@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DictionaryRequestFactoryTest {
+public class DictionaryRequestTest {
     @Test
     void basic() {
         // 기본적인 추출 
