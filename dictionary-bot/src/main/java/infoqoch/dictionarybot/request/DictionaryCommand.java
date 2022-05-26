@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.request;
 
 public enum DictionaryCommand {
-    HELP("help"), UNKNOWN("unknown");
+    HELP("help"), LOOKUP_WORD("w"), UNKNOWN("unknown");
 
     private final String alias;
 
