@@ -16,6 +16,6 @@ public class UpdateWrapper {
         if(update.getMessage().getPhoto()!=null) return PHOTO;
         if(update.getMessage().getDocument()!=null) return DOCUMENT;
         if(update.getMessage().getText()!=null) return CHAT;
-        throw new IllegalStateException("unknown type");
+        throw new IllegalStateException("unknown update type");
     }
 }
