@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.repository;
+package infoqoch.dictionarybot.repository.dictionary;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

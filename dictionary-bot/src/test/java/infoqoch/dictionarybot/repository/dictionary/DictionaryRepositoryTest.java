@@ -1,5 +1,6 @@
-package infoqoch.dictionarybot.repository;
+package infoqoch.dictionarybot.repository.dictionary;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class DictionaryRepositoryTest {
 
         // when
         Optional<Dictionary> result = repository.findByNo(dictionaryNo);
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(result.get().getNo()).isEqualTo(dictionaryNo);
         assertThat(result.get().getContent()).usingRecursiveComparison().isEqualTo(content);
     }

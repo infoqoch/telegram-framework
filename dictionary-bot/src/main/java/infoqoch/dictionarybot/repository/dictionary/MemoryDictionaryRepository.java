@@ -1,10 +1,13 @@
-package infoqoch.dictionarybot.repository;
+package infoqoch.dictionarybot.repository.dictionary;
+
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalLong;
 
+@Repository
 public class MemoryDictionaryRepository implements DictionaryRepository {
 
     private final Map<Long, Dictionary> repository = new HashMap<>();
