@@ -27,4 +27,31 @@ public class UpdateWrapper {
         if(type() == PHOTO) return DictionaryRequestFactory.resolve(update.getMessage().getCaption());
         throw new IllegalStateException("unknown update type (2)");
     }
+
+    public ChatRequest toChat() {
+        return ChatRequest.builder()
+                .updateId(update.getUpdateId())
+                .messageId(update.getMessage().getMessageId())
+                .date(update.getMessage().getDate())
+                .text(update.getMessage().getText())
+                .from(update.getMessage().getFrom())
+                .chat(update.getMessage().getChat())
+                .build();
+    }
+
+    public DocumentRequest toDocument() {
+        return DocumentRequest.builder()
+                .updateId(update.getUpdateId())
+                .messageId(update.getMessage().getMessageId())
+                .date(update.getMessage().getDate())
+                .caption(update.getMessage().getCaption())
+                .from(update.getMessage().getFrom())
+                .chat(update.getMessage().getChat())
+                .document(update.getMessage().getDocument())
+                .build();
+    }
+
+    public Object toPhoto() throws Exception {
+        throw new Exception(new UnsupportedOperationException("not support operation"));
+    }
 }

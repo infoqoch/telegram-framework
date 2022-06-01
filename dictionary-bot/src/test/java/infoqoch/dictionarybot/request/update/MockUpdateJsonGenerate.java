@@ -27,6 +27,10 @@ public class MockUpdateJsonGenerate {
         return resolveType(mockChatJsonUpdate(text, chatId));
     }
 
+    public static UpdateWrapper mockChatUpdate(String text){
+        return resolveType(mockChatJsonUpdate(text));
+    }
+
     public static UpdateWrapper mockDocumentUpdate(String caption){
         return resolveType(mockDocumentJsonUpdate(caption));
     }
@@ -36,9 +40,13 @@ public class MockUpdateJsonGenerate {
     }
 
     public static UpdateWrapper resolveType(String json) {
-        Response<List<Update>> response = new DefaultJsonBind().toList(json, Update.class);
-        final Update update = response.getResult().get(0);
+        final Update update = extractUpdate(json);
         UpdateWrapper wrapper = new UpdateWrapper(update);
         return wrapper;
+    }
+
+    public static Update extractUpdate(String json) {
+        Response<List<Update>> response = new DefaultJsonBind().toList(json, Update.class);
+        return response.getResult().get(0);
     }
 }
