@@ -6,4 +6,6 @@ public interface DictionaryRepository {
     Long save(Dictionary dictionary);
 
     Optional<Dictionary> findByNo(Long dictionaryNo);
+
+    Optional<Dictionary> findByWord(String target);
 }

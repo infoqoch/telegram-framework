@@ -24,8 +24,16 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
         return Optional.ofNullable(repository.get(dictionaryNo));
     }
 
+    @Override
+    public Optional<Dictionary> findByWord(String target) {
+        return repository.values().stream().filter(d -> d.getContent().getWord().contains(target)).findAny();
+    }
+
     private Long maxNo() {
         final OptionalLong max = repository.keySet().stream().mapToLong(l -> l).max();
-        return max.orElse(1l);
+
+        if(max.isPresent())
+            return max.getAsLong() + 1l;
+        return 1l;
     }
 }
