@@ -1,16 +1,16 @@
-package infoqoch.dictionarybot.request;
+package infoqoch.dictionarybot.update.request;
 
-public class DictionaryRequestFactory {
-    public static DictionaryRequest resolve(String input) {
+public class UpdateRequestFactory {
+    public static UpdateRequest resolve(String input) {
         String message = input.replaceAll("_", " ");
         final int firstSpaceIdx = message.indexOf(" ");
-        final DictionaryCommand command = extractCommand(message, firstSpaceIdx);
+        final UpdateRequestCommand command = extractCommand(message, firstSpaceIdx);
         String value = extractValue(message, firstSpaceIdx);
-        return new DictionaryRequest(command, value);
+        return new UpdateRequest(command, value);
     }
 
-    private static DictionaryCommand extractCommand(String message, int firstSpaceIdx) {
-        return DictionaryCommand.of(extractCommandStr(message, firstSpaceIdx));
+    private static UpdateRequestCommand extractCommand(String message, int firstSpaceIdx) {
+        return UpdateRequestCommand.of(extractCommandStr(message, firstSpaceIdx));
     }
 
     private static String extractValue(String message, int firstSpaceIdx) {

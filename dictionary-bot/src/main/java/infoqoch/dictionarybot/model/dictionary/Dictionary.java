@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.repository.dictionary;
+package infoqoch.dictionarybot.model.dictionary;
 
 import lombok.*;
 

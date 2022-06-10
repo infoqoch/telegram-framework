@@ -1,0 +1,40 @@
+package infoqoch.dictionarybot.update;
+
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestFactory;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class DictionaryRequestTest {
+    @Test
+    void basic() {
+        // 기본적인 추출 
+        assertResolveMessage("/help", UpdateRequestCommand.HELP, "");
+        assertResolveMessage("/help good", UpdateRequestCommand.HELP, "good");
+        assertResolveMessage("/help good good", UpdateRequestCommand.HELP, "good good");
+        
+        // 모르는 명령
+        assertResolveMessage("/wefijeif", UpdateRequestCommand.UNKNOWN, "");
+
+        // 특수문자 대응
+        // 명령은 첫 번째 스페이스 혹은 언더바를 기준으로 분리된다.
+        // 모든 언더바는 스페이스로 변환된다.
+        assertResolveMessage("/help_happy", UpdateRequestCommand.HELP, "happy");
+        assertResolveMessage("help_happy", UpdateRequestCommand.HELP, "happy");
+        assertResolveMessage("help happy", UpdateRequestCommand.HELP, "happy");
+        assertResolveMessage("help good_job", UpdateRequestCommand.HELP, "good job");
+        assertResolveMessage("/help_good_job", UpdateRequestCommand.HELP, "good job");
+        assertResolveMessage("/help_good job", UpdateRequestCommand.HELP, "good job");
+        assertResolveMessage("help good job!", UpdateRequestCommand.HELP, "good job!");
+        assertResolveMessage("help !good 😀job^^", UpdateRequestCommand.HELP, "!good 😀job^^");
+        
+    }
+
+    private void assertResolveMessage(String message, UpdateRequestCommand command, String value) {
+        UpdateRequest request = UpdateRequestFactory.resolve(message);
+        assertThat(request.command()).isEqualTo(command);
+        assertThat(request.value()).isEqualTo(value);
+    }
+}

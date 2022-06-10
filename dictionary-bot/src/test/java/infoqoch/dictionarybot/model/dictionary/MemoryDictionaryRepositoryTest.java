@@ -1,5 +1,6 @@
-package infoqoch.dictionarybot.repository.dictionary;
+package infoqoch.dictionarybot.model.dictionary;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,7 @@ public class MemoryDictionaryRepositoryTest {
         Optional<Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(dictionaryNo).isEqualTo(1l);
         assertThat(result.get().getNo()).isEqualTo(dictionaryNo);
         assertThat(result.get().getContent()).usingRecursiveComparison().isEqualTo(content);
@@ -51,7 +52,7 @@ public class MemoryDictionaryRepositoryTest {
         Optional<Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(dictionaryNo).isEqualTo(2l);
         assertThat(result.get().getNo()).isEqualTo(dictionaryNo);
         assertThat(result.get().getContent()).usingRecursiveComparison().isEqualTo(content);
@@ -69,7 +70,7 @@ public class MemoryDictionaryRepositoryTest {
         Optional<Dictionary> result = repository.findByWord("apple");
 
         // then
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(result.get().getNo()).isEqualTo(dictionaryNo);
         assertThat(result.get().getContent()).usingRecursiveComparison().isEqualTo(content);
     }

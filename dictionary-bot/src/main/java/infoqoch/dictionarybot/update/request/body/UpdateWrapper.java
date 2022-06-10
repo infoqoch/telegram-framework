@@ -1,10 +1,10 @@
-package infoqoch.dictionarybot.request.update;
+package infoqoch.dictionarybot.update.request.body;
 
-import infoqoch.dictionarybot.request.DictionaryRequest;
-import infoqoch.dictionarybot.request.DictionaryRequestFactory;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestFactory;
 import infoqoch.telegrambot.bot.entity.Update;
 
-import static infoqoch.dictionarybot.request.update.UpdateType.*;
+import static infoqoch.dictionarybot.update.request.body.UpdateType.*;
 
 public class UpdateWrapper {
     private final Update update;
@@ -21,15 +21,15 @@ public class UpdateWrapper {
         throw new IllegalStateException("unknown update type");
     }
 
-    public DictionaryRequest command() {
-        if(type() == CHAT) return DictionaryRequestFactory.resolve(update.getMessage().getText());
-        if(type() == DOCUMENT) return DictionaryRequestFactory.resolve(update.getMessage().getCaption());
-        if(type() == PHOTO) return DictionaryRequestFactory.resolve(update.getMessage().getCaption());
+    public UpdateRequest command() {
+        if(type() == CHAT) return UpdateRequestFactory.resolve(update.getMessage().getText());
+        if(type() == DOCUMENT) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
+        if(type() == PHOTO) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
         throw new IllegalStateException("unknown update type (2)");
     }
 
-    public ChatRequest toChat() {
-        return ChatRequest.builder()
+    public UpdateChat toChat() {
+        return UpdateChat.builder()
                 .updateId(update.getUpdateId())
                 .messageId(update.getMessage().getMessageId())
                 .date(update.getMessage().getDate())
@@ -39,8 +39,8 @@ public class UpdateWrapper {
                 .build();
     }
 
-    public DocumentRequest toDocument() {
-        return DocumentRequest.builder()
+    public UpdateDocument toDocument() {
+        return UpdateDocument.builder()
                 .updateId(update.getUpdateId())
                 .messageId(update.getMessage().getMessageId())
                 .date(update.getMessage().getDate())

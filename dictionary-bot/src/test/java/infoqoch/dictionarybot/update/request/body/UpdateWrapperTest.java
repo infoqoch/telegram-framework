@@ -1,19 +1,14 @@
-package infoqoch.dictionarybot.request.update;
+package infoqoch.dictionarybot.update.request.body;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import infoqoch.dictionarybot.request.DictionaryCommand;
-import infoqoch.dictionarybot.request.DictionaryRequest;
-import infoqoch.telegrambot.bot.entity.Response;
-import infoqoch.telegrambot.bot.entity.Update;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import infoqoch.telegrambot.util.JsonBind;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static infoqoch.dictionarybot.request.DictionaryCommand.HELP;
-import static infoqoch.dictionarybot.request.DictionaryCommand.LOOKUP_WORD;
-import static infoqoch.dictionarybot.request.update.MockUpdateJsonGenerate.*;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.LOOKUP_WORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateWrapperTest {
@@ -40,14 +35,14 @@ class UpdateWrapperTest {
 
     @Test
     void extractCommand(){
-        assertUpdateRequest(resolveType(mockChatJsonUpdate("/help")).command(), HELP, "");
-        assertUpdateRequest(resolveType(mockChatJsonUpdate("/help_hi")).command(), HELP, "hi");
-        assertUpdateRequest(resolveType(mockChatJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(resolveType(mockDocumentJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(resolveType(mockPhotoJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).command(), HELP, "");
+        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help_hi")).command(), HELP, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockPhotoJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
     }
 
-    private void assertUpdateRequest(DictionaryRequest request, DictionaryCommand command, String value) {
+    private void assertUpdateRequest(UpdateRequest request, UpdateRequestCommand command, String value) {
         assertThat(request.command()).isEqualTo(command);
         assertThat(request.value()).isEqualTo(value);
     }

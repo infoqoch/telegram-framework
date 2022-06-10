@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.request.update;
+package infoqoch.dictionarybot.update.request.body;
 
 public enum UpdateType {
     DOCUMENT, PHOTO, CHAT, EDITED;

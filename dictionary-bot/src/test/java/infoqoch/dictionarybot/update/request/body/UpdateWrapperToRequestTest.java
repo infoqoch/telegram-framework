@@ -1,16 +1,15 @@
-package infoqoch.dictionarybot.request.update;
+package infoqoch.dictionarybot.update.request.body;
 
 import infoqoch.telegrambot.bot.entity.Update;
 import org.junit.jupiter.api.Test;
 
-import static infoqoch.dictionarybot.request.update.MockUpdateJsonGenerate.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UpdateWrapperToRequestTest {
     @Test
     void wrapper_to_chat_request() {
-        final Update update = extractUpdate(mockChatJsonUpdate("/help"));
-        final ChatRequest chat = resolveType(mockChatJsonUpdate("/help")).toChat();
+        final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockChatJsonUpdate("/help"));
+        final UpdateChat chat = MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).toChat();
 
         assertThat(chat.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(chat.getMessageId()).isEqualTo(update.getMessage().getMessageId());
@@ -22,8 +21,8 @@ public class UpdateWrapperToRequestTest {
 
     @Test
     void wrapper_to_document_request() {
-        final Update update = extractUpdate(mockDocumentJsonUpdate("/help"));
-        final DocumentRequest document = resolveType(mockDocumentJsonUpdate("/help")).toDocument();
+        final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help"));
+        final UpdateDocument document = MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help")).toDocument();
 
         assertThat(document.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(document.getMessageId()).isEqualTo(update.getMessage().getMessageId());
