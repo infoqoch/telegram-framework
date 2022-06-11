@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpdateWrapperToRequestTest {
+public class UpdateWrapperExtractRequestBodyTest {
     @Test
     void wrapper_to_chat_request() {
         final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockChatJsonUpdate("/help"));
