@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.util;
+package infoqoch.dictionarybot.update.resolver.bean;
 
 import org.springframework.beans.BeansException;
 

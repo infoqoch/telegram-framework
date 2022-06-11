@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.update.resolver.util.SpringBeanContext;
+import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

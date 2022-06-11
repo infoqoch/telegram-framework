@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.util;
+package infoqoch.dictionarybot.update.resolver.bean;
 
 import lombok.Setter;
 import org.springframework.beans.BeansException;

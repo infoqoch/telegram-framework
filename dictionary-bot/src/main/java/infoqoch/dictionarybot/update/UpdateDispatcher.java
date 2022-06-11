@@ -3,13 +3,12 @@ package infoqoch.dictionarybot.update;
 import infoqoch.dictionarybot.update.request.body.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.resolver.util.BeanContext;
+import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-import org.springframework.context.annotation.Primary;
 
 import java.lang.reflect.Method;
 import java.util.*;
