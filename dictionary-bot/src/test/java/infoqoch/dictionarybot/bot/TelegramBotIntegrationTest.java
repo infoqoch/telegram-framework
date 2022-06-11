@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.api;
+package infoqoch.dictionarybot.bot;
 
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -7,7 +7,6 @@ import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

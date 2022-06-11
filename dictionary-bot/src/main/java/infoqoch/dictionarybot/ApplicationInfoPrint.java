@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 //@ConditionalOnProperty(name = "is_test", havingValue = "N")
 @AllArgsConstructor
-public class Runner implements CommandLineRunner {
+public class ApplicationInfoPrint implements CommandLineRunner {
 
     private final UpdateDispatcher updateDispatcher;
 

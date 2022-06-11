@@ -1,6 +1,5 @@
-package infoqoch.dictionarybot.api;
+package infoqoch.dictionarybot.bot;
 
-import infoqoch.telegrambot.bot.entity.Update;
 import org.junit.jupiter.api.Test;
 
 public class DictionaryBot {

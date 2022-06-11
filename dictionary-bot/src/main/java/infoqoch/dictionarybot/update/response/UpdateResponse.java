@@ -1,5 +1,8 @@
 package infoqoch.dictionarybot.update.response;
 
+import lombok.ToString;
+
+@ToString
 public class UpdateResponse {
     SendType type;
     Object body;

@@ -70,6 +70,19 @@ public class UpdateDispatcherTest {
         assertThat((String) response.body()).isEqualTo("LOOKUP_WORD : apple : 2149");
     }
 
+    @Test
+    void not_support_update_command(){
+        // given
+        UpdateWrapper update = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/wefwe"));
+
+        UpdateResponse response = updateDispatcher.process(update);
+
+        // then
+        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.body()).isInstanceOf(String.class);
+        assertThat((String) response.body()).isEqualTo("help! hello!");
+    }
+
 }
 
 

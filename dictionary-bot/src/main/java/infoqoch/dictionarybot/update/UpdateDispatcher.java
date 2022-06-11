@@ -21,7 +21,10 @@ public class UpdateDispatcher {
     }
 
     public UpdateResponse process(UpdateWrapper update) {
-        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
+        final Optional<UpdateRequestMethodResolver> any = methodResolvers.stream().filter(r -> r.support(update)).findAny();
+        if(any.isEmpty())
+            throw new IllegalStateException("cannot find any update request method resolver");
+        return any.get().process(update);
     }
 
     private void collectUpdateRequestMappedMethods(String packagePath, BeanContext context) {
