@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update;
+package infoqoch.dictionarybot.update.request;
 
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequest;

@@ -23,25 +23,25 @@ public class MockUpdateJsonGenerate {
         return "{\"ok\": true,\"result\": [{\"update_id\": 567841808,\"message\": {\"message_id\": 2150,\"from\": {\"id\": 39327045,\"is_bot\": false,\"first_name\": \"\\uc11d\\uc9c4\",\"language_code\": \"ko\"},\"chat\": {\"id\": 39327045,\"first_name\": \"\\uc11d\\uc9c4\",\"type\": \"private\"},\"date\": 1653482413,\"photo\": [{\"file_id\": \"AgACAgUAAxkBAAIIZmKOI6wEb4PQtzRFKkLv8fPtja6tAAJYsTEbNKpwVIdigkCEtD4HAQADAgADcwADJAQ\",\"file_unique_id\": \"AQADWLExGzSqcFR4\",\"file_size\": 1196,\"width\": 90,\"height\": 90},{\"file_id\": \"AgACAgUAAxkBAAIIZmKOI6wEb4PQtzRFKkLv8fPtja6tAAJYsTEbNKpwVIdigkCEtD4HAQADAgADbQADJAQ\",\"file_unique_id\": \"AQADWLExGzSqcFRy\",\"file_size\": 15474,\"width\": 320,\"height\": 320},{\"file_id\": \"AgACAgUAAxkBAAIIZmKOI6wEb4PQtzRFKkLv8fPtja6tAAJYsTEbNKpwVIdigkCEtD4HAQADAgADeAADJAQ\",\"file_unique_id\": \"AQADWLExGzSqcFR9\",\"file_size\": 52057,\"width\": 800,\"height\": 800},{\"file_id\": \"AgACAgUAAxkBAAIIZmKOI6wEb4PQtzRFKkLv8fPtja6tAAJYsTEbNKpwVIdigkCEtD4HAQADAgADeQADJAQ\",\"file_unique_id\": \"AQADWLExGzSqcFR-\",\"file_size\": 70180,\"width\": 1280,\"height\": 1280}],\"caption\": \""+caption+"\"}}]}";
     }
 
-    public static UpdateRequestBody mockChatUpdate(String text, long chatId){
-        return resolveType(mockChatJsonUpdate(text, chatId));
+    public static UpdateWrapper mockChatUpdate(String text, long chatId){
+        return toUpdateRequestBody(mockChatJsonUpdate(text, chatId));
     }
 
-    public static UpdateRequestBody mockChatUpdate(String text){
-        return resolveType(mockChatJsonUpdate(text));
+    public static UpdateWrapper mockChatUpdate(String text){
+        return toUpdateRequestBody(mockChatJsonUpdate(text));
     }
 
-    public static UpdateRequestBody mockDocumentUpdate(String caption){
-        return resolveType(mockDocumentJsonUpdate(caption));
+    public static UpdateWrapper mockDocumentUpdate(String caption){
+        return toUpdateRequestBody(mockDocumentJsonUpdate(caption));
     }
 
-    public static UpdateRequestBody mockPhotoUpdate(String caption){
-        return resolveType(mockPhotoJsonUpdate(caption));
+    public static UpdateWrapper mockPhotoUpdate(String caption){
+        return toUpdateRequestBody(mockPhotoJsonUpdate(caption));
     }
 
-    public static UpdateRequestBody resolveType(String json) {
+    public static UpdateWrapper toUpdateRequestBody(String json) {
         final Update update = extractUpdate(json);
-        UpdateRequestBody updateRequestBody = new UpdateRequestBody(update);
+        UpdateWrapper updateRequestBody = new UpdateWrapper(update);
         return updateRequestBody;
     }
 

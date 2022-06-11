@@ -29,17 +29,17 @@ class UpdateRequestBodyParsingTest {
     }
 
     private void assertType(String json, UpdateType type) {
-        UpdateRequestBody wrapper = MockUpdateJsonGenerate.resolveType(json);
+        UpdateWrapper wrapper = MockUpdateJsonGenerate.toUpdateRequestBody(json);
         assertThat(wrapper.type()).isEqualTo(type);
     }
 
     @Test
     void extractCommand(){
-        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).command(), HELP, "");
-        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help_hi")).command(), HELP, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockPhotoJsonUpdate("/w_hi")).command(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).commandAndValue(), HELP, "");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help_hi")).commandAndValue(), HELP, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockPhotoJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
     }
 
     private void assertUpdateRequest(UpdateRequest request, UpdateRequestCommand command, String value) {

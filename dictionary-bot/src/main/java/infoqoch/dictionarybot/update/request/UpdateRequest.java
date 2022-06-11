@@ -15,7 +15,6 @@ public class UpdateRequest {
     public UpdateRequestCommand command() {
         return getCommand();
     }
-
     public String value() {
         return getValue();
     }

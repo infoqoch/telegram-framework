@@ -9,7 +9,7 @@ public class UpdateRequestBodyTest {
     @Test
     void wrapper_to_chat_request() {
         final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockChatJsonUpdate("/help"));
-        final UpdateChat chat = MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).toChat();
+        final UpdateChat chat = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).toChat();
 
         assertThat(chat.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(chat.getMessageId()).isEqualTo(update.getMessage().getMessageId());
@@ -22,7 +22,7 @@ public class UpdateRequestBodyTest {
     @Test
     void wrapper_to_document_request() {
         final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help"));
-        final UpdateDocument document = MockUpdateJsonGenerate.resolveType(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help")).toDocument();
+        final UpdateDocument document = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help")).toDocument();
 
         assertThat(document.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(document.getMessageId()).isEqualTo(update.getMessage().getMessageId());
