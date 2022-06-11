@@ -11,7 +11,7 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.LOOKUP_WORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateWrapperTest {
+class UpdateRequestBodyParsingTest {
     JsonBind jsonBind = new DefaultJsonBind();
 
     // MockUpdateJsonGenerate에 사용한 raw json이 아래의 데이터임.
@@ -29,7 +29,7 @@ class UpdateWrapperTest {
     }
 
     private void assertType(String json, UpdateType type) {
-        UpdateWrapper wrapper = MockUpdateJsonGenerate.resolveType(json);
+        UpdateRequestBody wrapper = MockUpdateJsonGenerate.resolveType(json);
         assertThat(wrapper.type()).isEqualTo(type);
     }
 

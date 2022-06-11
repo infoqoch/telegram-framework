@@ -6,10 +6,10 @@ import infoqoch.telegrambot.bot.entity.Update;
 
 import static infoqoch.dictionarybot.update.request.body.UpdateType.*;
 
-public class UpdateWrapper {
+public class UpdateRequestBody {
     private final Update update;
 
-    public UpdateWrapper(Update update) {
+    public UpdateRequestBody(Update update) {
         this.update = update;
     }
 
