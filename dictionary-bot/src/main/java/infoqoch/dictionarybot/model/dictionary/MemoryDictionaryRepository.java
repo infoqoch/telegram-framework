@@ -2,10 +2,8 @@ package infoqoch.dictionarybot.model.dictionary;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalLong;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class MemoryDictionaryRepository implements DictionaryRepository {
@@ -25,8 +23,8 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
     }
 
     @Override
-    public Optional<Dictionary> findByWord(String target) {
-        return repository.values().stream().filter(d -> d.getContent().getWord().contains(target)).findAny();
+    public List<Dictionary> findByWord(String target) {
+        return repository.values().stream().filter(d -> d.getContent().getWord().contains(target)).collect(Collectors.toList());
     }
 
     private Long maxNo() {

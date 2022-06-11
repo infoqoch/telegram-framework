@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,12 +68,12 @@ public class MemoryDictionaryRepositoryTest {
         saveDictionaryInRepo(createSimpleDictionaryContent("radio")); // 허수
 
         // when
-        Optional<Dictionary> result = repository.findByWord("apple");
+        List<Dictionary> result = repository.findByWord("apple");
 
         // then
-        Assertions.assertThat(result).isPresent();
-        assertThat(result.get().getNo()).isEqualTo(dictionaryNo);
-        assertThat(result.get().getContent()).usingRecursiveComparison().isEqualTo(content);
+        Assertions.assertThat(result).size().isEqualTo(1);
+        assertThat(result.get(0).getNo()).isEqualTo(dictionaryNo);
+        assertThat(result.get(0).getContent()).usingRecursiveComparison().isEqualTo(content);
     }
 
 

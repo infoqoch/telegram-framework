@@ -16,8 +16,4 @@ public class UpdateResponse {
     public Object body(){
         return body;
     }
-
-    public String message() {
-        return "hi";
-    }
 }
