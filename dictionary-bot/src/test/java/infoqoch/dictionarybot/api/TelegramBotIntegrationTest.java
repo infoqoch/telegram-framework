@@ -19,7 +19,7 @@ public class TelegramBotIntegrationTest {
         bot =  DefaultTelegramBotFactory.init("1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o");
     }
 
-    @Test
+    // @Test
     @DisplayName("TelegramBot.send() 테스트")
     void send_message(){
         // when

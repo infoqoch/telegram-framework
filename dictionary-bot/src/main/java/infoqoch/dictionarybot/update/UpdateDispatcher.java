@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
+import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -14,28 +14,34 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class UpdateDispatcher {
-    private final List<UpdateRequestMethodResolver> methodResolvers;
+    private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
 
     public UpdateDispatcher(String packagePath, BeanContext context) {
-        methodResolvers = collectUpdateRequestMappedMethods(packagePath, context);
+        collectUpdateRequestMappedMethods(packagePath, context);
     }
 
-    private List<UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(String packagePath, BeanContext context) {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(packagePath)).setScanners(Scanners.MethodsAnnotated));
-        final Set<Method> methods = reflections.getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
+    public UpdateResponse process(UpdateWrapper update) {
+        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
+    }
 
-        List<UpdateRequestMethodResolver> resolvers = new ArrayList<>();
+    private void collectUpdateRequestMappedMethods(String packagePath, BeanContext context) {
         Set<UpdateRequestMethodMapper> updateRequestMappers = new HashSet<>();
 
-        for (Method method : methods) {
-            final Object bean = context.getBean(method.getDeclaringClass());
-            final UpdateRequestMethodMapper mapper = (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
+        for (Method method : getMethodsAnnotated(packagePath)) {
+            final UpdateRequestMethodMapper mapper = extractUpdateRequestMapper(method);
 
             checkDuplicatedMapper(updateRequestMappers, mapper);
 
-            resolvers.add(new UpdateRequestMethodResolver(bean, method, mapper));
+            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper));
         }
-        return resolvers;
+    }
+
+    private UpdateRequestMethodMapper extractUpdateRequestMapper(Method method) {
+        return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
+    }
+
+    private Set<Method> getMethodsAnnotated(String packagePath) {
+        return new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(packagePath)).setScanners(Scanners.MethodsAnnotated)).getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
     }
 
     private void checkDuplicatedMapper(Set<UpdateRequestMethodMapper> checkDuplicatedMapper, UpdateRequestMethodMapper mapper) {
@@ -44,9 +50,4 @@ public class UpdateDispatcher {
         checkDuplicatedMapper.add(mapper);
     }
 
-    public UpdateResponse process(UpdateWrapper update) {
-        final Optional<UpdateRequestMethodResolver> any = methodResolvers.stream().filter(r -> r.support(update)).findAny();
-        final UpdateRequestMethodResolver updateRequestMethodResolver = any.get();
-        return updateRequestMethodResolver.process(update);
-    }
 }
