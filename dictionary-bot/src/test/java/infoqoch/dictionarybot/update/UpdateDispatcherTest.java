@@ -26,9 +26,7 @@ public class UpdateDispatcherTest {
         MapBeanContext beanExtract = new MapBeanContext();
         beanExtract.setContext(context);
 
-        System.out.println("!!!!!!!!!!!");
         final String path = this.getClass().getPackage().getName() + ".testcontroller";
-        System.out.println("path = " + path);
         updateDispatcher = new UpdateDispatcher(path, beanExtract);
     }
 
