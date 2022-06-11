@@ -1,8 +1,8 @@
-package infoqoch.dictionarybot.update.request.body;
+package infoqoch.dictionarybot.update.request;
 
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateRequestFactory;
+import infoqoch.dictionarybot.update.request.body.UpdateChat;
+import infoqoch.dictionarybot.update.request.body.UpdateDocument;
+import infoqoch.dictionarybot.update.request.body.UpdateType;
 import infoqoch.telegrambot.bot.entity.Update;
 
 import java.util.Optional;
@@ -21,18 +21,18 @@ public class UpdateWrapper {
         if(update.getMessage().getPhoto()!=null) return PHOTO;
         if(update.getMessage().getDocument()!=null) return DOCUMENT;
         if(update.getMessage().getText()!=null) return CHAT;
-        throw new IllegalStateException("unknown update type");
+        throw new IllegalStateException("unknown update type (1)");
     }
 
     public UpdateRequestCommand command(){
-        return commandAndValue().command();
+        return updateRequest().command();
     }
 
     public String value(){
-        return commandAndValue().value();
+        return updateRequest().value();
     }
 
-    public UpdateRequest commandAndValue() {
+    public UpdateRequest updateRequest() {
         if(type() == CHAT) return UpdateRequestFactory.resolve(update.getMessage().getText());
         if(type() == DOCUMENT) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
         if(type() == PHOTO) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
@@ -69,6 +69,6 @@ public class UpdateWrapper {
     public Optional<Object> getBodyByType(Class<?> type) {
         if(type == UpdateChat.class) return Optional.of(toChat());
         if(type == UpdateDocument.class) return Optional.of(toDocument());
-        throw new IllegalStateException("지원하지 않는 형태입니다.");
+        throw new IllegalStateException("not support data type");
     }
 }

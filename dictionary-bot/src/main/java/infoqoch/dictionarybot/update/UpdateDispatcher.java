@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.update.request.body.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.resolver.bean.BeanContext;

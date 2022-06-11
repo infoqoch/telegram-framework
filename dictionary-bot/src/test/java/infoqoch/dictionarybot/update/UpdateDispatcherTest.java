@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.update.testcontroller.TestHandler;
 import infoqoch.dictionarybot.update.request.body.MockUpdateJsonGenerate;
-import infoqoch.dictionarybot.update.request.body.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.bean.MapBeanContext;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;

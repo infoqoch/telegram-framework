@@ -1,20 +1,13 @@
 package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateRequestFactory;
-import infoqoch.dictionarybot.update.request.body.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

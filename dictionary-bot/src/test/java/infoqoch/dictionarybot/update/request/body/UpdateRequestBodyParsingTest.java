@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.request.body;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import infoqoch.telegrambot.util.JsonBind;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,11 @@ class UpdateRequestBodyParsingTest {
 
     @Test
     void extractCommand(){
-        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).commandAndValue(), HELP, "");
-        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help_hi")).commandAndValue(), HELP, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockPhotoJsonUpdate("/w_hi")).commandAndValue(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).updateRequest(), HELP, "");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help_hi")).updateRequest(), HELP, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockPhotoJsonUpdate("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
     }
 
     private void assertUpdateRequest(UpdateRequest request, UpdateRequestCommand command, String value) {

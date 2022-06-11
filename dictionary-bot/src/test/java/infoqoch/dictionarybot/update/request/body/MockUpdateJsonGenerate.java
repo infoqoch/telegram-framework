@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.request.body;
 
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.util.DefaultJsonBind;

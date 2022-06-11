@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.update.resolver;
 
 import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.body.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestBodyParameterMapper;
 import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
@@ -42,7 +42,7 @@ public class UpdateRequestMethodResolver {
             }
 
             if(type == UpdateRequest.class){
-                args[i] = update.commandAndValue();
+                args[i] = update.updateRequest();
                 continue;
             }
 
