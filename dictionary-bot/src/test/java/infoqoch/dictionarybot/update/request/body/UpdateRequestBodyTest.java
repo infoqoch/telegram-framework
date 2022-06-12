@@ -8,8 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UpdateRequestBodyTest {
     @Test
     void wrapper_to_chat_request() {
-        final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockChatJsonUpdate("/help"));
-        final UpdateChat chat = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockChatJsonUpdate("/help")).toChat();
+        final Update update = MockUpdateGenerate.jsonToUpdate(MockUpdateGenerate.chatJson("/help"));
+        final UpdateChat chat = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.chatJson("/help")).toChat();
 
         assertThat(chat.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(chat.getMessageId()).isEqualTo(update.getMessage().getMessageId());
@@ -21,8 +21,8 @@ public class UpdateRequestBodyTest {
 
     @Test
     void wrapper_to_document_request() {
-        final Update update = MockUpdateJsonGenerate.extractUpdate(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help"));
-        final UpdateDocument document = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/help")).toDocument();
+        final Update update = MockUpdateGenerate.jsonToUpdate(MockUpdateGenerate.documentJson("/help"));
+        final UpdateDocument document = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/help")).toDocument();
 
         assertThat(document.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(document.getMessageId()).isEqualTo(update.getMessage().getMessageId());

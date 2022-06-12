@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.send;
+package infoqoch.dictionarybot.bot;
 
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramFile;
@@ -7,9 +7,16 @@ import infoqoch.telegrambot.bot.TelegramUpdate;
 
 public class FakeTelegramBot implements TelegramBot {
     private final TelegramSend telegramSend;
+    private final TelegramUpdate telegramUpdate;
 
     public FakeTelegramBot(TelegramSend telegramSend) {
         this.telegramSend = telegramSend;
+        this.telegramUpdate = null;
+    }
+
+    public FakeTelegramBot(TelegramUpdate telegramUpdate, TelegramSend telegramSend) {
+        this.telegramSend = telegramSend;
+        this.telegramUpdate = telegramUpdate;
     }
 
 
@@ -20,7 +27,7 @@ public class FakeTelegramBot implements TelegramBot {
 
     @Override
     public TelegramUpdate update() {
-        return null;
+        return telegramUpdate;
     }
 
     @Override

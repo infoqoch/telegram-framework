@@ -1,10 +1,11 @@
 package infoqoch.dictionarybot.send;
 
+import infoqoch.dictionarybot.bot.FakeTelegramBot;
+import infoqoch.dictionarybot.bot.FakeTelegramSend;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramBot;
-import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class SendDispatcherTest {
     @Test
     void message(){
         // given
-        fakeSend.setMessageResponseJson(generateMockSendMessageResponseBody("/help", 12345l));
+        fakeSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/help", 12345l));
         final SendRequest request = new SendRequest(12345l, SendType.MESSAGE, "/help");
 
         // when
@@ -41,7 +42,7 @@ public class SendDispatcherTest {
     @Test
     void document(){
         // given
-        fakeSend.setDocumentResponseJson(generateMockSendDocumentResponseBody());
+        fakeSend.setMockDocumentResponseJson(MockSendResponseGenerate.sendDocument());
         final SendRequest request = new SendRequest(12345l, SendType.DOCUMENT, "fake document", "fake text");
 
         // when
@@ -52,11 +53,4 @@ public class SendDispatcherTest {
         assertThat(fakeSend.isDocumentCalled()).isTrue();
     }
 
-    private String generateMockSendMessageResponseBody(String text, long chatId) {
-        return "{\"ok\":true,\"result\":{\"message_id\":2092,\"from\":{\"id\":1959903402,\"is_bot\":true,\"first_name\":\"coffs_test\",\"username\":\"coffs_dic_test_bot\"},\"chat\":{\"id\":" + chatId + ",\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652014357,\"text\":\"" + text + "\"}}";
-    }
-
-    private String generateMockSendDocumentResponseBody() {
-        return "{\"ok\":true,\"result\":{\"message_id\":2143,\"from\":{\"id\":1959903402,\"is_bot\":true,\"first_name\":\"coffs_test\",\"username\":\"coffs_dic_test_bot\"},\"chat\":{\"id\":39327045,\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652609308,\"document\":{\"file_name\":\"sample.xlsx\",\"mime_type\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"file_id\":\"BQACAgUAAxkDAAIIX2KA0RyYEZNXxw7qiny1i0Jj7-RqAAL_BAACg56JVdF3guuN7A6tJAQ\",\"file_unique_id\":\"AgAD_wQAAoOeiVU\",\"file_size\":26440},\"caption\":\"\\uc774\\ud0c8\\ub9ad\\uba54\\uc2dc\\uc9c0!\",\"caption_entities\":[{\"offset\":0,\"length\":7,\"type\":\"italic\"}]}}";
-    }
 }
