@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UpdateDispatcherTest {
 
@@ -75,12 +76,7 @@ public class UpdateDispatcherTest {
         // given
         UpdateWrapper update = MockUpdateJsonGenerate.toUpdateRequestBody(MockUpdateJsonGenerate.mockDocumentJsonUpdate("/wefwe"));
 
-        UpdateResponse response = updateDispatcher.process(update);
-
-        // then
-        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.body()).isInstanceOf(String.class);
-        assertThat((String) response.body()).isEqualTo("help! hello!");
+        assertThatThrownBy(()-> updateDispatcher.process(update)).isInstanceOf(IllegalStateException.class);
     }
 
 }

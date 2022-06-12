@@ -5,6 +5,7 @@ import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.entity.Message;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
+import infoqoch.telegrambot.bot.response.SendMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
@@ -22,7 +23,7 @@ public class TelegramBotIntegrationTest {
     @DisplayName("TelegramBot.send() 테스트")
     void send_message(){
         // when
-        final Response<Message> response = bot.send().message(new SendMessageRequest(39327045, "hi, 반가반가"));
+        final Response<SendMessageResponse> response = bot.send().message(new SendMessageRequest(39327045, "hi, 반가반가"));
 
         // then
         assertThat(response.isOk()).isTrue();
