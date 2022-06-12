@@ -4,12 +4,21 @@ import lombok.ToString;
 
 @ToString
 public class UpdateResponse {
-    SendType type;
-    Object body;
+    private final SendType type;
+    private final Object body;
+
+    private final String document;
 
     public UpdateResponse(SendType type, Object body) {
         this.type= type;
         this.body = body;
+        this.document = document();
+    }
+
+    public UpdateResponse(SendType type, Object body, String document) {
+        this.type = type;
+        this.body = body;
+        this.document = document;
     }
 
     public SendType type() {
@@ -18,5 +27,9 @@ public class UpdateResponse {
 
     public Object body(){
         return body;
+    }
+
+    public String document(){
+        return document;
     }
 }

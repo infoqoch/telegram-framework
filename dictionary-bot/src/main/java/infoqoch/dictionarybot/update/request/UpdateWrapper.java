@@ -16,6 +16,9 @@ public class UpdateWrapper {
         this.update = update;
     }
 
+    public Long chatId(){
+        return toChat().getChat().getId();
+    }
     public UpdateType type() {
         if(update.getEditedMessage()!=null) return EDITED;
         if(update.getMessage().getPhoto()!=null) return PHOTO;

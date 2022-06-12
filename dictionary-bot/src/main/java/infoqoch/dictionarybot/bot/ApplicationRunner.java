@@ -1,9 +1,13 @@
 package infoqoch.dictionarybot.bot;
 
+import infoqoch.dictionarybot.send.SendDispatcher;
+import infoqoch.dictionarybot.send.request.SendRequest;
+import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.TelegramBot;
+import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.TelegramUpdate;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
@@ -17,16 +21,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
-// @Component
+@Component
 public class ApplicationRunner {
 
     private final TelegramUpdate updater;
     private final UpdateDispatcher updateDispatcher;
+    private final SendDispatcher sendDispatcher;
     private long LAST_UPDATE_ID = 0l;
 
-    public ApplicationRunner(TelegramBot telegramBot, UpdateDispatcher updateDispatcher) {
+    public ApplicationRunner(TelegramBot telegramBot, UpdateDispatcher updateDispatcher, SendDispatcher sendDispatcher) {
         this.updater = telegramBot.update();
         this.updateDispatcher = updateDispatcher;
+        this.sendDispatcher = sendDispatcher;
     }
 
     @Scheduled(fixedDelay = 1000)
@@ -40,8 +46,13 @@ public class ApplicationRunner {
         for (Update update : telegramUpdateResponse.getResult()) {
             replaceLastUpdateId(update.getUpdateId());
             try{
-                final UpdateResponse response = updateDispatcher.process(new UpdateWrapper(update));
-                System.out.println("response.toString() = " + response.toString());
+                final UpdateWrapper updateWrap = new UpdateWrapper(update);
+                final UpdateResponse updateResponse = updateDispatcher.process(updateWrap);
+                log.info("updateResponse : {}", updateResponse);
+
+                final SendResponse sendResponse = sendDispatcher.process(new SendRequest(updateWrap.chatId(), updateResponse.type(), updateResponse.document(), updateResponse.body()));
+                log.info("sendResponse : {}", sendResponse);
+
             }catch (Exception e){
                 e.printStackTrace();
             }
