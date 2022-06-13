@@ -91,7 +91,7 @@ public class ExcelReader {
 	private List<String> emptyList() {
 		List<String> cellsData = new ArrayList<>();
 		for(int j=0; j<numberOfCell; j++) {
-			cellsData.add("");
+			cellsData.add(null);
 		}
 		return cellsData;
 	}
@@ -105,14 +105,14 @@ public class ExcelReader {
 	}
 
 	private String cellToString(Cell cell) {
-		if(cell==null) return "";
+		if(cell==null) return null;
 
 		switch (cell.getCellType()) {
 	        case STRING: return cell.getStringCellValue();
 	        case NUMERIC: return String.valueOf(cell.getNumericCellValue());
 	        case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
 	        case FORMULA: return String.valueOf(cell.getCellFormula() );
-	        default: return "";
+	        default: return null;
 		}
 	}
 

@@ -13,7 +13,7 @@ public class ExcelReadTest {
         File file = new File(getClass().getClassLoader().getResource("exceltest/test1.xlsx").getFile());
         final ExcelReader excelReader = new ExcelReader(file, 4);
         final List<List<List<String>>> extract = excelReader.extract();
-        assertThat(extract.toString()).isEqualTo("[[[a, b, c, d], [1.0, , 3.0, ], [, , , ], [, , , end]]]");
+        assertThat(extract.toString()).isEqualTo("[[[a, b, c, d], [1.0, null, 3.0, null], [null, null, null, null], [null, null, null, end]]]");
     }
 
     @Test
@@ -23,8 +23,8 @@ public class ExcelReadTest {
         final List<List<List<String>>> extract = excelReader.extract();
         assertThat(extract.toString()).isEqualTo("" +
                 "[" +
-                "[[a, b, c, d], [1.0, , 3.0, ], [, , , ], [, , , end]]" + // 시트 1
-                ", [[1.0, 2.0, 3.0, 4.0], [, , , ], [, , , ], [, 6.0, , ], [, , , 8.0]]" + // 시트 2
+                "[[a, b, c, d], [1.0, null, 3.0, null], [null, null, null, null], [null, null, null, end]]" + // 시트 1
+                ", [[1.0, 2.0, 3.0, 4.0], [null, null, null, null], [null, null, null, null], [null, 6.0, null, null], [null, null, null, 8.0]]" + // 시트 2
                 "]");
     }
 

@@ -3,9 +3,11 @@ package infoqoch.dictionarybot.model.dictionary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor @Builder
+@ToString
 public class DictionaryContent implements Cloneable {
     private String word;
     private String pronunciation;
