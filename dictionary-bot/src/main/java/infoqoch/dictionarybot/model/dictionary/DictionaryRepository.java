@@ -9,4 +9,8 @@ public interface DictionaryRepository {
     Optional<Dictionary> findByNo(Long dictionaryNo);
 
     List<Dictionary> findByWord(String target);
+
+    List<Dictionary> findBySentence(String target);
+
+    List<Dictionary> findByDefinition(String target);
 }

@@ -27,6 +27,16 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
         return repository.values().stream().filter(d -> d.getContent().getWord().contains(target)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Dictionary> findBySentence(String target) {
+        return repository.values().stream().filter(d -> d.getContent().getSentence().contains(target)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Dictionary> findByDefinition(String target) {
+        return repository.values().stream().filter(d -> d.getContent().getDefinition().contains(target)).collect(Collectors.toList());
+    }
+
     private Long maxNo() {
         final OptionalLong max = repository.keySet().stream().mapToLong(l -> l).max();
 
