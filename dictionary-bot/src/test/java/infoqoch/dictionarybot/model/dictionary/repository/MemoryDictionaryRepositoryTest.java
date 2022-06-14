@@ -1,11 +1,16 @@
-package infoqoch.dictionarybot.model.dictionary;
+package infoqoch.dictionarybot.model.dictionary.repository;
 
+import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.util.excel.ExcelReader;
+import infoqoch.dictionarybot.util.excel.ExcelToDictionaryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +36,7 @@ public class MemoryDictionaryRepositoryTest {
         final Long dictionaryNo = saveDictionaryInRepo(content);
 
         // when
-        Optional<Dictionary> result = repository.findByNo(dictionaryNo);
+        Optional<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
         Assertions.assertThat(result).isPresent();
@@ -50,7 +55,7 @@ public class MemoryDictionaryRepositoryTest {
         final Long dictionaryNo = saveDictionaryInRepo(content);
 
         // when
-        Optional<Dictionary> result = repository.findByNo(dictionaryNo);
+        Optional<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
         Assertions.assertThat(result).isPresent();
@@ -68,7 +73,7 @@ public class MemoryDictionaryRepositoryTest {
         saveDictionaryInRepo(createSimpleDictionaryContent("radio")); // 허수
 
         // when
-        List<Dictionary> result = repository.findByWord("apple");
+        List<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByWord("apple");
 
         // then
         Assertions.assertThat(result).size().isEqualTo(1);
@@ -78,7 +83,7 @@ public class MemoryDictionaryRepositoryTest {
 
 
     private Long saveDictionaryInRepo(DictionaryContent dictionaryContent) {
-        final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
+        final infoqoch.dictionarybot.model.dictionary.Dictionary dictionary = infoqoch.dictionarybot.model.dictionary.Dictionary.builder().content(dictionaryContent).build();
         return repository.save(dictionary);
     }
 
@@ -93,4 +98,46 @@ public class MemoryDictionaryRepositoryTest {
                 .build();
         return content;
     }
+
+    @Test
+    void push_excel_save(){
+        // given
+        List<infoqoch.dictionarybot.model.dictionary.Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents());
+
+        // when
+        repository.save(dictionaries);
+
+        // then
+        final List<infoqoch.dictionarybot.model.dictionary.Dictionary> all = repository.findAll();
+        assertThat(all).size().isEqualTo(dictionaries.size());
+        assertThat(toWordSet(all)).containsAll(toWordSet(dictionaries));
+    }
+
+    private List<infoqoch.dictionarybot.model.dictionary.Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {
+        List<infoqoch.dictionarybot.model.dictionary.Dictionary> dictionaries = new ArrayList<>();
+        final String sourceId = UUID.randomUUID().toString();
+        for (List<DictionaryContent> rowsData : sheetsData) {
+            for (DictionaryContent content : rowsData) {
+                final infoqoch.dictionarybot.model.dictionary.Dictionary dictionary = infoqoch.dictionarybot.model.dictionary.Dictionary.builder()
+                        .content(content)
+                        .source(infoqoch.dictionarybot.model.dictionary.Dictionary.Source.EXCEL)
+                        .sourceId(sourceId)
+                        .build();
+                dictionaries.add(dictionary);
+            }
+        }
+        return dictionaries;
+    }
+
+    private List<List<DictionaryContent>> sampleExcelToContents() {
+        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        final ExcelReader excelReader = new ExcelReader(file, 4);
+        List<List<DictionaryContent>> sheetsData = ExcelToDictionaryFactory.doubleRows(excelReader);
+        return sheetsData;
+    }
+
+    private Set<String> toWordSet(List<Dictionary> all) {
+        return all.stream().map(d -> d.getContent().getWord()).collect(Collectors.toSet());
+    }
+
 }

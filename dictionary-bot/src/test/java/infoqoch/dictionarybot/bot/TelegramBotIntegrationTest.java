@@ -4,10 +4,15 @@ import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.entity.Message;
 import infoqoch.telegrambot.bot.entity.Response;
+import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.util.ClassUtils;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,5 +32,16 @@ public class TelegramBotIntegrationTest {
 
         // then
         assertThat(response.isOk()).isTrue();
+    }
+
+    @Test
+    @DisplayName("TelegramBot.update() 테스트")
+    void update(){
+        // when
+        final Response<List<Update>> listResponse = bot.update().get(0l);
+
+        System.out.println(listResponse);
+
+        // then
     }
 }
