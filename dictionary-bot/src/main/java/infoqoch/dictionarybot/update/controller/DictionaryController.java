@@ -15,7 +15,9 @@ import infoqoch.telegrambot.bot.entity.FilePath;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.FilePathRequest;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -29,19 +31,11 @@ import java.util.List;
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 
 @Slf4j
-@Controller
-@AllArgsConstructor
+@Component
+@RequiredArgsConstructor
 public class DictionaryController {
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryService dictionaryService;
-    private final TelegramFileHandler telegramFileHandler;
-
-    @UpdateRequestMethodMapper(LOOKUP_WORD)
-    public UpdateResponse lookupByWord(UpdateRequest updateRequest) {
-        log.info("UpdateRequestMethodMapper : lookupByWord!");
-        final List<Dictionary> result = dictionaryRepository.findByWord(updateRequest.getValue());
-        return new UpdateResponse(SendType.MESSAGE, result.toString());
-    }
 
     @UpdateRequestMethodMapper(HELP)
     public String help() {
@@ -55,22 +49,18 @@ public class DictionaryController {
         return help();
     }
 
-    @UpdateRequestMethodMapper(EXCEL_PUSH)
-    public String excelPush(@UpdateRequestBodyParameterMapper UpdateDocument document) {
-        log.info("UpdateRequestMethodMapper : excel_push");
-
-        final File file = telegramFileHandler.extractExcelFile(document);
-
-        dictionaryService.saveExcel(file);
-
-        return "good job!";
+    @UpdateRequestMethodMapper(LOOKUP_WORD)
+    public UpdateResponse lookupByWord(UpdateRequest updateRequest) {
+        log.info("UpdateRequestMethodMapper : lookupByWord!");
+        final List<Dictionary> result = dictionaryRepository.findByWord(updateRequest.getValue());
+        return new UpdateResponse(SendType.MESSAGE, result.toString());
     }
 
+    @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
+    public String lookupBySentence(UpdateRequest updateRequest) {
+        log.info("UpdateRequestMethodMapper : lookupBySentence!");
+        final List<Dictionary> result = dictionaryRepository.findBySentence(updateRequest.getValue());
+        return result.toString();
+    }
 
-//    TODO!
-//    @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
-//    public String lookupBySentence(UpdateRequest request) {
-//        StringBuilder sb = new StringBuilder();
-//        return "LOOKUP_SENTENCE : " + request.getValue();
-//    }
 }

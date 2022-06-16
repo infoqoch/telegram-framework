@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
@@ -18,8 +17,8 @@ import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.exce
 import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.jsonToUpdateWrapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DictionaryControllerTest {
-    DictionaryController dictionaryController;
+class DocumentControllerTest {
+    DocumentController dictionaryController;
     DictionaryService dictionaryService;
     DictionaryRepository dictionaryRepository;
 
@@ -32,7 +31,7 @@ class DictionaryControllerTest {
         final TelegramBotProperties properties = TelegramBotProperties.defaultProperties("1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o");
         TelegramFileHandler handler = new TelegramFileHandler(bot, properties);
 
-        dictionaryController = new DictionaryController(dictionaryRepository, dictionaryService, handler);
+        dictionaryController = new DocumentController(dictionaryRepository, dictionaryService, handler);
     }
 
     @Test
