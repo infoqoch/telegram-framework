@@ -1,13 +1,10 @@
 package infoqoch.dictionarybot.model.dictionary.service;
 
-import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
-import infoqoch.dictionarybot.util.excel.ExcelReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

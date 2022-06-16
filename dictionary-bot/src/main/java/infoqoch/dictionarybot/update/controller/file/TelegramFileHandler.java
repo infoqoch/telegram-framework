@@ -1,8 +1,6 @@
 package infoqoch.dictionarybot.update.controller.file;
 
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.config.TelegramBotProperties;
 import infoqoch.telegrambot.bot.entity.FilePath;
@@ -13,12 +11,9 @@ import lombok.RequiredArgsConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_PUSH;
 
 @RequiredArgsConstructor
 public class TelegramFileHandler {

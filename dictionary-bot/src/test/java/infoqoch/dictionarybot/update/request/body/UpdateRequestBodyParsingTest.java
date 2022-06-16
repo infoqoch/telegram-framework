@@ -1,8 +1,8 @@
 package infoqoch.dictionarybot.update.request.body;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import infoqoch.telegrambot.util.JsonBind;

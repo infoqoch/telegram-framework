@@ -3,7 +3,6 @@ package infoqoch.dictionarybot.bot;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
-import infoqoch.telegrambot.bot.DefaultTelegramBot;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import org.springframework.context.ApplicationContext;

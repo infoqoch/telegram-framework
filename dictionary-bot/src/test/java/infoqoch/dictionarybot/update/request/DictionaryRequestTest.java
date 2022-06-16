@@ -1,8 +1,5 @@
 package infoqoch.dictionarybot.update.request;
 
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateRequestFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
