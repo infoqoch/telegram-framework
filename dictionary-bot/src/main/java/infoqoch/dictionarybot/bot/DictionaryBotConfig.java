@@ -19,7 +19,7 @@ public class DictionaryBotConfig {
 
     @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
-        final String packagePath = UpdateDispatcher.class.getPackageName() + ".controller";
+        final String packagePath = UpdateDispatcher.class.getPackageName();
         // final String packagePath = this.getClass().getPackageName();
         return new UpdateDispatcher(packagePath, new SpringBeanContext(context));
     }

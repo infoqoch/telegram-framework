@@ -22,8 +22,6 @@ public class UpdateDispatcher {
 
     public UpdateResponse process(UpdateWrapper update) {
         final Optional<UpdateRequestMethodResolver> any = methodResolvers.stream().filter(r -> r.support(update)).findAny();
-        if(any.isEmpty())
-            throw new IllegalStateException("cannot find any update request method resolver");
         return any.get().process(update);
     }
 

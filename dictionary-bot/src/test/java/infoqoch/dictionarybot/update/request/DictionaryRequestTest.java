@@ -13,7 +13,7 @@ public class DictionaryRequestTest {
         assertResolveMessage("/help good good", UpdateRequestCommand.HELP, "good good");
         
         // 모르는 명령
-        assertResolveMessage("/wefijeif", UpdateRequestCommand.UNKNOWN, "");
+        assertResolveMessage("/wefijeif", UpdateRequestCommand.UNKNOWN, "wefijeif");
 
         // 특수문자 대응
         // 명령은 첫 번째 스페이스 혹은 언더바를 기준으로 분리된다.

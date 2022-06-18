@@ -8,8 +8,8 @@ import infoqoch.telegrambot.util.DefaultJsonBind;
 import infoqoch.telegrambot.util.JsonBind;
 import org.junit.jupiter.api.Test;
 
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.LOOKUP_WORD;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
+import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestBodyParsingTest {
@@ -30,21 +30,36 @@ class UpdateRequestBodyParsingTest {
     }
 
     private void assertType(String json, UpdateType type) {
-        UpdateWrapper wrapper = MockUpdateGenerate.jsonToUpdateWrapper(json);
+        UpdateWrapper wrapper = jsonToUpdateWrapper(json);
         assertThat(wrapper.type()).isEqualTo(type);
     }
 
     @Test
     void extractCommand(){
-        assertUpdateRequest(MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.chatJson("/help")).updateRequest(), HELP, "");
-        assertUpdateRequest(MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.chatJson("/help_hi")).updateRequest(), HELP, "hi");
-        assertUpdateRequest(MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.chatJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.photoJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help")).updateRequest(), HELP, "");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help_hi")).updateRequest(), HELP, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(photoJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/excel_push")).updateRequest(), EXCEL_PUSH, "");
     }
 
     private void assertUpdateRequest(UpdateRequest request, UpdateRequestCommand command, String value) {
         assertThat(request.command()).isEqualTo(command);
         assertThat(request.value()).isEqualTo(value);
+    }
+
+    @Test
+    void handle_spaces_and_tabs(){
+        assertMultipleSpaceAndTabReplaceWithSingleSpace("abc     efg", "abc efg");
+        assertMultipleSpaceAndTabReplaceWithSingleSpace("abc         efg", "abc efg");
+        assertMultipleSpaceAndTabReplaceWithSingleSpace("abc                      efg", "abc efg");
+        assertMultipleSpaceAndTabReplaceWithSingleSpace("      a         b    c     e           f                  g", "a b c e f g");
+    }
+
+    private void assertMultipleSpaceAndTabReplaceWithSingleSpace(String actual, String expected) {
+        String regex = "[\\t\\s]+";
+        final String result = actual.replaceAll(regex, " ").trim();
+        assertThat(result).isEqualTo(expected);
     }
 }

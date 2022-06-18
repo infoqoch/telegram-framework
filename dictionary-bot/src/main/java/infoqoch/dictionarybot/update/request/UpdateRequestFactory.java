@@ -2,26 +2,32 @@ package infoqoch.dictionarybot.update.request;
 
 public class UpdateRequestFactory {
     public static UpdateRequest resolve(String input) {
-        String message = input.replaceAll("_", " ");
-        final int firstSpaceIdx = message.indexOf(" ");
-        final UpdateRequestCommand command = extractCommand(message, firstSpaceIdx);
-        String value = extractValue(message, firstSpaceIdx);
+        String message = simpleString(input);
+        final UpdateRequestCommand command = extractCommand(message);
+
+        if(command==UpdateRequestCommand.UNKNOWN)
+            return new UpdateRequest(command, message);
+
+        return commandAndExtractedValue(message, command);
+    }
+
+    private static UpdateRequest commandAndExtractedValue(String message, UpdateRequestCommand command) {
+        final int firstSpaceIdx = message.indexOf(command.alias());
+        String value = extractValue(message, firstSpaceIdx+ command.alias().length());
         return new UpdateRequest(command, value);
     }
 
-    private static UpdateRequestCommand extractCommand(String message, int firstSpaceIdx) {
-        return UpdateRequestCommand.of(extractCommandStr(message, firstSpaceIdx));
+    private static String simpleString(String input) {
+        return input.replaceAll("_", " ").replaceAll("/", "").replaceAll("[\\t\\s]+", " ").trim();
+    }
+
+    private static UpdateRequestCommand extractCommand(String message) {
+        return UpdateRequestCommand.of(message);
     }
 
     private static String extractValue(String message, int firstSpaceIdx) {
         if (firstSpaceIdx > -1)
             return message.substring(firstSpaceIdx).trim();
         return "";
-    }
-
-    private static String extractCommandStr(String message, int firstSpaceIdx) {
-        if (firstSpaceIdx > -1)
-            return message.substring(0, firstSpaceIdx).trim().replaceAll("/", "");
-        return message.trim().replace("/", "");
     }
 }

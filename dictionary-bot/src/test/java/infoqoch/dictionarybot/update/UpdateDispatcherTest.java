@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update;
 
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
 import infoqoch.dictionarybot.update.response.SendType;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UpdateDispatcherTest {
 
@@ -61,12 +61,10 @@ public class UpdateDispatcherTest {
 
     @Test
     void not_support_update_command(){
-        // given
         UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/wefwe"));
-
-        assertThatThrownBy(()-> updateDispatcher.process(update)).isInstanceOf(IllegalStateException.class);
+        assertThat(update.command()).isEqualTo(UpdateRequestCommand.UNKNOWN);
+        assertThat(update.value()).isEqualTo("wefwe");
     }
-
 }
 
 
