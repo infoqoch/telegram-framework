@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.model.dictionary.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
-import infoqoch.dictionarybot.util.excel.ExcelReader;
-import infoqoch.dictionarybot.util.excel.ExcelToDictionaryFactory;
+import infoqoch.dictionarybot.system.excel.ExcelReader;
+import infoqoch.dictionarybot.system.excel.ExcelParser;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,7 +145,7 @@ public class MemoryDictionaryRepositoryTest {
     private List<List<DictionaryContent>> sampleExcelToContents() {
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
         final ExcelReader excelReader = new ExcelReader(file, 4);
-        List<List<DictionaryContent>> sheetsData = ExcelToDictionaryFactory.doubleRows(excelReader);
+        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader);
         return sheetsData;
     }
 

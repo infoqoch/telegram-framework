@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.util.excel;
+package infoqoch.dictionarybot.system.excel;
 
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import org.junit.jupiter.api.Test;
@@ -8,15 +8,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExcelToDictionaryTest {
+public class ExcelParserTest {
 
 
     @Test
-    void test(){
+    void double_row(){
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
         final ExcelReader excelReader = new ExcelReader(file, 4);
 
-        List<List<DictionaryContent>> sheetsData = ExcelToDictionaryFactory.doubleRows(excelReader);
+        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader);
 
         assertThat(sheetsData.get(0)).size().isEqualTo(9);
         assertThat(sheetsData.get(1)).size().isEqualTo(19);

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.util.excel;
+package infoqoch.dictionarybot.system.excel;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

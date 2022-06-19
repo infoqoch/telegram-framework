@@ -3,8 +3,8 @@ package infoqoch.dictionarybot.model.dictionary.service;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
-import infoqoch.dictionarybot.util.excel.ExcelReader;
-import infoqoch.dictionarybot.util.excel.ExcelToDictionaryFactory;
+import infoqoch.dictionarybot.system.excel.ExcelReader;
+import infoqoch.dictionarybot.system.excel.ExcelParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +43,6 @@ public class DictionaryService {
     }
 
     private List<List<DictionaryContent>> sampleExcelToContents(File file) {
-        return ExcelToDictionaryFactory.doubleRows(new ExcelReader(file, 4));
+        return ExcelParser.doubleRows(new ExcelReader(file, 4));
     }
 }
