@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.send.request;
 
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.ToString;
@@ -31,7 +32,7 @@ public class SendRequest {
             return (MarkdownStringBuilder) body;
         if(body instanceof String)
             return new MarkdownStringBuilder().plain((String) body);
-        throw new IllegalArgumentException("not support send request body type");
+        throw new TelegramServerException("not support send request body type");
     }
 
     public SendType type() {

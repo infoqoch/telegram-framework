@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramSend;
@@ -24,6 +25,6 @@ public class SendDispatcher {
     private Response<?> sendResolver(SendRequest request) {
         if(request.type() == SendType.MESSAGE) return send.message(new SendMessageRequest(request.chatId(), request.message()));
         if(request.type() == SendType.DOCUMENT) return send.document(new SendDocumentRequest(request.chatId(), request.document(), request.message()));
-        throw new IllegalArgumentException("not supported SendType");
+        throw new TelegramServerException("not supported SendType");
     }
 }

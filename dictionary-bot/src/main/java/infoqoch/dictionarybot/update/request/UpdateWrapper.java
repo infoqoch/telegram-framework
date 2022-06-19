@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.request;
 
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.dictionarybot.update.request.body.UpdateType;
@@ -24,7 +25,7 @@ public class UpdateWrapper {
         if(update.getMessage().getPhoto()!=null) return PHOTO;
         if(update.getMessage().getDocument()!=null) return DOCUMENT;
         if(update.getMessage().getText()!=null) return CHAT;
-        throw new IllegalStateException("unknown update type (1)");
+        throw new TelegramServerException("unknown update type (1)");
     }
 
     public UpdateRequestCommand command(){
@@ -39,7 +40,7 @@ public class UpdateWrapper {
         if(type() == CHAT) return UpdateRequestFactory.resolve(update.getMessage().getText());
         if(type() == DOCUMENT) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
         if(type() == PHOTO) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
-        throw new IllegalStateException("unknown update type (2)");
+        throw new TelegramServerException("unknown update type (2)");
     }
 
     public UpdateChat toChat() {
@@ -72,6 +73,6 @@ public class UpdateWrapper {
     public Optional<Object> getBodyByType(Class<?> type) {
         if(type == UpdateChat.class) return Optional.of(toChat());
         if(type == UpdateDocument.class) return Optional.of(toDocument());
-        throw new IllegalStateException("not support data type");
+        throw new TelegramServerException("not support data type (3)");
     }
 }

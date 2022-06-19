@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.bot;
 
 import infoqoch.dictionarybot.send.MockSendResponseGenerate;
 import infoqoch.dictionarybot.send.SendDispatcher;
-import infoqoch.dictionarybot.update.FakeUpdateDispatcherFactory;
+import infoqoch.dictionarybot.update.dispatcher.fake.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -29,7 +29,7 @@ class DictionaryBotRunnerTest {
         telegramUpdate = new FakeTelegramUpdate();
         bot = new FakeTelegramBot(telegramUpdate, telegramSend);
 
-        updateDispatcher = FakeUpdateDispatcherFactory.instance();
+        updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
         sendDispatcher = new SendDispatcher(bot);
         runner = new DictionaryBotRunner(bot, updateDispatcher, sendDispatcher);
     }

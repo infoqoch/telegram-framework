@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.system.excel;
 
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -51,7 +52,7 @@ public class ExcelReader {
 		try (Workbook workbook = new XSSFWorkbook(new FileInputStream(file))) {
 			return workbook;
 		} catch (IOException e) {
-			throw new IllegalArgumentException(e);
+			throw new TelegramServerException(e);
 		}
 	}
 
@@ -130,7 +131,6 @@ public class ExcelReader {
 		for(Sheet sheet : workbook)
 			for(Row row : sheet)
 				if(row.getPhysicalNumberOfCells() > max) max = row.getPhysicalNumberOfCells();
-
 		return max;
 	}
 }

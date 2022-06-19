@@ -1,5 +1,7 @@
-package infoqoch.dictionarybot.update;
+package infoqoch.dictionarybot.update.dispatcher;
 
+import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.dispatcher.fake.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
@@ -18,7 +20,7 @@ public class UpdateDispatcherTest {
 
     @BeforeEach
     void setUp() {
-        updateDispatcher = FakeUpdateDispatcherFactory.instance();
+        updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
     }
 
     @Test

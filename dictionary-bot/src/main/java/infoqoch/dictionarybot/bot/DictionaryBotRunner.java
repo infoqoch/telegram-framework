@@ -3,19 +3,23 @@ package infoqoch.dictionarybot.bot;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
+import infoqoch.dictionarybot.system.exception.TelegramException;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
-import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramUpdate;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+
+import static infoqoch.dictionarybot.update.response.SendType.MESSAGE;
 
 @Slf4j
 @Component
@@ -55,10 +59,20 @@ public class DictionaryBotRunner {
     private UpdateResponse resolveUpdate(UpdateWrapper updateWrap) {
         try{
             return updateDispatcher.process(updateWrap);
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e){
+            return updateExceptionHandler(e);
         }
-        return new UpdateResponse(SendType.MESSAGE, "알 수 없는 오류가 발생하였습니다!");
+    }
+
+    private UpdateResponse updateExceptionHandler(Exception e) {
+        final Optional<TelegramException> telegramException = causedByTelegramException(e);
+        if(telegramException.isPresent()){
+            final TelegramException te = telegramException.get();
+            final MarkdownStringBuilder response = te.response();
+            if (response != null) return new UpdateResponse(MESSAGE, response);
+            return new UpdateResponse(MESSAGE, "서버에 문제가 발생하였습니다. 죄송합니다.");
+        }
+        return new UpdateResponse(MESSAGE, "서버에 문제가 발생하였습니다. 죄송합니다.");
     }
 
     private SendResponse resolveSend(UpdateWrapper updateWrap, UpdateResponse updateResponse) {
@@ -69,6 +83,16 @@ public class DictionaryBotRunner {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Optional<TelegramException> causedByTelegramException(Throwable e) {
+        if(e instanceof TelegramException)
+            return Optional.of((TelegramException)e);
+        final Throwable cause = e.getCause();
+        if(cause !=null){
+            causedByTelegramException(cause);
+        }
+        return Optional.empty();
     }
 
     private void replaceLastUpdateId(Long updateId) {

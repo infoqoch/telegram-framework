@@ -18,12 +18,14 @@ import java.util.UUID;
 public class DictionaryService {
     private final DictionaryRepository dictionaryRepository;
 
-    public void saveExcel(File file){
+    public int saveExcel(File file){
         // given
         List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents(file));
 
         // when
         dictionaryRepository.save(dictionaries);
+
+        return dictionaries.size();
     }
 
     private List<Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {

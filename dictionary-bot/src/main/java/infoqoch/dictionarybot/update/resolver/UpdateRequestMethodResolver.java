@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.resolver;
 
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestBodyParameterMapper;
@@ -12,6 +13,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
+// TODO.
+// 런타임이 아닌 스프링 컨텍스트 로딩 시점에서 지원하는 데이터타입이 아닌 타입을 시그니처로 했을 때 예외가 터지도록 변경 필요.
 public class UpdateRequestMethodResolver {
     private final Object bean;
     private final Method method;
@@ -53,7 +56,7 @@ public class UpdateRequestMethodResolver {
             if(parameter.hasAnnotation(UpdateRequestBodyParameterMapper.class)){
                 Optional<Object> body = update.getBodyByType(parameter.type());
                 if(body.isEmpty())
-                    throw new IllegalArgumentException("not support parameter type. UpdateChat, UpdateDocument supported only");
+                    throw new TelegramServerException("not support parameter type. UpdateChat, UpdateDocument supported only");
                 args[i] = body.get();
                 continue;
             }
@@ -66,11 +69,12 @@ public class UpdateRequestMethodResolver {
             final Object result = method.invoke(bean, args);
             if(result instanceof String)
                 return new UpdateResponse(SendType.MESSAGE, result);
-            return (UpdateResponse) result;
+            if(result instanceof UpdateResponse)
+                return (UpdateResponse) result;
+            throw new TelegramServerException("can not resolve the return data (1) : " + result.getClass());
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("can not resolve the return data.", e);
+            throw new TelegramServerException("can not resolve the return data (2)", e);
         }
-
     }
 
     private ParameterWrapper[] extractParameterWrapper() {

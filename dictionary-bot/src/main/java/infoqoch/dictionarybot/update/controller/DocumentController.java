@@ -28,8 +28,8 @@ public class DocumentController {
 
         final File file = telegramFileHandler.extractExcelFile(document);
 
-        dictionaryService.saveExcel(file);
+        final int saved = dictionaryService.saveExcel(file);
 
-        return "good job!";
+        return saved + "의 사전이 등록되었습니다!";
     }
 }

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update;
+package infoqoch.dictionarybot.update.dispatcher.fake;
 
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
@@ -39,7 +39,6 @@ public class FakeController {
         return new UpdateResponse(SendType.MESSAGE, "help! " + request.getValue());
     }
 
-
     @UpdateRequestMethodMapper(UNKNOWN)
     public String unknown() {
         return "unknown??";
@@ -47,8 +46,6 @@ public class FakeController {
 
     @UpdateRequestMethodMapper(EXCEL_PUSH)
     public String excelpush() {
-        return "excel push!!";
+        return "excep push!!";
     }
-
-
 }
