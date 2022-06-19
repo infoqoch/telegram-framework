@@ -64,14 +64,13 @@ public class UpdateRequestMethodResolver {
     private UpdateResponse resolveReturn(Object[] args){
         try {
             final Object result = method.invoke(bean, args);
-
             if(result instanceof String)
                 return new UpdateResponse(SendType.MESSAGE, result);
             return (UpdateResponse) result;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("can not resolve the return data.", e);
         }
-        throw new IllegalStateException("!!!!!@#$#@");
+
     }
 
     private ParameterWrapper[] extractParameterWrapper() {

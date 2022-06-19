@@ -52,6 +52,15 @@ public class DictionaryBotRunner {
         log.debug("sendResponse = {}", sendResponse);
     }
 
+    private UpdateResponse resolveUpdate(UpdateWrapper updateWrap) {
+        try{
+            return updateDispatcher.process(updateWrap);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new UpdateResponse(SendType.MESSAGE, "알 수 없는 오류가 발생하였습니다!");
+    }
+
     private SendResponse resolveSend(UpdateWrapper updateWrap, UpdateResponse updateResponse) {
         try{
             final SendRequest request = new SendRequest(updateWrap.chatId(), updateResponse.type(), updateResponse.document(), updateResponse.body());
@@ -60,15 +69,6 @@ public class DictionaryBotRunner {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private UpdateResponse resolveUpdate(UpdateWrapper updateWrap) {
-        try{
-            return updateDispatcher.process(updateWrap);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return new UpdateResponse(SendType.MESSAGE, "알 수 없는 오류가 발생하였습니다!");
     }
 
     private void replaceLastUpdateId(Long updateId) {

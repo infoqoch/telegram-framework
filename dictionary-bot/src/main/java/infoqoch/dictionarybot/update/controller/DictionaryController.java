@@ -48,4 +48,10 @@ public class DictionaryController {
         return result.toString();
     }
 
+    @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
+    public String lookupByDefinition(UpdateRequest updateRequest) {
+        log.info("UpdateRequestMethodMapper : lookupByDefinition!");
+        return updateRequest.getValue()+"을(를) 뜻으로 검색하였습니다.";
+    }
+
 }

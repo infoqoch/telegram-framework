@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FakeUpdateDispatcherTest {
+// FakeUpdateDispatcherFactory 에 등록된 가짜 빈에 한정함!
+public class UpdateDispatcherTest {
 
     private UpdateDispatcher updateDispatcher;
 
@@ -20,7 +21,7 @@ public class FakeUpdateDispatcherTest {
     }
 
     @Test
-    void resolver_default_signature_test(){
+    void param_UpdateRequestBodyParameterMapper(){
         // given
         UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/help_hello!"));
 
@@ -33,7 +34,7 @@ public class FakeUpdateDispatcherTest {
     }
 
     @Test
-    void resolver_custom_parameter(){
+    void param_UpdateRequest_return_string(){
         // given
         UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/s_orange"));
 
@@ -47,7 +48,7 @@ public class FakeUpdateDispatcherTest {
     }
 
     @Test
-    void resolver_custom_return(){
+    void return_UpdateResponse(){
         // given
         UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/w_apple"));
 
@@ -60,10 +61,28 @@ public class FakeUpdateDispatcherTest {
     }
 
     @Test
-    void not_support_update_command(){
+    void return_UpdateResponse_null_body(){
+        // given
+        UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/d_hi"));
+
+        UpdateResponse response = updateDispatcher.process(update);
+
+        // then
+        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.body()).isNull();;
+    }
+
+    @Test
+    void unknown_command(){
+        //when
         UpdateWrapper update = MockUpdateGenerate.jsonToUpdateWrapper(MockUpdateGenerate.documentJson("/wefwe"));
+
+        UpdateResponse response = updateDispatcher.process(update);
+
+        //then
         assertThat(update.command()).isEqualTo(UpdateRequestCommand.UNKNOWN);
-        assertThat(update.value()).isEqualTo("wefwe");
+        assertThat(update.value()).isEqualTo("wefwe"); // command를 알 수 없으면 value를 요청한 값으로 한다.
+        assertThat(response.body()).isEqualTo("unknown??");
     }
 }
 

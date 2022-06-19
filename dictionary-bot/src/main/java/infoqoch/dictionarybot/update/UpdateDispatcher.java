@@ -22,10 +22,7 @@ public class UpdateDispatcher {
     }
 
     public UpdateResponse process(UpdateWrapper update) {
-        final Optional<UpdateRequestMethodResolver> any = methodResolvers.stream().filter(r -> r.support(update)).findAny();
-        if(any.isEmpty())
-            throw new IllegalStateException("not concreted command. UpdateRequest : " + update.updateRequest());
-        return any.get().process(update);
+        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
     }
 
     private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls) {
