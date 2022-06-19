@@ -7,6 +7,7 @@ import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +33,7 @@ public class TelegramBotIntegrationTest {
         assertThat(response.isOk()).isTrue();
     }
 
+    @Disabled("update 값이 있어야 동작함.")
     @Test
     @DisplayName("TelegramBot.update() 테스트")
     void update(){

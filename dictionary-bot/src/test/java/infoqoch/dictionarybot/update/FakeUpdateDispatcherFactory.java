@@ -1,11 +1,11 @@
 package infoqoch.dictionarybot.update;
 
+import infoqoch.dictionarybot.DictionaryBotApplicationTests;
 import infoqoch.dictionarybot.update.resolver.bean.MapBeanContext;
 import infoqoch.dictionarybot.update.testcontroller.TestHandler;
-import org.reflections.util.ClasspathHelper;
 
 import java.net.URL;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +18,12 @@ public class FakeUpdateDispatcherFactory {
         MapBeanContext beanExtract = new MapBeanContext();
         beanExtract.setContext(context);
 
-        final Collection<URL> urls = ClasspathHelper.forPackage(UpdateDispatcher.class.getPackage().getName());
+        final URL resource = DictionaryBotApplicationTests.class.getResource(".");
+        System.out.println("resource = " + resource);
+
+        final ArrayList<URL> urls = new ArrayList<>();
+        urls.add(resource);
+
         return new UpdateDispatcher(beanExtract, urls);
     }
-
 }
