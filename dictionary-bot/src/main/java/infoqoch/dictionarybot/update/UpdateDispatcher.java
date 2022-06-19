@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update;
 
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
@@ -22,6 +23,8 @@ public class UpdateDispatcher {
 
     public UpdateResponse process(UpdateWrapper update) {
         final Optional<UpdateRequestMethodResolver> any = methodResolvers.stream().filter(r -> r.support(update)).findAny();
+        if(any.isEmpty())
+            throw new IllegalStateException("not concreted command. UpdateRequest : " + update.updateRequest());
         return any.get().process(update);
     }
 
@@ -35,6 +38,22 @@ public class UpdateDispatcher {
 
             methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper));
         }
+
+        if(isNotConcretedEveryCommand(updateRequestMappers)){
+            throw new IllegalArgumentException("every mapper should be concreted. commands  : " + printAllCommands());
+        }
+    }
+
+    private String printAllCommands() {
+        StringBuilder sb = new StringBuilder();
+        for(UpdateRequestCommand command : UpdateRequestCommand.values() ){
+            sb.append(command).append(" ");
+        }
+        return sb.toString();
+    }
+
+    private boolean isNotConcretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
+        return updateRequestMappers.size() != UpdateRequestCommand.values().length;
     }
 
     private UpdateRequestMethodMapper extractUpdateRequestMapper(Method method) {
