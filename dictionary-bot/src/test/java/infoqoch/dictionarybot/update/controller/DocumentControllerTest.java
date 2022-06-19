@@ -7,35 +7,38 @@ import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
-import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
-import infoqoch.telegrambot.bot.TelegramBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.excelDocumentJson;
 import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.jsonToUpdateWrapper;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DocumentControllerTest {
     DocumentController dictionaryController;
     DictionaryService dictionaryService;
     DictionaryRepository dictionaryRepository;
+    TelegramFileHandler mockHandler;
 
     @BeforeEach
     void setUp(){
         dictionaryRepository = new MemoryDictionaryRepository();
         dictionaryService = new DictionaryService(dictionaryRepository);
-
-        TelegramBot bot =  DefaultTelegramBotFactory.init("1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o");
-        TelegramFileHandler handler = new TelegramFileHandler(bot);
-
-        dictionaryController = new DocumentController(dictionaryRepository, dictionaryService, handler);
+        mockHandler = mock(TelegramFileHandler.class);
+        dictionaryController = new DocumentController(dictionaryRepository, dictionaryService, mockHandler);
     }
 
     @Test
     void test() throws JsonProcessingException {
         // given
         final UpdateDocument document = mockDocumentWithExcel("/excel_push");
+        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        when(mockHandler.extractExcelFile(any())).thenReturn(file);
 
         // when
         dictionaryController.excelPush(document);
