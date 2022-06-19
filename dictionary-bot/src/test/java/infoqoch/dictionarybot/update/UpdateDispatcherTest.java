@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // FakeUpdateDispatcherFactory 에 등록된 가짜 빈에 한정함!
+// param resolver, return resolver 를 특히 검사함.
 public class UpdateDispatcherTest {
 
     private UpdateDispatcher updateDispatcher;

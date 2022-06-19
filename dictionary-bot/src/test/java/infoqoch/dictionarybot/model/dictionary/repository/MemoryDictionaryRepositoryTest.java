@@ -25,7 +25,7 @@ public class MemoryDictionaryRepositoryTest {
 
     @Test
     void save(){
-        final Long dictionaryNo = saveDictionaryInRepo(createSimpleDictionaryContent("apple"));
+        final Long dictionaryNo = saveInRepo(createSimpleDictionaryContent("apple"));
         assertThat(dictionaryNo).isGreaterThan(0);
     }
 
@@ -33,7 +33,7 @@ public class MemoryDictionaryRepositoryTest {
     void find_by_no(){
         // given
         final DictionaryContent content = createSimpleDictionaryContent("first");
-        final Long dictionaryNo = saveDictionaryInRepo(content);
+        final Long dictionaryNo = saveInRepo(content);
 
         // when
         Optional<Dictionary> result = repository.findByNo(dictionaryNo);
@@ -46,13 +46,13 @@ public class MemoryDictionaryRepositoryTest {
     }
 
     @Test
-    void find_by_no_next_key(){
-        final Long firstNo = saveDictionaryInRepo(createSimpleDictionaryContent("first"));
+    void increment_pk(){
+        // given
+        final Long firstNo = saveInRepo(createSimpleDictionaryContent("first"));
         assert firstNo == 1l;
 
-        // given
         final DictionaryContent content = createSimpleDictionaryContent("second");
-        final Long dictionaryNo = saveDictionaryInRepo(content);
+        final Long dictionaryNo = saveInRepo(content);
 
         // when
         Optional<Dictionary> result = repository.findByNo(dictionaryNo);
@@ -67,10 +67,10 @@ public class MemoryDictionaryRepositoryTest {
     @Test
     void find_by_word(){
         // given
-        saveDictionaryInRepo(createSimpleDictionaryContent("kimchi")); // 허수
+        saveInRepo(createSimpleDictionaryContent("kimchi")); // 허수
         DictionaryContent content = createSimpleDictionaryContent("apple");
-        final Long dictionaryNo = saveDictionaryInRepo(content);
-        saveDictionaryInRepo(createSimpleDictionaryContent("radio")); // 허수
+        final Long dictionaryNo = saveInRepo(content);
+        saveInRepo(createSimpleDictionaryContent("radio")); // 허수
 
         // when
         List<Dictionary> result = repository.findByWord("apple");
@@ -85,7 +85,7 @@ public class MemoryDictionaryRepositoryTest {
     @Test
     void find_by_word_not_found(){
         // given
-        saveDictionaryInRepo(createSimpleDictionaryContent("kimchi")); // 허수
+        saveInRepo(createSimpleDictionaryContent("kimchi")); // 허수
 
         // when
         List<Dictionary> result = repository.findByWord("apple");
@@ -95,7 +95,7 @@ public class MemoryDictionaryRepositoryTest {
     }
 
 
-    private Long saveDictionaryInRepo(DictionaryContent dictionaryContent) {
+    private Long saveInRepo(DictionaryContent dictionaryContent) {
         final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
         return repository.save(dictionary);
     }
@@ -113,7 +113,7 @@ public class MemoryDictionaryRepositoryTest {
     }
 
     @Test
-    void push_excel_save(){
+    void save_list(){
         // given
         List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents());
 

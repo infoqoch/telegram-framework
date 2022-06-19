@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SendRequestTest {
     @Test
-    void body_test(){
+    void body_escape(){
         SendRequest request = new SendRequest(112354l, SendType.MESSAGE, "good job!");
         assertSendRequest(request, 112354l, SendType.MESSAGE, "good job\\!"); //
 
@@ -17,7 +17,7 @@ public class SendRequestTest {
     }
 
     @Test
-    void type_test() {
+    void send_type() {
         SendRequest request = new SendRequest(112354l, SendType.MESSAGE, "good job!");
         assertSendRequest(request, 112354l, SendType.MESSAGE, "good job\\!"); //
 

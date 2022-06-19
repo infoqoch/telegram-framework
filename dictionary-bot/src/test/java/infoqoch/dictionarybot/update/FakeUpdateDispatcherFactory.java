@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.DictionaryBotApplicationTests;
-import infoqoch.dictionarybot.update.resolver.bean.MapBeanContext;
+import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ public class FakeUpdateDispatcherFactory {
         return urls;
     }
 
-    // !! 테스트에 한정하는 @UpdateRequestMethodMapper 의 객체를 삽입해야한다.
-    private static MapBeanContext fakeBeanContext() {
+    // !! 테스트에 한정하는 @UpdateRequestMethodMapper 의 객체(인스턴스)를 삽입해야한다.
+    private static FakeMapBeanContext fakeBeanContext() {
         Map<Class<?>, Object> context = new HashMap<>();
         final Object bean = new FakeController();
         context.put(bean.getClass(), bean);
 
-        MapBeanContext beanExtract = new MapBeanContext();
+        FakeMapBeanContext beanExtract = new FakeMapBeanContext();
         beanExtract.setContext(context);
         return beanExtract;
     }

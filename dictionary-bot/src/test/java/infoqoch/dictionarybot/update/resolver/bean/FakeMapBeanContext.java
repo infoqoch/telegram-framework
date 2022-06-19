@@ -5,7 +5,7 @@ import org.springframework.beans.BeansException;
 
 import java.util.Map;
 
-public class MapBeanContext implements BeanContext {
+public class FakeMapBeanContext implements BeanContext {
     @Setter
     private Map<Class<?>, Object> context;
 

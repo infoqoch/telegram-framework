@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 class DictionaryBotRunnerTest {
 
@@ -24,13 +23,6 @@ class DictionaryBotRunnerTest {
     // test target instance
     DictionaryBotRunner runner;
 
-    void setUpWithMockito(){
-        bot = mock(TelegramBot.class);
-        updateDispatcher = mock(UpdateDispatcher.class);
-        sendDispatcher = mock(SendDispatcher.class);
-        runner = new DictionaryBotRunner(bot, updateDispatcher, sendDispatcher);
-    }
-
     @BeforeEach
     void setUp(){
         telegramSend = new FakeTelegramSend();
@@ -41,8 +33,7 @@ class DictionaryBotRunnerTest {
         sendDispatcher = new SendDispatcher(bot);
         runner = new DictionaryBotRunner(bot, updateDispatcher, sendDispatcher);
     }
-
-
+    
     @Test
     void message_send() {
         telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w hi", 123l));

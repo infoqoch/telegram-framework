@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestCommandTest {
     @Test
-    void test(){
+    void resolve_command(){
         assertMatchCommand("help", "help", HELP);
         assertMatchCommand("excel push", "excel push", EXCEL_PUSH);
         assertMatchCommand("w", "w", LOOKUP_WORD);

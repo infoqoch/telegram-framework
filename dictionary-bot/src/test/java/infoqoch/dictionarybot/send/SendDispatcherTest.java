@@ -6,8 +6,10 @@ import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramBot;
+import infoqoch.telegrambot.bot.response.SendDocumentResponse;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,14 +25,14 @@ public class SendDispatcherTest {
         sendDispatcher = new SendDispatcher(bot);
     }
 
+    @DisplayName("가상의 응답값(SendResponse)의 정상처리 여부")
     @Test
     void message(){
-        // given
+        // given. sendRequest를 telegram에 보내고 telegram의 정상 응답값을 받았음. 해당 응답값에 대한 대역
         fakeSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/help", 12345l));
-        final SendRequest request = new SendRequest(12345l, SendType.MESSAGE, "/help");
 
         // when
-        SendResponse sendResponse = sendDispatcher.process(request);
+        SendResponse sendResponse = sendDispatcher.process(new SendRequest(12345l, SendType.MESSAGE, "/help"));
 
         // then
         assertThat(sendResponse.isOk()).isTrue();
@@ -39,18 +41,20 @@ public class SendDispatcherTest {
         assertThat(result.getText()).isEqualTo("/help");
     }
 
+    @DisplayName("가상의 응답값(SendResponse)의 정상처리 여부, sendtype = document")
     @Test
     void document(){
         // given
-        fakeSend.setMockDocumentResponseJson(MockSendResponseGenerate.sendDocument());
-        final SendRequest request = new SendRequest(12345l, SendType.DOCUMENT, "fake document", "fake text");
+        fakeSend.setMockDocumentResponseJson(MockSendResponseGenerate.sendDocument(12345l));
+        assert fakeSend.isDocumentCalled() == false;
 
         // when
-        assert fakeSend.isDocumentCalled() == false;
-        SendResponse sendResponse = sendDispatcher.process(request);
+        final SendResponse response = sendDispatcher.process(new SendRequest(12345l, SendType.DOCUMENT, "fake document", "fake text"));
 
         // then
         assertThat(fakeSend.isDocumentCalled()).isTrue();
-    }
 
+        final SendDocumentResponse result = (SendDocumentResponse) response.result();
+        assertThat(result.getChat().getId()).isEqualTo(12345l);
+    }
 }
