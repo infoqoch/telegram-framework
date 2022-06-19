@@ -4,6 +4,7 @@ import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramFile;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.TelegramUpdate;
+import infoqoch.telegrambot.bot.config.TelegramBotProperties;
 
 public class FakeTelegramBot implements TelegramBot {
     private final TelegramSend telegramSend;
@@ -32,6 +33,11 @@ public class FakeTelegramBot implements TelegramBot {
 
     @Override
     public TelegramFile file() {
+        return null;
+    }
+
+    @Override
+    public TelegramBotProperties.Url url() {
         return null;
     }
 }

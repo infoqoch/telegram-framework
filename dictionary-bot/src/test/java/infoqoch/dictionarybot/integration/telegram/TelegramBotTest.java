@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot.integration.telegram;
 
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TelegramBotIntegrationTest {
+public class TelegramBotTest {
     private TelegramBot bot;
 
     @BeforeEach
@@ -23,7 +23,8 @@ public class TelegramBotIntegrationTest {
         bot =  DefaultTelegramBotFactory.init("1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o");
     }
 
-    // @Test
+    @Disabled("실제 telegram bot 과 통신함")
+    @Test
     @DisplayName("TelegramBot.send() 테스트")
     void send_message(){
         // when
@@ -33,7 +34,7 @@ public class TelegramBotIntegrationTest {
         assertThat(response.isOk()).isTrue();
     }
 
-    @Disabled("update 값이 있어야 동작함.")
+    @Disabled("실제 telegram bot 과 통신함")
     @Test
     @DisplayName("TelegramBot.update() 테스트")
     void update(){

@@ -36,7 +36,7 @@ public class MemoryDictionaryRepositoryTest {
         final Long dictionaryNo = saveDictionaryInRepo(content);
 
         // when
-        Optional<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByNo(dictionaryNo);
+        Optional<Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
         Assertions.assertThat(result).isPresent();
@@ -55,7 +55,7 @@ public class MemoryDictionaryRepositoryTest {
         final Long dictionaryNo = saveDictionaryInRepo(content);
 
         // when
-        Optional<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByNo(dictionaryNo);
+        Optional<Dictionary> result = repository.findByNo(dictionaryNo);
 
         // then
         Assertions.assertThat(result).isPresent();
@@ -73,7 +73,7 @@ public class MemoryDictionaryRepositoryTest {
         saveDictionaryInRepo(createSimpleDictionaryContent("radio")); // 허수
 
         // when
-        List<infoqoch.dictionarybot.model.dictionary.Dictionary> result = repository.findByWord("apple");
+        List<Dictionary> result = repository.findByWord("apple");
 
         // then
         Assertions.assertThat(result).size().isEqualTo(1);
@@ -82,8 +82,21 @@ public class MemoryDictionaryRepositoryTest {
     }
 
 
+    @Test
+    void find_by_word_not_found(){
+        // given
+        saveDictionaryInRepo(createSimpleDictionaryContent("kimchi")); // 허수
+
+        // when
+        List<Dictionary> result = repository.findByWord("apple");
+
+        // then
+        Assertions.assertThat(result).size().isEqualTo(0);
+    }
+
+
     private Long saveDictionaryInRepo(DictionaryContent dictionaryContent) {
-        final infoqoch.dictionarybot.model.dictionary.Dictionary dictionary = infoqoch.dictionarybot.model.dictionary.Dictionary.builder().content(dictionaryContent).build();
+        final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
         return repository.save(dictionary);
     }
 
@@ -102,25 +115,25 @@ public class MemoryDictionaryRepositoryTest {
     @Test
     void push_excel_save(){
         // given
-        List<infoqoch.dictionarybot.model.dictionary.Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents());
+        List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents());
 
         // when
         repository.save(dictionaries);
 
         // then
-        final List<infoqoch.dictionarybot.model.dictionary.Dictionary> all = repository.findAll();
+        final List<Dictionary> all = repository.findAll();
         assertThat(all).size().isEqualTo(dictionaries.size());
         assertThat(toWordSet(all)).containsAll(toWordSet(dictionaries));
     }
 
-    private List<infoqoch.dictionarybot.model.dictionary.Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {
-        List<infoqoch.dictionarybot.model.dictionary.Dictionary> dictionaries = new ArrayList<>();
+    private List<Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {
+        List<Dictionary> dictionaries = new ArrayList<>();
         final String sourceId = UUID.randomUUID().toString();
         for (List<DictionaryContent> rowsData : sheetsData) {
             for (DictionaryContent content : rowsData) {
-                final infoqoch.dictionarybot.model.dictionary.Dictionary dictionary = infoqoch.dictionarybot.model.dictionary.Dictionary.builder()
+                final Dictionary dictionary = Dictionary.builder()
                         .content(content)
-                        .source(infoqoch.dictionarybot.model.dictionary.Dictionary.Source.EXCEL)
+                        .source(Dictionary.Source.EXCEL)
                         .sourceId(sourceId)
                         .build();
                 dictionaries.add(dictionary);
