@@ -60,6 +60,6 @@ class DictionaryBotRunnerTest {
         runner.run();
 
         assertThat(telegramSend.isMessageCalled).isTrue(); // spy 로 검사한다.
-        assertThat(telegramSend.getSendMessageRequest().getText()).isEqualTo("알 수 없는 오류가 발생하였습니다\\!");
+        assertThat(telegramSend.getSendMessageRequest().getText()).isEqualTo("unknown??");
     }
 }
