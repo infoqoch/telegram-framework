@@ -7,17 +7,17 @@ import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.*;
 
 public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
 
-    public UpdateDispatcher(String packagePath, BeanContext context) {
-        collectUpdateRequestMappedMethods(packagePath, context);
+    public UpdateDispatcher(BeanContext context, Collection<URL> urls) {
+        collectUpdateRequestMappedMethods(context, urls);
     }
 
     public UpdateResponse process(UpdateWrapper update) {
@@ -25,10 +25,10 @@ public class UpdateDispatcher {
         return any.get().process(update);
     }
 
-    private void collectUpdateRequestMappedMethods(String packagePath, BeanContext context) {
+    private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls) {
         Set<UpdateRequestMethodMapper> updateRequestMappers = new HashSet<>();
 
-        for (Method method : getMethodsAnnotated(packagePath)) {
+        for (Method method : getMethodsAnnotated(urls)) {
             final UpdateRequestMethodMapper mapper = extractUpdateRequestMapper(method);
 
             checkDuplicatedMapper(updateRequestMappers, mapper);
@@ -41,8 +41,8 @@ public class UpdateDispatcher {
         return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
     }
 
-    private Set<Method> getMethodsAnnotated(String packagePath) {
-        return new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(packagePath)).setScanners(Scanners.MethodsAnnotated)).getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
+    private Set<Method> getMethodsAnnotated(Collection<URL> urls) {
+        return new Reflections(new ConfigurationBuilder().setUrls(urls).setScanners(Scanners.MethodsAnnotated)).getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
     }
 
     private void checkDuplicatedMapper(Set<UpdateRequestMethodMapper> checkDuplicatedMapper, UpdateRequestMethodMapper mapper) {

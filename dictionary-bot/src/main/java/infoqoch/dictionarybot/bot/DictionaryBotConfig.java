@@ -5,9 +5,15 @@ import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
+import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.net.URL;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 public class DictionaryBotConfig {
@@ -19,9 +25,12 @@ public class DictionaryBotConfig {
 
     @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
-        final String packagePath = UpdateDispatcher.class.getPackageName();
-        // final String packagePath = this.getClass().getPackageName();
-        return new UpdateDispatcher(packagePath, new SpringBeanContext(context));
+        final Collection<URL> urls = getUrlsExcludeTest();
+        return new UpdateDispatcher(new SpringBeanContext(context), urls);
+    }
+
+    private Set<URL> getUrlsExcludeTest() {
+        return ClasspathHelper.forPackage(UpdateDispatcher.class.getPackageName()).stream().filter(url -> !url.toString().contains("/test-classes")).collect(Collectors.toSet());
     }
 
     @Bean

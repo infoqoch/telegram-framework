@@ -2,7 +2,10 @@ package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.update.resolver.bean.MapBeanContext;
 import infoqoch.dictionarybot.update.testcontroller.TestHandler;
+import org.reflections.util.ClasspathHelper;
 
+import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,8 +18,8 @@ public class FakeUpdateDispatcherFactory {
         MapBeanContext beanExtract = new MapBeanContext();
         beanExtract.setContext(context);
 
-        final String path = UpdateDispatcher.class.getPackage().getName() + ".testcontroller";
-        return new UpdateDispatcher(path, beanExtract);
+        final Collection<URL> urls = ClasspathHelper.forPackage(UpdateDispatcher.class.getPackage().getName());
+        return new UpdateDispatcher(beanExtract, urls);
     }
 
 }
