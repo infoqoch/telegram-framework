@@ -8,11 +8,10 @@ import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+// @Component
 //@ConditionalOnProperty(name = "is_test", havingValue = "N")
 @AllArgsConstructor
 public class ApplicationInfoPrint implements CommandLineRunner {
