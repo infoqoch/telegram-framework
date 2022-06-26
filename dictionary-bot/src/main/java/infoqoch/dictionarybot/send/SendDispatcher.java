@@ -18,11 +18,11 @@ public class SendDispatcher {
     }
 
     public SendResponse process(SendRequest request) {
-        Response<?> response = sendResolver(request);
+        Response<?> response = send(request);
         return new SendResponse(response.isOk(), response.getResult());
     }
 
-    private Response<?> sendResolver(SendRequest request) {
+    private Response<?> send(SendRequest request) {
         if(request.type() == SendType.MESSAGE) return send.message(new SendMessageRequest(request.chatId(), request.message()));
         if(request.type() == SendType.DOCUMENT) return send.document(new SendDocumentRequest(request.chatId(), request.document(), request.message()));
         throw new TelegramServerException("not supported SendType");

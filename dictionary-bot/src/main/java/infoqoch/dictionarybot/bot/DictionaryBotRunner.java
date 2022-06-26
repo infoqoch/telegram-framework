@@ -52,7 +52,7 @@ public class DictionaryBotRunner {
         final UpdateResponse updateResponse = resolveUpdate(updateWrap);
         log.debug("updateResponse = {}", updateResponse);
 
-        final SendResponse sendResponse = resolveSend(updateWrap, updateResponse);
+        final SendResponse sendResponse = resolveSend(updateWrap.chatId(), updateResponse);
         log.debug("sendResponse = {}", sendResponse);
     }
 
@@ -75,9 +75,9 @@ public class DictionaryBotRunner {
         return new UpdateResponse(MESSAGE, "서버에 문제가 발생하였습니다. 죄송합니다.");
     }
 
-    private SendResponse resolveSend(UpdateWrapper updateWrap, UpdateResponse updateResponse) {
+    private SendResponse resolveSend(Long chatId, UpdateResponse updateResponse) {
         try{
-            final SendRequest request = new SendRequest(updateWrap.chatId(), updateResponse.type(), updateResponse.document(), updateResponse.body());
+            final SendRequest request = new SendRequest(chatId, updateResponse.type(), updateResponse.document(), updateResponse.body());
             return sendDispatcher.process(request);
         }catch (Exception e){
             e.printStackTrace();
