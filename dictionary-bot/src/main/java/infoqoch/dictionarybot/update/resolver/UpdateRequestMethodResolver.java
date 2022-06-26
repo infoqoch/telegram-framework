@@ -71,7 +71,7 @@ public class UpdateRequestMethodResolver {
                 return new UpdateResponse(SendType.MESSAGE, result);
             if(result instanceof UpdateResponse)
                 return (UpdateResponse) result;
-            throw new TelegramServerException("can not resolve the return data (1) : " + result.getClass());
+            throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new TelegramServerException("can not resolve the return data (2)", e);
         }
