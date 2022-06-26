@@ -3,8 +3,9 @@ package infoqoch.dictionarybot.update.resolver;
 import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.resolver.param.ParameterWrapper;
+import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
+import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 

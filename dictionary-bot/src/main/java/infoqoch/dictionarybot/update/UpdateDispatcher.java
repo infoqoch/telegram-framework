@@ -4,7 +4,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;

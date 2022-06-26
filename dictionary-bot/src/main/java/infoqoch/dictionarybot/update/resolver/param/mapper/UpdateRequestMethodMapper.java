@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.mapper;
+package infoqoch.dictionarybot.update.resolver.param.mapper;
 
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 

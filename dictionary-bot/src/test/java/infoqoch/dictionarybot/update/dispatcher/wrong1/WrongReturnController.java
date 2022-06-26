@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.update.dispatcher.wrong1;
 
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
+import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.junit.jupiter.api.Disabled;
