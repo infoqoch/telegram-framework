@@ -2,10 +2,12 @@ package infoqoch.dictionarybot.update.dispatcher.fake;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
+import infoqoch.dictionarybot.update.resolver.returns.*;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // 테스트에 한정하는 @UpdateRequestMethodMapper 의 객체(인스턴스)를 삽입해야한다.
@@ -14,8 +16,19 @@ import java.util.Map;
 public class FakeUpdateDispatcherFactory {
     // test를 fake로 사용하는 UpdateDispatcher
     public static UpdateDispatcher defaultInstance(){
-        return new UpdateDispatcher(fakeBeanContext(), testUrls());
+        return new UpdateDispatcher(fakeBeanContext(), testUrls(), returnResolvers());
     }
+
+    private static List<UpdateRequestReturn> returnResolvers(){
+        List<UpdateRequestReturn> returnResolvers = new ArrayList<>();
+        returnResolvers.add(new DictionaryUpdateRequestReturn());
+        returnResolvers.add(new MSBUpdateRequestReturn());
+        returnResolvers.add(new StringUpdateRequestReturn());
+        returnResolvers.add(new DictionariesUpdateRequestReturn());
+        returnResolvers.add(new UpdateResponseUpdateRequestReturn());
+        return returnResolvers;
+    }
+
 
     private static ArrayList<URL> testUrls() {
         final URL resource = FakeController.class.getResource(".");

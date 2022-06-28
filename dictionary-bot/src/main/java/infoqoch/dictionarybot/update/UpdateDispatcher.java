@@ -5,6 +5,7 @@ import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -16,13 +17,15 @@ import java.util.*;
 
 public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
+    private final List<UpdateRequestReturn> returnResolvers;
 
-    public UpdateDispatcher(BeanContext context, Collection<URL> urls) {
+    public UpdateDispatcher(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
+        this.returnResolvers = returnResolvers;
         collectUpdateRequestMappedMethods(context, urls);
     }
 
     public UpdateResponse process(UpdateWrapper update) {
-        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
+        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update, returnResolvers);
     }
 
     private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls) {

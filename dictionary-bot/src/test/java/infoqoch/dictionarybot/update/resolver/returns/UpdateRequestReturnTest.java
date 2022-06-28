@@ -1,17 +1,14 @@
-package infoqoch.dictionarybot.update.resolver.param;
+package infoqoch.dictionarybot.update.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
-import infoqoch.dictionarybot.update.resolver.returns.DictionaryUpdateRequestMethodParameterResolver;
-import infoqoch.dictionarybot.update.resolver.returns.MSBUpdateRequestMethodParameterResolver;
-import infoqoch.dictionarybot.update.resolver.returns.StringUpdateRequestMethodParameterResolver;
-import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestMethodParameterResolver;
+import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRequestMethodParameterResolverTest {
+class UpdateRequestReturnTest {
 
     @Test
     void string(){
@@ -21,15 +18,15 @@ class UpdateRequestMethodParameterResolverTest {
 
     private void assertString(String body, String expected) {
         // given
-        UpdateRequestMethodParameterResolver resolver = new StringUpdateRequestMethodParameterResolver();
+        UpdateRequestReturn resolver = new StringUpdateRequestReturn();
 
         // support
         boolean isSupport = resolver.support(body);
         assertThat(isSupport).isTrue();
 
         // resolve
-        MarkdownStringBuilder result =  resolver.resolve(body);
-        assertThat(result.toString()).isEqualTo(expected);
+        UpdateResponse result =  resolver.resolve(body);
+        assertThat(result.message().text()).isEqualTo(expected);
     }
 
     @Test
@@ -40,16 +37,16 @@ class UpdateRequestMethodParameterResolverTest {
 
     private void assertMSB(MarkdownStringBuilder target, String expected) {
         // given
-        UpdateRequestMethodParameterResolver resolver = new MSBUpdateRequestMethodParameterResolver();
+        UpdateRequestReturn resolver = new MSBUpdateRequestReturn();
 
         // support
         boolean isSupport = resolver.support(target);
         assertThat(isSupport).isTrue();
 
         // resolve
-        MarkdownStringBuilder result =  resolver.resolve(target);
-        assertThat(result).usingRecursiveComparison().isEqualTo(target);
-        assertThat(result.toString()).isEqualTo(expected);
+        UpdateResponse result =  resolver.resolve(target);
+        assertThat(result.message()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(result.message().text()).isEqualTo(expected);
     }
 
     @Test
@@ -67,15 +64,15 @@ class UpdateRequestMethodParameterResolverTest {
 
     private void assertSingleDictionary(Dictionary target, String...expected) {
         // given
-        UpdateRequestMethodParameterResolver resolver = new DictionaryUpdateRequestMethodParameterResolver();
+        UpdateRequestReturn resolver = new DictionaryUpdateRequestReturn();
 
         // support
         boolean isSupport = resolver.support(target);
         assertThat(isSupport).isTrue();
 
         // resolve
-        MarkdownStringBuilder result =  resolver.resolve(target);
-        assertThat(result.toString()).contains(expected);
+        UpdateResponse result =  resolver.resolve(target);
+        assertThat(result.message().text()).contains(expected);
     }
 
     private Dictionary createSimpleDictionary(DictionaryContent content, long no) {

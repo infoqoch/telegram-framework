@@ -47,6 +47,7 @@ class DictionaryBotRunnerIntegrationTest {
         bot = new FakeTelegramBot(telegramUpdate, telegramSend);
     }
 
+    // TODO. 전반적인 정리 필요.
     @Test
     void test(){
         telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w hi", 123l)); // telegram에서 받은 값

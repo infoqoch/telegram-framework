@@ -61,6 +61,7 @@ public class DictionaryBotRunner {
         try{
             return updateDispatcher.process(updateWrap);
         } catch (Exception e){
+            log.error("[error] resolveUpdate. ", e);
             return updateExceptionHandler(e);
         }
     }
@@ -71,9 +72,9 @@ public class DictionaryBotRunner {
             final TelegramException te = telegramException.get();
             final MarkdownStringBuilder response = te.response();
             if (response != null) return new UpdateResponse(MESSAGE, response);
-            return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다."));
+            return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)"));
         }
-        return new UpdateResponse(MESSAGE, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다."));
+        return new UpdateResponse(MESSAGE, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)"));
     }
 
     private SendResponse resolveSend(Long chatId, UpdateResponse updateResponse) {

@@ -33,10 +33,10 @@ public class DictionaryController {
     }
 
     @UpdateRequestMethodMapper(LOOKUP_WORD)
-    public List<Dictionary> lookupByWord(UpdateRequest updateRequest) {
+    public Dictionary lookupByWord(UpdateRequest updateRequest) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");
         final List<Dictionary> result = dictionaryRepository.findByWord(updateRequest.getValue());
-        return result;
+        return result.get(0);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)

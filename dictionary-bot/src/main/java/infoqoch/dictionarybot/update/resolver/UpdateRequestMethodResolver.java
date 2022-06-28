@@ -6,13 +6,13 @@ import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.param.ParameterWrapper;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
-import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.List;
 import java.util.Optional;
 
 // TODO.
@@ -34,9 +34,9 @@ public class UpdateRequestMethodResolver {
         return mapper.value() == update.command();
     }
 
-    public UpdateResponse process(UpdateWrapper update) {
+    public UpdateResponse process(UpdateWrapper update, List<UpdateRequestReturn> returnResolvers) {
         Object[] args = resolveParameters(update);
-        return resolveReturn(args);
+        return resolveReturn(args, returnResolvers);
     }
 
     private Object[] resolveParameters(UpdateWrapper update) {
@@ -66,14 +66,21 @@ public class UpdateRequestMethodResolver {
         return args;
     }
 
-    private UpdateResponse resolveReturn(Object[] args){
+    private UpdateResponse resolveReturn(Object[] args, List<UpdateRequestReturn> returnResolvers){
         try {
             final Object result = method.invoke(bean, args);
-            if(result instanceof String)
-                return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder((String) result));
-            if(result instanceof UpdateResponse)
-                return (UpdateResponse) result;
-            throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());
+//            if(result instanceof String)
+//                return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder((String) result));
+//            if(result instanceof UpdateResponse)
+//                return (UpdateResponse) result;
+            System.out.println("result = " + result);
+            System.out.println("returnResolvers = " + returnResolvers.size());
+            Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(result)).findAny();
+
+            if(resolver.isEmpty())  throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());
+
+            return resolver.get().resolve(result);
+
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new TelegramServerException("can not resolve the return data (2)", e);
         }
