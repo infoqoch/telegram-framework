@@ -27,16 +27,4 @@ class DictionaryControllerTest {
         final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
         return repository.save(dictionary);
     }
-
-    private DictionaryContent createSimpleDictionaryContent(String word) {
-        DictionaryContent content = DictionaryContent.builder()
-                .word(word)
-                .pronunciation("애포얼")
-                .partOfSpeech("noun")
-                .source("아낌없이 주는 나무")
-                .definition("사과")
-                .sentence("Iphone 7 is the latest model")
-                .build();
-        return content;
-    }
 }

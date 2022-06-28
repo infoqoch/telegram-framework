@@ -9,7 +9,7 @@ import infoqoch.telegrambot.util.JsonBind;
 import org.junit.jupiter.api.Test;
 
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
-import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.*;
+import static infoqoch.dictionarybot.mock.data.MockUpdate.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestBodyParsingTest {

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.request.body;
+package infoqoch.dictionarybot.mock.data;
 
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.telegrambot.bot.entity.Response;
@@ -7,7 +7,7 @@ import infoqoch.telegrambot.util.DefaultJsonBind;
 
 import java.util.List;
 
-public class MockUpdateGenerate {
+public class MockUpdate {
     public static Response<List<Update>> responseWithSingleChat(String text, long chatId) {
         return jsonToResponse(chatJson(text, chatId)) ;
     }

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.dispatcher.fake;
+package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;

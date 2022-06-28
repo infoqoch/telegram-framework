@@ -1,10 +1,10 @@
 package infoqoch.dictionarybot.bot;
 
-import infoqoch.dictionarybot.send.MockSendResponseGenerate;
+import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.SendDispatcher;
-import infoqoch.dictionarybot.update.dispatcher.fake.FakeUpdateDispatcherFactory;
+import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
+import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.telegrambot.bot.TelegramBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +36,8 @@ class DictionaryBotRunnerTest {
     
     @Test
     void message_send() {
-        telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w hi", 123l));
-        telegramSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/w hi", 123l));
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/w hi", 123l));
+        telegramSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/w hi", 123l));
         runner.run();
 
         assertThat(telegramSend.isMessageCalled).isTrue(); // spy 로 검사한다.
@@ -46,8 +46,8 @@ class DictionaryBotRunnerTest {
 
     @Test
     void message_unknown_command() {
-        telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/f89j45", 123l));
-        telegramSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/w hi", 123l));
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/f89j45", 123l));
+        telegramSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/w hi", 123l));
         runner.run();
 
         assertThat(telegramSend.isMessageCalled).isTrue(); // spy 로 검사한다.

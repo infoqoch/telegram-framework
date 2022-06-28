@@ -19,13 +19,15 @@ public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
     private final List<UpdateRequestReturn> returnResolvers;
 
+    // 실제 동작
+    public UpdateResponse process(UpdateWrapper update) {
+        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update, returnResolvers);
+    }
+
+    // 이후 factory로 delegate 할 소스들
     public UpdateDispatcher(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
         this.returnResolvers = returnResolvers;
         collectUpdateRequestMappedMethods(context, urls);
-    }
-
-    public UpdateResponse process(UpdateWrapper update) {
-        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update, returnResolvers);
     }
 
     private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls) {
@@ -40,8 +42,26 @@ public class UpdateDispatcher {
         }
 
         if(isNotConcretedEveryCommand(updateRequestMappers)){
-            throw new IllegalArgumentException("every mapper should be concreted. commands  : " + printAllCommands());
+            throw new IllegalArgumentException("every mapper should be concreted. declared with mapper annotation commands: " + printAllCommands());
         }
+    }
+
+    private Set<Method> getMethodsAnnotated(Collection<URL> urls) {
+        return new Reflections(new ConfigurationBuilder().setUrls(urls).setScanners(Scanners.MethodsAnnotated)).getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
+    }
+
+    private UpdateRequestMethodMapper extractUpdateRequestMapper(Method method) {
+        return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
+    }
+
+    private void checkDuplicatedMapper(Set<UpdateRequestMethodMapper> checkDuplicatedMapper, UpdateRequestMethodMapper mapper) {
+        if (checkDuplicatedMapper.contains(mapper))
+            throw new IllegalStateException("duplicate declared command detected  : " + mapper.toString());
+        checkDuplicatedMapper.add(mapper);
+    }
+
+    private boolean isNotConcretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
+        return updateRequestMappers.size() != UpdateRequestCommand.values().length;
     }
 
     private String printAllCommands() {
@@ -51,23 +71,4 @@ public class UpdateDispatcher {
         }
         return sb.toString();
     }
-
-    private boolean isNotConcretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
-        return updateRequestMappers.size() != UpdateRequestCommand.values().length;
-    }
-
-    private UpdateRequestMethodMapper extractUpdateRequestMapper(Method method) {
-        return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
-    }
-
-    private Set<Method> getMethodsAnnotated(Collection<URL> urls) {
-        return new Reflections(new ConfigurationBuilder().setUrls(urls).setScanners(Scanners.MethodsAnnotated)).getMethodsAnnotatedWith(UpdateRequestMethodMapper.class);
-    }
-
-    private void checkDuplicatedMapper(Set<UpdateRequestMethodMapper> checkDuplicatedMapper, UpdateRequestMethodMapper mapper) {
-        if (checkDuplicatedMapper.contains(mapper))
-            throw new IllegalStateException("중복 UpdateRequestMapper 는 불가능 합니다 : " + mapper.toString());
-        checkDuplicatedMapper.add(mapper);
-    }
-
 }

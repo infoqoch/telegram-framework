@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.excelDocumentJson;
-import static infoqoch.dictionarybot.update.request.body.MockUpdateGenerate.jsonToUpdateWrapper;
+import static infoqoch.dictionarybot.mock.data.MockUpdate.excelDocumentJson;
+import static infoqoch.dictionarybot.mock.data.MockUpdate.jsonToUpdateWrapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TelegramFileHandlerTest {

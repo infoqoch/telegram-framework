@@ -1,11 +1,12 @@
 package infoqoch.dictionarybot.update.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;
 
+import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionary;
+import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestReturnTest {
@@ -73,21 +74,5 @@ class UpdateRequestReturnTest {
         // resolve
         UpdateResponse result =  resolver.resolve(target);
         assertThat(result.message().text()).contains(expected);
-    }
-
-    private Dictionary createSimpleDictionary(DictionaryContent content, long no) {
-        return Dictionary.builder().no(no).content(content).build();
-    }
-
-    private DictionaryContent createSimpleDictionaryContent() {
-        DictionaryContent content = DictionaryContent.builder()
-                .word("apple")
-                .pronunciation("애포얼")
-                .partOfSpeech("noun")
-                .source("아낌없이 주는 나무")
-                .definition("사과")
-                .sentence("Iphone 7 is the latest model")
-                .build();
-        return content;
     }
 }

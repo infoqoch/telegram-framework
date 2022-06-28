@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.dispatcher.fake;
+package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;

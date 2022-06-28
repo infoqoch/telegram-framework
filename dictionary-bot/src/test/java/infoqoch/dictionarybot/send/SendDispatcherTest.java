@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.bot.FakeTelegramBot;
 import infoqoch.dictionarybot.bot.FakeTelegramSend;
+import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.update.response.SendType;
@@ -30,7 +31,7 @@ public class SendDispatcherTest {
     @Test
     void message(){
         // given. sendRequest를 telegram에 보내고 telegram의 정상 응답값을 받았음. 해당 응답값에 대한 대역
-        fakeSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/help", 12345l));
+        fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
 
         // when
         SendResponse sendResponse = sendDispatcher.process(new SendRequest(12345l, SendType.MESSAGE,  new MarkdownStringBuilder().plain("/help")));
@@ -46,7 +47,7 @@ public class SendDispatcherTest {
     @Test
     void document(){
         // given
-        fakeSend.setMockDocumentResponseJson(MockSendResponseGenerate.sendDocument(12345l));
+        fakeSend.setMockDocumentResponseJson(MockSendResponse.sendDocument(12345l));
         assert fakeSend.isDocumentCalled() == false;
 
         // when

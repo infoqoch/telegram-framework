@@ -1,6 +1,6 @@
-package infoqoch.dictionarybot.send;
+package infoqoch.dictionarybot.mock.data;
 
-public class MockSendResponseGenerate {
+public class MockSendResponse {
 
     public static String sendMessage(String text, long chatId) {
         return "{\"ok\":true,\"result\":{\"message_id\":2092,\"from\":{\"id\":1959903402,\"is_bot\":true,\"first_name\":\"coffs_test\",\"username\":\"coffs_dic_test_bot\"},\"chat\":{\"id\":" + chatId + ",\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652014357,\"text\":\"" + text + "\"}}";

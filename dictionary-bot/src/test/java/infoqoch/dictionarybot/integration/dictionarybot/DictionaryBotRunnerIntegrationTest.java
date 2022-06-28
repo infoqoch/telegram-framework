@@ -4,10 +4,10 @@ import infoqoch.dictionarybot.bot.DictionaryBotRunner;
 import infoqoch.dictionarybot.bot.FakeTelegramBot;
 import infoqoch.dictionarybot.bot.FakeTelegramSend;
 import infoqoch.dictionarybot.bot.FakeTelegramUpdate;
-import infoqoch.dictionarybot.send.MockSendResponseGenerate;
+import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
+import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,8 +52,8 @@ class DictionaryBotRunnerIntegrationTest {
     // TODO. 통합테스트에 대한 고민이 있음. 일단은 실제 운영에 들어가면 DB에서 데이터를 읽을 것이다. 이를 어떻게 대역으로 만들지 고민임.
     @Test
     void lookupByWord_no_result(){
-        telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // telegram에서 받은 값
-        telegramSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // response 이후 telegram에서 받은 응답값
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // telegram에서 받은 값
+        telegramSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // response 이후 telegram에서 받은 응답값
         dictionaryBotRunner.run();
 
         final SendMessageRequest sendMessageRequest = telegramSend.getSendMessageRequest();

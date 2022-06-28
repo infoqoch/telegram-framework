@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.update.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionary;
+import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestReturnListTest {
@@ -84,21 +85,4 @@ class UpdateRequestReturnListTest {
         assertThat(resolver.get().resolve(target).message().text()).contains(d1.toMarkdown().text());
         assertThat(resolver.get().resolve(target).message().text()).contains(d2.toMarkdown().text());
     }
-
-    private Dictionary createSimpleDictionary(DictionaryContent content, long no) {
-        return Dictionary.builder().no(no).content(content).build();
-    }
-
-    private DictionaryContent createSimpleDictionaryContent() {
-        DictionaryContent content = DictionaryContent.builder()
-                .word("apple")
-                .pronunciation("애포얼")
-                .partOfSpeech("noun")
-                .source("아낌없이 주는 나무")
-                .definition("사과")
-                .sentence("Iphone 7 is the latest model")
-                .build();
-        return content;
-    }
-
 }
