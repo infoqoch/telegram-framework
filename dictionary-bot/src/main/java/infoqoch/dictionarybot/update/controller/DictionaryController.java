@@ -5,8 +5,6 @@ import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.response.SendType;
-import infoqoch.dictionarybot.update.response.UpdateResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,10 +33,10 @@ public class DictionaryController {
     }
 
     @UpdateRequestMethodMapper(LOOKUP_WORD)
-    public UpdateResponse lookupByWord(UpdateRequest updateRequest) {
+    public List<Dictionary> lookupByWord(UpdateRequest updateRequest) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");
         final List<Dictionary> result = dictionaryRepository.findByWord(updateRequest.getValue());
-        return new UpdateResponse(SendType.MESSAGE, result.toString());
+        return result;
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)

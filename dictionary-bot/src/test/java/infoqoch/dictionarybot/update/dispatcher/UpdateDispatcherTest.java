@@ -7,6 +7,7 @@ import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.request.body.MockUpdateGenerate;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +33,8 @@ public class UpdateDispatcherTest {
 
         // then
         assertThat(response.type()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.body()).isInstanceOf(String.class);
-        assertThat((String) response.body()).isEqualTo("help! hello!");
+        assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
+        assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("help! hello!"));
     }
 
     @Test
@@ -46,8 +47,8 @@ public class UpdateDispatcherTest {
 
         // then
         assertThat(response.type()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.body()).isInstanceOf(String.class);
-        assertThat((String) response.body()).isEqualTo("LOOKUP_SENTENCE : orange");
+        assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
+        assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("LOOKUP_SENTENCE : orange"));
     }
 
     @Test
@@ -59,8 +60,8 @@ public class UpdateDispatcherTest {
 
         // then
         assertThat(response.type()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.body()).isInstanceOf(String.class);
-        assertThat((String) response.body()).isEqualTo("LOOKUP_WORD : apple : 2149");
+        assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
+        assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("LOOKUP_WORD : apple : 2149"));
     }
 
     @Test
@@ -72,7 +73,7 @@ public class UpdateDispatcherTest {
 
         // then
         assertThat(response.type()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.body()).isNull();;
+        assertThat(response.message()).isNull();;
     }
 
     @Test
@@ -85,7 +86,7 @@ public class UpdateDispatcherTest {
         //then
         assertThat(update.command()).isEqualTo(UpdateRequestCommand.UNKNOWN);
         assertThat(update.value()).isEqualTo("wefwe"); // command를 알 수 없으면 value를 요청한 값으로 한다.
-        assertThat(response.body()).isEqualTo("unknown??");
+        assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("unknown??"));
     }
 }
 

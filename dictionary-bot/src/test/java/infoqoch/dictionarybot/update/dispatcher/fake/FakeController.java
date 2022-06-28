@@ -6,6 +6,7 @@ import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyPara
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 
@@ -31,12 +32,12 @@ public class FakeController {
         sb.append(updateRequest.value()).append(" : ");
         sb.append(chat.getMessageId());
 
-        return new UpdateResponse(SendType.MESSAGE, sb.toString());
+        return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder(sb.toString()));
     }
 
     @UpdateRequestMethodMapper(HELP)
     public UpdateResponse help(UpdateRequest request) {
-        return new UpdateResponse(SendType.MESSAGE, "help! " + request.getValue());
+        return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("help! " + request.getValue()));
     }
 
     @UpdateRequestMethodMapper(UNKNOWN)

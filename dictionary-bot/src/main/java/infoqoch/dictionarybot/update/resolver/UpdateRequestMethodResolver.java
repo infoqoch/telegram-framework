@@ -8,6 +8,7 @@ import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyPara
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -69,7 +70,7 @@ public class UpdateRequestMethodResolver {
         try {
             final Object result = method.invoke(bean, args);
             if(result instanceof String)
-                return new UpdateResponse(SendType.MESSAGE, result);
+                return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder((String) result));
             if(result instanceof UpdateResponse)
                 return (UpdateResponse) result;
             throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());

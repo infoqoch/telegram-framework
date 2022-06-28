@@ -71,14 +71,14 @@ public class DictionaryBotRunner {
             final TelegramException te = telegramException.get();
             final MarkdownStringBuilder response = te.response();
             if (response != null) return new UpdateResponse(MESSAGE, response);
-            return new UpdateResponse(MESSAGE, "서버에 문제가 발생하였습니다. 죄송합니다.");
+            return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다."));
         }
-        return new UpdateResponse(MESSAGE, "서버에 문제가 발생하였습니다. 죄송합니다.");
+        return new UpdateResponse(MESSAGE, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다."));
     }
 
     private SendResponse resolveSend(Long chatId, UpdateResponse updateResponse) {
         try{
-            final SendRequest request = new SendRequest(chatId, updateResponse.type(), updateResponse.document(), bodyResolver(updateResponse.body()));
+            final SendRequest request = new SendRequest(chatId, updateResponse.type(), updateResponse.document(), updateResponse.message());
             return sendDispatcher.process(request);
         }catch (Exception e){
             e.printStackTrace();

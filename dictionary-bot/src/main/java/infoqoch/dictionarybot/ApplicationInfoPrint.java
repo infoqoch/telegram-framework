@@ -25,6 +25,6 @@ public class ApplicationInfoPrint implements CommandLineRunner {
         final Response<List<Update>> listResponse = new DefaultJsonBind().toList(json, Update.class);
         final Update update = listResponse.getResult().get(0);
         final UpdateResponse process = updateDispatcher.process(new UpdateWrapper(update));
-        System.out.println("process.message() = " + process.body());
+        System.out.println("process.message() = " + process.message());
     }
 }
