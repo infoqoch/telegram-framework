@@ -4,6 +4,7 @@ import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.system.exception.TelegramException;
+import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -77,12 +78,20 @@ public class DictionaryBotRunner {
 
     private SendResponse resolveSend(Long chatId, UpdateResponse updateResponse) {
         try{
-            final SendRequest request = new SendRequest(chatId, updateResponse.type(), updateResponse.document(), updateResponse.body());
+            final SendRequest request = new SendRequest(chatId, updateResponse.type(), updateResponse.document(), bodyResolver(updateResponse.body()));
             return sendDispatcher.process(request);
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
+    }
+
+    private MarkdownStringBuilder bodyResolver(Object body) {
+        if (body instanceof MarkdownStringBuilder)
+            return (MarkdownStringBuilder) body;
+        if (body instanceof String)
+            return new MarkdownStringBuilder().plain((String) body);
+        throw new TelegramServerException("not support send request body type");
     }
 
     private Optional<TelegramException> causedByTelegramException(Throwable e) {

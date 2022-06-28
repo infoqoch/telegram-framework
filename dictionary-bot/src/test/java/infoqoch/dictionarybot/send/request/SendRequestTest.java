@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SendRequestTest {
     @Test
     void body_escape(){
-        SendRequest request = new SendRequest(112354l, SendType.MESSAGE, "good job!");
+        SendRequest request = new SendRequest(112354l, SendType.MESSAGE,  new MarkdownStringBuilder().plain("good job!"));
         assertSendRequest(request, 112354l, SendType.MESSAGE, "good job\\!"); //
 
         SendRequest request2 = new SendRequest(11235344l, SendType.MESSAGE, new MarkdownStringBuilder().bold("즐거운 일요일!").italic("행복한 코딩시간^^").code("<h3>진짜야!<h3>"));
@@ -18,10 +18,10 @@ public class SendRequestTest {
 
     @Test
     void send_type() {
-        SendRequest request = new SendRequest(112354l, SendType.MESSAGE, "good job!");
+        SendRequest request = new SendRequest(112354l, SendType.MESSAGE, new MarkdownStringBuilder().plain("good job!"));
         assertSendRequest(request, 112354l, SendType.MESSAGE, "good job\\!"); //
 
-        SendRequest request2 = new SendRequest(112354l, SendType.DOCUMENT, "good job!");
+        SendRequest request2 = new SendRequest(112354l, SendType.DOCUMENT,  new MarkdownStringBuilder().plain("good job!"));
         assertSendRequest(request2, 112354l, SendType.DOCUMENT, "good job\\!"); //
     }
 

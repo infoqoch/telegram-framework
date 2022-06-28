@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.send.request;
 
-import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.ToString;
@@ -13,26 +12,18 @@ public class SendRequest {
 
     private final String document;
 
-    public SendRequest(Long chatId, SendType type, Object body) {
+    public SendRequest(Long chatId, SendType type, MarkdownStringBuilder msb) {
         this.chatId = chatId;
         this.type = type;
-        this.message = bodyResolver(body);
+        this.message = msb;
         this.document = null;
     }
 
-    public SendRequest(Long chatId, SendType type, String document, Object body) {
+    public SendRequest(Long chatId, SendType type, String document, MarkdownStringBuilder msb) {
         this.chatId = chatId;
         this.type = type;
         this.document = document;
-        this.message = bodyResolver(body);
-    }
-
-    private MarkdownStringBuilder bodyResolver(Object body) {
-        if(body instanceof MarkdownStringBuilder)
-            return (MarkdownStringBuilder) body;
-        if(body instanceof String)
-            return new MarkdownStringBuilder().plain((String) body);
-        throw new TelegramServerException("not support send request body type");
+        this.message = msb;
     }
 
     public SendType type() {

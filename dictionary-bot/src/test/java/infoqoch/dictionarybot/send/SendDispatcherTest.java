@@ -8,6 +8,7 @@ import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.response.SendDocumentResponse;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class SendDispatcherTest {
         fakeSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/help", 12345l));
 
         // when
-        SendResponse sendResponse = sendDispatcher.process(new SendRequest(12345l, SendType.MESSAGE, "/help"));
+        SendResponse sendResponse = sendDispatcher.process(new SendRequest(12345l, SendType.MESSAGE,  new MarkdownStringBuilder().plain("/help")));
 
         // then
         assertThat(sendResponse.isOk()).isTrue();
@@ -49,7 +50,7 @@ public class SendDispatcherTest {
         assert fakeSend.isDocumentCalled() == false;
 
         // when
-        final SendResponse response = sendDispatcher.process(new SendRequest(12345l, SendType.DOCUMENT, "fake document", "fake text"));
+        final SendResponse response = sendDispatcher.process(new SendRequest(12345l, SendType.DOCUMENT, "fake document",  new MarkdownStringBuilder().plain("fake text")));
 
         // then
         assertThat(fakeSend.isDocumentCalled()).isTrue();
