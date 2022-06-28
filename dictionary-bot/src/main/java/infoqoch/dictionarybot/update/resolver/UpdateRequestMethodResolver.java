@@ -69,18 +69,12 @@ public class UpdateRequestMethodResolver {
     private UpdateResponse resolveReturn(Object[] args, List<UpdateRequestReturn> returnResolvers){
         try {
             final Object result = method.invoke(bean, args);
-//            if(result instanceof String)
-//                return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder((String) result));
-//            if(result instanceof UpdateResponse)
-//                return (UpdateResponse) result;
-            System.out.println("result = " + result);
-            System.out.println("returnResolvers = " + returnResolvers.size());
+
             Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(result)).findAny();
 
             if(resolver.isEmpty())  throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());
 
             return resolver.get().resolve(result);
-
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new TelegramServerException("can not resolve the return data (2)", e);
         }

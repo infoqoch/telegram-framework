@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 // 외부 api인 telegram-bot 만 대역으로 사용함.
 // 그 외는 스프링 통합 테스트를 진행함.
 @SpringBootTest
@@ -47,16 +49,15 @@ class DictionaryBotRunnerIntegrationTest {
         bot = new FakeTelegramBot(telegramUpdate, telegramSend);
     }
 
-    // TODO. 전반적인 정리 필요.
+    // TODO. 통합테스트에 대한 고민이 있음. 일단은 실제 운영에 들어가면 DB에서 데이터를 읽을 것이다. 이를 어떻게 대역으로 만들지 고민임.
     @Test
-    void test(){
-        telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w hi", 123l)); // telegram에서 받은 값
-        telegramSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/w hi", 123l)); // response 이후 telegram에서 받은 응답값
+    void lookupByWord_no_result(){
+        telegramUpdate.setMock(MockUpdateGenerate.responseWithSingleChat("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // telegram에서 받은 값
+        telegramSend.setMockMessageResponseJson(MockSendResponseGenerate.sendMessage("/w wfjwef98wfj9w8efjew98fjwe98fj", 123l)); // response 이후 telegram에서 받은 응답값
         dictionaryBotRunner.run();
 
         final SendMessageRequest sendMessageRequest = telegramSend.getSendMessageRequest();
-        System.out.println("sendMessageRequest = " + sendMessageRequest);
+        assertThat(sendMessageRequest.getText()).isEqualTo("검색결과를 찾을 수 없습니다\\.");
     }
-
 
 }

@@ -16,11 +16,18 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
 
     @Override
     public UpdateResponse resolve(Object target) {
+        MarkdownStringBuilder msb = toMarkdown((List<Dictionary>) target);
+        if(msb.size()==0) return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
+
+        return new UpdateResponse(SendType.MESSAGE, msb);
+    }
+
+    private MarkdownStringBuilder toMarkdown(List<Dictionary> target) {
         MarkdownStringBuilder msb = new MarkdownStringBuilder();
-        final List<Dictionary> dictionaries = (List<Dictionary>) target;
+        final List<Dictionary> dictionaries = target;
         for (Dictionary dictionary : dictionaries) {
             msb.append(dictionary.toMarkdown());
         }
-        return new UpdateResponse(SendType.MESSAGE, msb);
+        return msb;
     }
 }
