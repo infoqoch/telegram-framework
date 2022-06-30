@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.resolver.returns.*;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;

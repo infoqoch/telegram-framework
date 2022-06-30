@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

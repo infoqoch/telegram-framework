@@ -4,7 +4,7 @@ import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

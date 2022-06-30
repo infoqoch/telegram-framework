@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.UpdateWrapper;
 import infoqoch.dictionarybot.update.resolver.param.ParameterWrapper;
 import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 
