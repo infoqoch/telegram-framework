@@ -1,9 +1,9 @@
 package infoqoch.dictionarybot.update.request.body;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.telegrambot.util.DefaultJsonBind;
 import infoqoch.telegrambot.util.JsonBind;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 import static infoqoch.dictionarybot.mock.data.MockUpdate.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRequestBodyParsingTest {
+class UpdateRequestMessageBodyParsingTest {
     JsonBind jsonBind = new DefaultJsonBind();
 
     // MockUpdateJsonGenerate에 사용한 raw json이 아래의 데이터임.
@@ -30,21 +30,21 @@ class UpdateRequestBodyParsingTest {
     }
 
     private void assertType(String json, UpdateType type) {
-        UpdateWrapper wrapper = jsonToUpdateWrapper(json);
+        UpdateRequest wrapper = jsonToUpdateWrapper(json);
         assertThat(wrapper.type()).isEqualTo(type);
     }
 
     @Test
     void extractCommand(){
-        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help")).updateRequest(), HELP, "");
-        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help_hi")).updateRequest(), HELP, "hi");
-        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(jsonToUpdateWrapper(photoJson("/w_hi")).updateRequest(), LOOKUP_WORD, "hi");
-        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/excel_push")).updateRequest(), EXCEL_PUSH, "");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help")).updateRequestMessage(), HELP, "");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/help_hi")).updateRequestMessage(), HELP, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(chatJson("/w_hi")).updateRequestMessage(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/w_hi")).updateRequestMessage(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(photoJson("/w_hi")).updateRequestMessage(), LOOKUP_WORD, "hi");
+        assertUpdateRequest(jsonToUpdateWrapper(documentJson("/excel_push")).updateRequestMessage(), EXCEL_PUSH, "");
     }
 
-    private void assertUpdateRequest(UpdateRequest request, UpdateRequestCommand command, String value) {
+    private void assertUpdateRequest(UpdateRequestMessage request, UpdateRequestCommand command, String value) {
         assertThat(request.command()).isEqualTo(command);
         assertThat(request.value()).isEqualTo(value);
     }

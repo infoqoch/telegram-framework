@@ -1,10 +1,11 @@
 package infoqoch.dictionarybot.update;
 
+import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
-import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
-import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
+import infoqoch.dictionarybot.update.controller.resolver.bean.BeanContext;
+import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -18,7 +19,7 @@ public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
 
     // 실제 동작
-    public UpdateResponse process(UpdateWrapper update) {
+    public UpdateResponse process(UpdateRequest update) {
         return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
     }
 

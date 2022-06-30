@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.update.dispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -27,7 +27,7 @@ public class UpdateDispatcherTest {
     @Test
     void param_UpdateRequestBodyParameterMapper(){
         // given
-        UpdateWrapper update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/help_hello!"));
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/help_hello!"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -40,7 +40,7 @@ public class UpdateDispatcherTest {
     @Test
     void param_UpdateRequest_return_string(){
         // given
-        UpdateWrapper update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/s_orange"));
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/s_orange"));
 
         // when
         UpdateResponse response = updateDispatcher.process(update);
@@ -54,7 +54,7 @@ public class UpdateDispatcherTest {
     @Test
     void return_UpdateResponse(){
         // given
-        UpdateWrapper update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/w_apple"));
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/w_apple"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -67,7 +67,7 @@ public class UpdateDispatcherTest {
     @Test
     void return_UpdateResponse_null_body(){
         // given
-        UpdateWrapper update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/d_hi"));
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/d_hi"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -79,7 +79,7 @@ public class UpdateDispatcherTest {
     @Test
     void unknown_command(){
         //when
-        UpdateWrapper update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/wefwe"));
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/wefwe"));
 
         UpdateResponse response = updateDispatcher.process(update);
 

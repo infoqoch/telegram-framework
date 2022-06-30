@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.param.mapper;
+package infoqoch.dictionarybot.update.controller.resolver.param.mapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

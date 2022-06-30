@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.integration.telegram;
 
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -32,8 +32,8 @@ class TelegramFileHandlerTest {
 
     private UpdateDocument mockDocumentWithExcel(String caption) {
         final String mockJson = excelDocumentJson(caption);
-        final UpdateWrapper updateWrapper = jsonToUpdateWrapper(mockJson);
-        final UpdateDocument document = updateWrapper.toDocument();
+        final UpdateRequest updateRequest = jsonToUpdateWrapper(mockJson);
+        final UpdateDocument document = updateRequest.toDocument();
         return document;
     }
 

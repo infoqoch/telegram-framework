@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.mock.data;
 
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
 import infoqoch.telegrambot.util.DefaultJsonBind;
@@ -12,8 +12,8 @@ public class MockUpdate {
         return jsonToResponse(chatJson(text, chatId)) ;
     }
 
-    public static UpdateWrapper jsonToUpdateWrapper(String json) {
-        return new UpdateWrapper(jsonToUpdate(json));
+    public static UpdateRequest jsonToUpdateWrapper(String json) {
+        return new UpdateRequest(jsonToUpdate(json));
     }
 
     public static Update jsonToUpdate(String json) {

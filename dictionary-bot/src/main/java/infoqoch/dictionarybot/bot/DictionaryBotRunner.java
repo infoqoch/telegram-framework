@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.system.exception.TelegramException;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramUpdate;
@@ -48,7 +48,7 @@ public class DictionaryBotRunner {
     }
 
     private void handleUpdate(Update update) {
-        final UpdateWrapper updateWrap = new UpdateWrapper(update);
+        final UpdateRequest updateWrap = new UpdateRequest(update);
         final UpdateResponse updateResponse = resolveUpdate(updateWrap);
         log.debug("updateResponse = {}", updateResponse);
 
@@ -56,7 +56,7 @@ public class DictionaryBotRunner {
         log.debug("sendResponse = {}", sendResponse);
     }
 
-    private UpdateResponse resolveUpdate(UpdateWrapper updateWrap) {
+    private UpdateResponse resolveUpdate(UpdateRequest updateWrap) {
         try{
             return updateDispatcher.process(updateWrap);
         } catch (Exception e){

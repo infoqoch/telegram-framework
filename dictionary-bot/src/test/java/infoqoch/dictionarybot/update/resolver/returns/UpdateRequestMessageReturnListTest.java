@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictio
 import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRequestReturnListTest {
+class UpdateRequestMessageReturnListTest {
     List<UpdateRequestReturn> returnResolvers;
 
     @BeforeEach

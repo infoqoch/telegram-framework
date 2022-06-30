@@ -1,6 +1,10 @@
 package infoqoch.dictionarybot.update.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.update.controller.resolver.returns.DictionaryUpdateRequestReturn;
+import infoqoch.dictionarybot.update.controller.resolver.returns.MSBUpdateRequestReturn;
+import infoqoch.dictionarybot.update.controller.resolver.returns.StringUpdateRequestReturn;
+import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;
@@ -9,7 +13,7 @@ import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictio
 import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRequestReturnTest {
+class UpdateRequestMessageReturnTest {
 
     @Test
     void string(){

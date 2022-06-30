@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpdateRequestBodyTest {
+public class UpdateRequestMessageBodyTest {
     @Test
     void wrapper_to_chat_request() {
         final Update update = MockUpdate.jsonToUpdate(MockUpdate.chatJson("/help"));

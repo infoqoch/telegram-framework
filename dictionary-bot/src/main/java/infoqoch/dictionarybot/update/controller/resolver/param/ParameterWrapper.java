@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.param;
+package infoqoch.dictionarybot.update.controller.resolver.param;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;

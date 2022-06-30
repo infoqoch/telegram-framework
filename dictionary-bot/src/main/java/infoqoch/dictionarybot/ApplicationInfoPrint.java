@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
@@ -24,7 +24,7 @@ public class ApplicationInfoPrint implements CommandLineRunner {
                 "\"message\":{\"message_id\":2102,\"from\":{\"id\":" + "12354" + ",\"is_bot\":false,\"first_name\":\"\\uc11d\\uc9c4\",\"language_code\":\"ko\"},\"chat\":{\"id\":39327045,\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652025791,\"text\":\"" + "help" + "\"}}]}";
         final Response<List<Update>> listResponse = new DefaultJsonBind().toList(json, Update.class);
         final Update update = listResponse.getResult().get(0);
-        final UpdateResponse process = updateDispatcher.process(new UpdateWrapper(update));
+        final UpdateResponse process = updateDispatcher.process(new UpdateRequest(update));
         System.out.println("process.message() = " + process.message());
     }
 }

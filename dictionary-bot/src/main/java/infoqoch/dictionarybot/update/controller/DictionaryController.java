@@ -3,8 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -33,23 +32,23 @@ public class DictionaryController {
     }
 
     @UpdateRequestMethodMapper(LOOKUP_WORD)
-    public List<Dictionary> lookupByWord(UpdateRequest updateRequest) {
+    public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");
-        final List<Dictionary> result = dictionaryRepository.findByWord(updateRequest.getValue());
+        final List<Dictionary> result = dictionaryRepository.findByWord(updateRequestMessage.getValue());
         return result;
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
-    public String lookupBySentence(UpdateRequest updateRequest) {
+    public String lookupBySentence(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupBySentence!");
-        final List<Dictionary> result = dictionaryRepository.findBySentence(updateRequest.getValue());
+        final List<Dictionary> result = dictionaryRepository.findBySentence(updateRequestMessage.getValue());
         return result.toString();
     }
 
     @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
-    public String lookupByDefinition(UpdateRequest updateRequest) {
+    public String lookupByDefinition(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupByDefinition!");
-        return updateRequest.getValue()+"을(를) 뜻으로 검색하였습니다.";
+        return updateRequestMessage.getValue()+"을(를) 뜻으로 검색하였습니다.";
     }
 
 }

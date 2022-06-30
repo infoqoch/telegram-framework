@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRequestCommandTest {
+class UpdateRequestMessageCommandTest {
     @Test
     void resolve_command(){
         assertMatchCommand("help", "help", HELP);

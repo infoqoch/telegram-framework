@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.bot;
 
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
-import infoqoch.dictionarybot.update.resolver.returns.*;
+import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
+import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.extern.slf4j.Slf4j;

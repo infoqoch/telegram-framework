@@ -1,20 +1,20 @@
 package infoqoch.dictionarybot.update.request;
 
 public class UpdateRequestFactory {
-    public static UpdateRequest resolve(String input) {
+    public static UpdateRequestMessage resolve(String input) {
         String message = simpleString(input);
         final UpdateRequestCommand command = extractCommand(message);
 
         if(command==UpdateRequestCommand.UNKNOWN)
-            return new UpdateRequest(command, message);
+            return new UpdateRequestMessage(command, message);
 
         return commandAndExtractedValue(message, command);
     }
 
-    private static UpdateRequest commandAndExtractedValue(String message, UpdateRequestCommand command) {
+    private static UpdateRequestMessage commandAndExtractedValue(String message, UpdateRequestCommand command) {
         final int firstSpaceIdx = message.indexOf(command.alias());
         String value = extractValue(message, firstSpaceIdx+ command.alias().length());
-        return new UpdateRequest(command, value);
+        return new UpdateRequestMessage(command, value);
     }
 
     private static String simpleString(String input) {

@@ -1,12 +1,12 @@
 package infoqoch.dictionarybot.update.dispatcher.wrong1;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.controller.resolver.returns.*;
+import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.resolver.returns.*;
+import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
+import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -43,31 +43,31 @@ public class WrongReturnControllerTest {
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
-    public String lookupBySentence(UpdateRequest request) {
+    public String lookupBySentence(UpdateRequestMessage request) {
         StringBuilder sb = new StringBuilder();
         return "LOOKUP_SENTENCE : " + request.getValue();
     }
 
     @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
-    public UpdateResponse lookupByDefinition(UpdateRequest request) {
+    public UpdateResponse lookupByDefinition(UpdateRequestMessage request) {
         return new UpdateResponse(SendType.MESSAGE, null);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_WORD)
     public UpdateResponse lookupByWord(
-            UpdateRequest updateRequest,
+            UpdateRequestMessage updateRequestMessage,
             @UpdateRequestBodyParameterMapper UpdateChat chat
     ) {
         StringBuilder sb = new StringBuilder();
-        sb.append(updateRequest.command()).append(" : ");
-        sb.append(updateRequest.value()).append(" : ");
+        sb.append(updateRequestMessage.command()).append(" : ");
+        sb.append(updateRequestMessage.value()).append(" : ");
         sb.append(chat.getMessageId());
 
         return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder(sb.toString()));
     }
 
     @UpdateRequestMethodMapper(HELP)
-    public UpdateResponse help(UpdateRequest request) {
+    public UpdateResponse help(UpdateRequestMessage request) {
         return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("help! " + request.getValue()));
     }
 

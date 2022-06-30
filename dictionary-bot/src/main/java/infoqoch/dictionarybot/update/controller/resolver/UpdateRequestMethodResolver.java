@@ -1,12 +1,12 @@
-package infoqoch.dictionarybot.update.resolver;
+package infoqoch.dictionarybot.update.controller.resolver;
 
 import infoqoch.dictionarybot.system.exception.TelegramServerException;
+import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateWrapper;
-import infoqoch.dictionarybot.update.resolver.param.ParameterWrapper;
-import infoqoch.dictionarybot.update.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.dictionarybot.update.controller.resolver.param.ParameterWrapper;
+import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
+import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,28 +41,28 @@ public class UpdateRequestMethodResolver {
         return resolver.get();
     }
 
-    public boolean support(UpdateWrapper update) {
+    public boolean support(UpdateRequest update) {
         return mapper.value() == update.command();
     }
 
-    public UpdateResponse process(UpdateWrapper update) {
+    public UpdateResponse process(UpdateRequest update) {
         Object[] args = resolveParameters(update);
         return resolveReturn(args);
     }
 
-    private Object[] resolveParameters(UpdateWrapper update) {
+    private Object[] resolveParameters(UpdateRequest update) {
         Object[] args = new Object[parameters.length];
 
         for(int i=0; i< parameters.length; i++){
             final ParameterWrapper parameter = parameters[i];
 
-            if(parameter.type() == UpdateWrapper.class){
+            if(parameter.type() == UpdateRequest.class){
                 args[i] = update;
                 continue;
             }
 
-            if(parameter.type() == UpdateRequest.class){
-                args[i] = update.updateRequest();
+            if(parameter.type() == UpdateRequestMessage.class){
+                args[i] = update.updateRequestMessage();
                 continue;
             }
 

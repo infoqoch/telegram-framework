@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.returns;
+package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.update.response.SendType;
