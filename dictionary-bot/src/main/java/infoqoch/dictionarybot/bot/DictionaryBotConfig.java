@@ -6,6 +6,7 @@ import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
 import infoqoch.dictionarybot.update.resolver.returns.*;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
+import lombok.extern.slf4j.Slf4j;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Configuration
 public class DictionaryBotConfig {
 
@@ -28,8 +30,10 @@ public class DictionaryBotConfig {
 
     @Bean
     public List<UpdateRequestReturn> returnResolvers(){
+        log.info("good!");
         List<UpdateRequestReturn> returnResolvers = new ArrayList<>();
         returnResolvers.add(new DictionaryUpdateRequestReturn());
+        returnResolvers.add(new DictionariesUpdateRequestReturn());
         returnResolvers.add(new MSBUpdateRequestReturn());
         returnResolvers.add(new StringUpdateRequestReturn());
         returnResolvers.add(new DictionariesUpdateRequestReturn());

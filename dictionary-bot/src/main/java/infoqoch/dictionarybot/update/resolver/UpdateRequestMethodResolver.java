@@ -22,21 +22,32 @@ public class UpdateRequestMethodResolver {
     private final Method method;
     private final UpdateRequestMethodMapper mapper;
     private final ParameterWrapper[] parameters;
+    private final UpdateRequestReturn returnResolver;
 
-    public UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper) {
+    public UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, List<UpdateRequestReturn> returnResolvers) {
         this.bean = bean;
         this.method = method;
         this.mapper = mapper;
         this.parameters = extractParameterWrapper();
+        this.returnResolver = findReturnResolver(returnResolvers);
+    }
+
+    private UpdateRequestReturn findReturnResolver(List<UpdateRequestReturn> returnResolvers) {
+
+        Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(method)).findAny();
+
+        if(resolver.isEmpty())  throw new IllegalArgumentException("can not resolve the return data (1). return type : " + method.getReturnType());
+
+        return resolver.get();
     }
 
     public boolean support(UpdateWrapper update) {
         return mapper.value() == update.command();
     }
 
-    public UpdateResponse process(UpdateWrapper update, List<UpdateRequestReturn> returnResolvers) {
+    public UpdateResponse process(UpdateWrapper update) {
         Object[] args = resolveParameters(update);
-        return resolveReturn(args, returnResolvers);
+        return resolveReturn(args);
     }
 
     private Object[] resolveParameters(UpdateWrapper update) {
@@ -66,15 +77,9 @@ public class UpdateRequestMethodResolver {
         return args;
     }
 
-    private UpdateResponse resolveReturn(Object[] args, List<UpdateRequestReturn> returnResolvers){
+    private UpdateResponse resolveReturn(Object[] args){
         try {
-            final Object result = method.invoke(bean, args);
-
-            Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(result)).findAny();
-
-            if(resolver.isEmpty())  throw new TelegramServerException("can not resolve the return data (1). return type : " + result.getClass());
-
-            return resolver.get().resolve(result);
+            return returnResolver.resolve(method.invoke(bean, args));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new TelegramServerException("can not resolve the return data (2)", e);
         }

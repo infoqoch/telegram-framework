@@ -17,20 +17,18 @@ import java.util.*;
 
 public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
-    private final List<UpdateRequestReturn> returnResolvers;
 
     // 실제 동작
     public UpdateResponse process(UpdateWrapper update) {
-        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update, returnResolvers);
+        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
     }
 
     // 이후 factory로 delegate 할 소스들
     public UpdateDispatcher(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
-        this.returnResolvers = returnResolvers;
-        collectUpdateRequestMappedMethods(context, urls);
+        collectUpdateRequestMappedMethods(context, urls, returnResolvers);
     }
 
-    private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls) {
+    private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
         Set<UpdateRequestMethodMapper> updateRequestMappers = new HashSet<>();
 
         for (Method method : getMethodsAnnotated(urls)) {
@@ -38,7 +36,7 @@ public class UpdateDispatcher {
 
             checkDuplicatedMapper(updateRequestMappers, mapper);
 
-            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper));
+            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, returnResolvers));
         }
 
         if(isNotConcretedEveryCommand(updateRequestMappers)){
