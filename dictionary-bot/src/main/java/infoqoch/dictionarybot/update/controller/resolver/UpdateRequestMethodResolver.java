@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.update.controller.resolver;
 
 import infoqoch.dictionarybot.system.exception.TelegramServerException;
-import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.controller.resolver.param.ParameterWrapper;
 import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;

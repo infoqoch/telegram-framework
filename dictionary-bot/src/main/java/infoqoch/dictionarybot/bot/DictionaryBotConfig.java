@@ -2,6 +2,8 @@ package infoqoch.dictionarybot.bot;
 
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
 import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
@@ -51,11 +53,12 @@ public class DictionaryBotConfig {
         return paramResolvers;
     }
 
-
     @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
         final Collection<URL> urls = getUrlsExcludeTest();
-        return new UpdateDispatcher(new SpringBeanContext(context), urls, paramResolvers(), returnResolvers());
+        final SpringBeanContext context1 = new SpringBeanContext(context);
+        final List<UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(context1, urls, paramResolvers(), returnResolvers());
+        return new UpdateDispatcher(methodResolvers);
     }
 
     // 통합 테스트(@SpringBootTest)가 동작할 때 클래스로더가 두 개 동작하며 그것의 절대 경로는 ../target/test-classes 와 ../target/classes 이다.

@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
@@ -18,7 +19,7 @@ public class FakeUpdateDispatcherFactory {
     // test를 fake로 사용하는 UpdateDispatcher
     // TODO
     public static UpdateDispatcher defaultInstance(){
-        return new UpdateDispatcher(fakeBeanContext(), testUrls(), paramResolvers(), returnResolvers());
+        return new UpdateDispatcher(UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(fakeBeanContext(), testUrls(), paramResolvers(), returnResolvers()));
     }
 
     private static List<UpdateRequestReturn> returnResolvers(){

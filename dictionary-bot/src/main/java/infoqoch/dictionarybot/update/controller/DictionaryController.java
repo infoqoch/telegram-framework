@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

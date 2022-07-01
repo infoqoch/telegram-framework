@@ -1,12 +1,13 @@
 package infoqoch.dictionarybot.update.dispatcher.wrong1;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
 import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
-import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -78,7 +79,7 @@ public class WrongReturnControllerTest {
 
     private static class WrongUpdateDispatcherFactory {
         public static UpdateDispatcher defaultInstance(){
-            return new UpdateDispatcher(fakeBeanContext(), testUrls(), null, returnResolvers());
+            return new UpdateDispatcher(UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(fakeBeanContext(), testUrls(), null, returnResolvers()));
         }
 
         private static List<UpdateRequestReturn> returnResolvers(){

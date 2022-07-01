@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
 import lombok.RequiredArgsConstructor;
