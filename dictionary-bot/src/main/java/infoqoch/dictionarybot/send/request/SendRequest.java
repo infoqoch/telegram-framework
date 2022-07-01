@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.send.request;
 
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.ToString;
 

@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 
 import java.lang.reflect.Method;

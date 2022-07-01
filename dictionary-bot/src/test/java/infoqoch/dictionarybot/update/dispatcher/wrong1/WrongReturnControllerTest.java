@@ -7,7 +7,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Disabled;

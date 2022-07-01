@@ -1,15 +1,10 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.send.SendDispatcher;
-import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
 import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
-import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
-import infoqoch.telegrambot.bot.TelegramBot;
-import lombok.extern.slf4j.Slf4j;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -22,14 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Configuration
-public class DictionaryBotConfig {
-
-    @Bean
-    TelegramBot telegramBot(){
-        return DefaultTelegramBotFactory.init("1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o");
-    }
+public class UpdateDispatcherConfig {
 
     @Bean
     public List<UpdateRequestReturn> returnResolvers(){
@@ -55,23 +44,18 @@ public class DictionaryBotConfig {
 
     @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
+        final SpringBeanContext springContext = new SpringBeanContext(context);
         final Collection<URL> urls = getUrlsExcludeTest();
-        final SpringBeanContext context1 = new SpringBeanContext(context);
-        final List<UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(context1, urls, paramResolvers(), returnResolvers());
+        final List<UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(springContext, urls, paramResolvers(), returnResolvers());
         return new UpdateDispatcher(methodResolvers);
     }
 
+    // TODO
     // 통합 테스트(@SpringBootTest)가 동작할 때 클래스로더가 두 개 동작하며 그것의 절대 경로는 ../target/test-classes 와 ../target/classes 이다.
+    // 실제 스프링 컨테이너를 로딩할 때는, 테스트를 사용하지 않으므로 이러한 코드가 필요 없다. 테스트를 할 때는 두 개의 클래스로더가 동작하기 때문에 불가피하게 아래와 같이 "/test-classes"에 있는 파일을 읽지 않도록 한다.
     // 운영이 테스트를 위한 코드에 종속되는 것은 좋지 않아서 최대한 해소하려 하였으나 어쩔 수 없이 아래와 같이 코드를 작성하였음.
-    // DictionaryBotApplication 를 기준으로 url을 추출하였으나 이 경우 /test-classes 의 패키지로 url을 가짐.
-    // 이 부분은 계속 고민이 필요해보임.
+    // 이에 대한 개선책이 반드시 필요함.
     private Set<URL> getUrlsExcludeTest() {
         return ClasspathHelper.forPackage(UpdateDispatcher.class.getPackageName()).stream().filter(url -> !url.toString().contains("/test-classes")).collect(Collectors.toSet());
     }
-
-    @Bean
-    public SendDispatcher sendDispatcher(){
-        return new SendDispatcher(telegramBot());
-    }
-
 }

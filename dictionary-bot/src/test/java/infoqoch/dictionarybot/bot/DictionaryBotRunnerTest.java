@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.bot;
 
+import infoqoch.dictionarybot.DictionaryBotRunner;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;

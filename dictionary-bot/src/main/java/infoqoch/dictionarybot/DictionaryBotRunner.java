@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.send.request.SendRequest;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static infoqoch.dictionarybot.update.response.SendType.MESSAGE;
+import static infoqoch.dictionarybot.send.SendType.MESSAGE;
 
 @Slf4j
 @Component

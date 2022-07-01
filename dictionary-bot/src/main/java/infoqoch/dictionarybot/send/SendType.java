@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.response;
+package infoqoch.dictionarybot.send;
 
 public enum SendType {
     DOCUMENT, MESSAGE;

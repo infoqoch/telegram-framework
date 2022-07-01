@@ -5,7 +5,6 @@ import infoqoch.dictionarybot.bot.FakeTelegramSend;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
-import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.response.SendDocumentResponse;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
