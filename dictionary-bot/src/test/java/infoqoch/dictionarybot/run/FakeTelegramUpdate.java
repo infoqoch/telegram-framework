@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot.run;
 
 import infoqoch.telegrambot.bot.TelegramUpdate;
 import infoqoch.telegrambot.bot.entity.Response;

@@ -5,10 +5,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalLong;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -29,6 +26,11 @@ public class MemorySendRepository implements SendRepository {
     @Override
     public List<Send> findByStatus(Send.Status status) {
         return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Send> findByNo(Long no) {
+        return Optional.ofNullable(repository.get(no));
     }
 
     @SneakyThrows

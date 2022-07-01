@@ -1,8 +1,8 @@
 package infoqoch.dictionarybot.integration.dictionarybot;
 
 import infoqoch.dictionarybot.DictionaryUpdateRunner;
-import infoqoch.dictionarybot.bot.FakeTelegramBot;
-import infoqoch.dictionarybot.bot.FakeTelegramUpdate;
+import infoqoch.dictionarybot.run.FakeTelegramBot;
+import infoqoch.dictionarybot.run.FakeTelegramUpdate;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.log.UpdateLog;

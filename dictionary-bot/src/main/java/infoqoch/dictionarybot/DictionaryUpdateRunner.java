@@ -55,11 +55,8 @@ public class DictionaryUpdateRunner {
         final UpdateResponse updateResponse = resolveUpdate(updateRequest);
         log.debug("updateResponse = {}", updateResponse);
 
-        // TODO
-        // 로그 저장하기
         updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
 
-        // 메시지 보내기
         Events.raise(new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message()));
     }
 

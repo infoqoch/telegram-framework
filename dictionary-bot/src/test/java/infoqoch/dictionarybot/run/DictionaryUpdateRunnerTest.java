@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot.run;
 
 import infoqoch.dictionarybot.DictionaryUpdateRunner;
 import infoqoch.dictionarybot.mock.data.MockUpdate;

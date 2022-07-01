@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.bot.FakeTelegramBot;
-import infoqoch.dictionarybot.bot.FakeTelegramSend;
+import infoqoch.dictionarybot.run.FakeTelegramBot;
+import infoqoch.dictionarybot.run.FakeTelegramSend;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.bot;
+package infoqoch.dictionarybot.run;
 
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
@@ -21,8 +21,12 @@ public class FakeTelegramSend implements TelegramSend {
     private SendMessageRequest sendMessageRequest;
     private SendDocumentRequest sendDocumentRequest;
 
+    private boolean throwRuntimeException;
+
     @Override
     public Response<SendMessageResponse> message(SendMessageRequest sendMessageRequest) {
+        if(throwRuntimeException) throw new RuntimeException("예외닷!");
+
         this.sendMessageRequest = sendMessageRequest;
         isMessageCalled = true;
         messageResult = new DefaultJsonBind().toObject(mockMessageResponseJson, SendMessageResponse.class);
@@ -31,6 +35,8 @@ public class FakeTelegramSend implements TelegramSend {
 
     @Override
     public Response<SendDocumentResponse> document(SendDocumentRequest sendDocumentRequest) {
+        if(throwRuntimeException) throw new RuntimeException("예외닷!");
+
         this.sendDocumentRequest = sendDocumentRequest;
         isDocumentCalled = true;
         documentResult = new DefaultJsonBind().toObject(mockDocumentResponseJson, SendDocumentResponse.class);

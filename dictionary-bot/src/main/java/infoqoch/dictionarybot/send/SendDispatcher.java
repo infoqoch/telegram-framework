@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
+import infoqoch.dictionarybot.system.exception.TelegramErrorResponseException;
 import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramSend;
@@ -18,6 +19,9 @@ public class SendDispatcher {
 
     public SendResponse process(SendRequest request) {
         Response<?> response = send(request);
+        if(response.getErrorCode()!=null){
+            throw new TelegramErrorResponseException(response.getErrorCode(), response.getDescription());
+        }
         return new SendResponse(response.isOk(), response.getResult());
     }
 

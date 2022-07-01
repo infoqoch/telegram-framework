@@ -2,6 +2,8 @@ package infoqoch.dictionarybot.system.exception;
 
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
+// TODO
+// 필드가 반드시 MarkdownStringBuilder 어야 할까? 그냥 message가 더 낫지 않을까. 고민.
 public class TelegramServerException extends RuntimeException implements TelegramException {
     private final MarkdownStringBuilder response;
 
@@ -28,6 +30,8 @@ public class TelegramServerException extends RuntimeException implements Telegra
 
     @Override
     public MarkdownStringBuilder response(){
+        if(response==null)
+            return new MarkdownStringBuilder().plain(getMessage());
         return response;
     }
 }
