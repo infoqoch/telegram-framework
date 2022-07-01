@@ -35,6 +35,8 @@ public class FakeController {
             UpdateRequestMessage updateRequestMessage,
             @UpdateRequestBodyParameterMapper UpdateChat chat
     ) {
+        System.out.println("updateRequestMessage = " + updateRequestMessage);
+        System.out.println("chat = " + chat);
         StringBuilder sb = new StringBuilder();
         sb.append(updateRequestMessage.command()).append(" : ");
         sb.append(updateRequestMessage.value()).append(" : ");

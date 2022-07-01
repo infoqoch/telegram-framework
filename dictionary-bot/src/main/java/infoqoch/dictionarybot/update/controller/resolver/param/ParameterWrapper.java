@@ -1,14 +1,18 @@
 package infoqoch.dictionarybot.update.controller.resolver.param;
 
+import infoqoch.dictionarybot.update.request.UpdateRequest;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 
 public class ParameterWrapper {
     private final Parameter parameter;
     private final Annotation[] annotations;
+    private final UpdateRequestParam paramResolver;
 
-    public ParameterWrapper(Parameter parameter) {
+    public ParameterWrapper(Parameter parameter, UpdateRequestParam paramResolver) {
         this.parameter = parameter;
+        this.paramResolver = paramResolver;
         this.annotations = parameter.getAnnotations();
     }
 
@@ -30,5 +34,9 @@ public class ParameterWrapper {
                 return (A) annotation;
         }
         throw new IllegalStateException("!!!!!");
+    }
+
+    public Object resolve(UpdateRequest update) {
+        return paramResolver.resolve(update);
     }
 }

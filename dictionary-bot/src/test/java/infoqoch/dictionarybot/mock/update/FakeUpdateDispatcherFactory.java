@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
 
@@ -15,8 +16,9 @@ import java.util.Map;
 // 기본 값은 기존의 FakeController를 가리키며 필요시 값을 삽입하여 사용한다.
 public class FakeUpdateDispatcherFactory {
     // test를 fake로 사용하는 UpdateDispatcher
+    // TODO
     public static UpdateDispatcher defaultInstance(){
-        return new UpdateDispatcher(fakeBeanContext(), testUrls(), returnResolvers());
+        return new UpdateDispatcher(fakeBeanContext(), testUrls(), paramResolvers(), returnResolvers());
     }
 
     private static List<UpdateRequestReturn> returnResolvers(){
@@ -29,6 +31,14 @@ public class FakeUpdateDispatcherFactory {
         return returnResolvers;
     }
 
+    public static List<UpdateRequestParam> paramResolvers(){
+        List<UpdateRequestParam> paramResolvers = new ArrayList<>();
+        paramResolvers.add(new UpdateRequestUpdateRequestParam());
+        paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
+        paramResolvers.add(new UpdateChatUpdateRequestParam());
+        paramResolvers.add(new UpdateDocumentUpdateRequestParam());
+        return paramResolvers;
+    }
 
     private static ArrayList<URL> testUrls() {
         final URL resource = FakeController.class.getResource(".");

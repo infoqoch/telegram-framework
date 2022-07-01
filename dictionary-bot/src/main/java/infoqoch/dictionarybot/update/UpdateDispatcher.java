@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.update.controller.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
@@ -24,11 +25,11 @@ public class UpdateDispatcher {
     }
 
     // 이후 factory로 delegate 할 소스들
-    public UpdateDispatcher(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
-        collectUpdateRequestMappedMethods(context, urls, returnResolvers);
+    public UpdateDispatcher(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+        collectUpdateRequestMappedMethods(context, urls, paramResolvers,  returnResolvers);
     }
 
-    private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestReturn> returnResolvers) {
+    private void collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
         Set<UpdateRequestMethodMapper> updateRequestMappers = new HashSet<>();
 
         for (Method method : getMethodsAnnotated(urls)) {
@@ -36,7 +37,7 @@ public class UpdateDispatcher {
 
             checkDuplicatedMapper(updateRequestMappers, mapper);
 
-            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, returnResolvers));
+            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, paramResolvers, returnResolvers));
         }
 
         if(isNotConcretedEveryCommand(updateRequestMappers)){

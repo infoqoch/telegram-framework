@@ -6,8 +6,6 @@ import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.dictionarybot.update.request.body.UpdateType;
 import infoqoch.telegrambot.bot.entity.Update;
 
-import java.util.Optional;
-
 import static infoqoch.dictionarybot.update.request.body.UpdateType.*;
 
 public class UpdateRequest {
@@ -69,10 +67,10 @@ public class UpdateRequest {
     public Object toPhoto() throws Exception {
         throw new Exception(new UnsupportedOperationException("not support operation"));
     }
-
-    public Optional<Object> getBodyByType(Class<?> type) {
-        if(type == UpdateChat.class) return Optional.of(toChat());
-        if(type == UpdateDocument.class) return Optional.of(toDocument());
-        throw new TelegramServerException("not support data type (3)");
+    
+    public Object getBodyByType(Class<?> type) {
+        if(type == UpdateChat.class) return toChat();
+        if(type == UpdateDocument.class) return toDocument();
+        throw new TelegramServerException("not support data type (4)");
     }
 }

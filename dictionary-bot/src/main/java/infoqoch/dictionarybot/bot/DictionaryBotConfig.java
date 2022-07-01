@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.bot;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
+import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -30,7 +31,6 @@ public class DictionaryBotConfig {
 
     @Bean
     public List<UpdateRequestReturn> returnResolvers(){
-        log.info("good!");
         List<UpdateRequestReturn> returnResolvers = new ArrayList<>();
         returnResolvers.add(new DictionaryUpdateRequestReturn());
         returnResolvers.add(new DictionariesUpdateRequestReturn());
@@ -42,9 +42,20 @@ public class DictionaryBotConfig {
     }
 
     @Bean
+    public List<UpdateRequestParam> paramResolvers(){
+        List<UpdateRequestParam> paramResolvers = new ArrayList<>();
+        paramResolvers.add(new UpdateRequestUpdateRequestParam());
+        paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
+        paramResolvers.add(new UpdateChatUpdateRequestParam());
+        paramResolvers.add(new UpdateDocumentUpdateRequestParam());
+        return paramResolvers;
+    }
+
+
+    @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
         final Collection<URL> urls = getUrlsExcludeTest();
-        return new UpdateDispatcher(new SpringBeanContext(context), urls, returnResolvers());
+        return new UpdateDispatcher(new SpringBeanContext(context), urls, paramResolvers(), returnResolvers());
     }
 
     // 통합 테스트(@SpringBootTest)가 동작할 때 클래스로더가 두 개 동작하며 그것의 절대 경로는 ../target/test-classes 와 ../target/classes 이다.

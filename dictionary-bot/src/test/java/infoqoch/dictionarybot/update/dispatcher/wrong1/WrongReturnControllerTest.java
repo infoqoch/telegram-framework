@@ -78,7 +78,7 @@ public class WrongReturnControllerTest {
 
     private static class WrongUpdateDispatcherFactory {
         public static UpdateDispatcher defaultInstance(){
-            return new UpdateDispatcher(fakeBeanContext(), testUrls(), returnResolvers());
+            return new UpdateDispatcher(fakeBeanContext(), testUrls(), null, returnResolvers());
         }
 
         private static List<UpdateRequestReturn> returnResolvers(){
