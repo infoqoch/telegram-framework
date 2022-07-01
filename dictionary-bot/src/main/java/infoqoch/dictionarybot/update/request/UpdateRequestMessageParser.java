@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update.request;
 
-public class UpdateRequestParse {
+public class UpdateRequestMessageParser {
+
     public static UpdateRequestMessage resolve(String input) {
         String message = flattingInput(input);
         final UpdateRequestCommand command = extractCommand(message);

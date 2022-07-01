@@ -13,6 +13,6 @@ public class UpdateChatUpdateRequestParam implements UpdateRequestParam {
 
     @Override
     public Object resolve(UpdateRequest request) {
-        return request.getBodyByType(UpdateChat.class);
+        return request.findBodyByType(UpdateChat.class);
     }
 }

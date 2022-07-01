@@ -13,6 +13,6 @@ public class UpdateDocumentUpdateRequestParam implements UpdateRequestParam {
 
     @Override
     public Object resolve(UpdateRequest request) {
-        return request.getBodyByType(UpdateDocument.class);
+        return request.findBodyByType(UpdateDocument.class);
     }
 }

@@ -18,6 +18,7 @@ public class UpdateRequest {
     public Long chatId(){
         return toChat().getChat().getId();
     }
+
     public UpdateType type() {
         if(update.getEditedMessage()!=null) return EDITED;
         if(update.getMessage().getPhoto()!=null) return PHOTO;
@@ -35,9 +36,9 @@ public class UpdateRequest {
     }
 
     public UpdateRequestMessage updateRequestMessage() {
-        if(type() == CHAT) return UpdateRequestParse.resolve(update.getMessage().getText());
-        if(type() == DOCUMENT) return UpdateRequestParse.resolve(update.getMessage().getCaption());
-        if(type() == PHOTO) return UpdateRequestParse.resolve(update.getMessage().getCaption());
+        if(type() == CHAT) return UpdateRequestMessageParser.resolve(update.getMessage().getText());
+        if(type() == DOCUMENT) return UpdateRequestMessageParser.resolve(update.getMessage().getCaption());
+        if(type() == PHOTO) return UpdateRequestMessageParser.resolve(update.getMessage().getCaption());
         throw new TelegramServerException("unknown update type (2)");
     }
 
@@ -68,7 +69,7 @@ public class UpdateRequest {
         throw new Exception(new UnsupportedOperationException("not support operation"));
     }
 
-    public Object getBodyByType(Class<?> type) {
+    public Object findBodyByType(Class<?> type) {
         if(type == UpdateChat.class) return toChat();
         if(type == UpdateDocument.class) return toDocument();
         throw new TelegramServerException("not support data type (4)");
