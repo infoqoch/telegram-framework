@@ -7,27 +7,27 @@ import lombok.ToString;
 @ToString
 public class SendRequest {
     private final Long chatId;
-    private final SendType type;
+    private final SendType sendType;
     private final MarkdownStringBuilder message;
 
     private final String document;
 
-    public SendRequest(Long chatId, SendType type, MarkdownStringBuilder msb) {
+    public SendRequest(Long chatId, SendType sendType, MarkdownStringBuilder msb) {
         this.chatId = chatId;
-        this.type = type;
+        this.sendType = sendType;
         this.message = msb;
         this.document = null;
     }
 
-    public SendRequest(Long chatId, SendType type, String document, MarkdownStringBuilder msb) {
+    public SendRequest(Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
         this.chatId = chatId;
-        this.type = type;
+        this.sendType = sendType;
         this.document = document;
         this.message = msb;
     }
 
-    public SendType type() {
-        return type;
+    public SendType sendType() {
+        return sendType;
      }
 
     public MarkdownStringBuilder message() {

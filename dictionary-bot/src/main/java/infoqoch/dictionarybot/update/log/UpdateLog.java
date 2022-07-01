@@ -1,0 +1,59 @@
+package infoqoch.dictionarybot.update.log;
+
+import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
+import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
+import infoqoch.dictionarybot.update.request.body.UpdateDataType;
+import infoqoch.dictionarybot.update.response.UpdateResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor @Builder
+public class UpdateLog {
+    private Long no;
+
+    private Long updateId;
+    private Long chatId;
+
+    private UpdateRequestCommand updateCommand;
+    private String updateValue;
+    private UpdateDataType updateDataType;
+
+    private String updateFileId;
+    private String updateFileName;
+
+    private SendType sendType;
+    private String sendDocument;
+    private String sendMessage;
+
+    public static UpdateLog of(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+        final UpdateRequestMessage updateRequestMessage = updateRequest.updateRequestMessage();
+
+        String fileId = null;
+        String fileName = null;
+        final UpdateDataType updateDataType = updateRequest.updateDataType();
+        if(updateDataType==UpdateDataType.DOCUMENT){
+            fileId = updateRequest.toDocument().getDocument().getFileId();
+            fileName = updateRequest.toDocument().getDocument().getFileName();
+        }
+
+        return UpdateLog.builder()
+                .updateId(updateRequest.updateId())
+                .chatId(updateRequest.chatId())
+
+                .updateCommand(updateRequestMessage.getCommand())
+                .updateValue(updateRequestMessage.value())
+                .updateDataType(updateRequest.updateDataType())
+
+                .updateFileId(fileId)
+                .updateFileName(fileName)
+
+                .sendType(updateResponse.sendType())
+                .sendDocument(updateResponse.document())
+                .sendMessage(updateResponse.message().toString())
+                .build();
+    }
+}

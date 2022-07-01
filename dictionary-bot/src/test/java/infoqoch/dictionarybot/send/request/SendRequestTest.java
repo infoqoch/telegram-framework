@@ -27,7 +27,7 @@ public class SendRequestTest {
 
         private void assertSendRequest(SendRequest request, long chatId, SendType type, String message) {
         assertThat(request.chatId()).isEqualTo(chatId);
-        assertThat(request.type()).isEqualTo(type);
+        assertThat(request.sendType()).isEqualTo(type);
         assertThat(request.message().toString()).isEqualTo(message);
     }
 

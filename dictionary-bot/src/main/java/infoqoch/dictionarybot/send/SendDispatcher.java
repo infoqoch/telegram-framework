@@ -22,8 +22,8 @@ public class SendDispatcher {
     }
 
     private Response<?> send(SendRequest request) {
-        if(request.type() == SendType.MESSAGE) return send.message(new SendMessageRequest(request.chatId(), request.message()));
-        if(request.type() == SendType.DOCUMENT) return send.document(new SendDocumentRequest(request.chatId(), request.document(), request.message()));
+        if(request.sendType() == SendType.MESSAGE) return send.message(new SendMessageRequest(request.chatId(), request.message()));
+        if(request.sendType() == SendType.DOCUMENT) return send.document(new SendDocumentRequest(request.chatId(), request.document(), request.message()));
         throw new TelegramServerException("not supported SendType");
     }
 }

@@ -6,24 +6,24 @@ import lombok.ToString;
 
 @ToString
 public class UpdateResponse {
-    private final SendType type;
+    private final SendType sendType;
     private final String document;
     private final MarkdownStringBuilder message;
 
-    public UpdateResponse(SendType type, MarkdownStringBuilder message) {
-        this.type= type;
+    public UpdateResponse(SendType sendType, MarkdownStringBuilder message) {
+        this.sendType = sendType;
         this.message = message;
         this.document = document();
     }
 
-    public UpdateResponse(SendType type, MarkdownStringBuilder message, String document) {
-        this.type = type;
+    public UpdateResponse(SendType sendType, MarkdownStringBuilder message, String document) {
+        this.sendType = sendType;
         this.message = message;
         this.document = document;
     }
 
-    public SendType type() {
-        return type;
+    public SendType sendType() {
+        return sendType;
     }
 
     public MarkdownStringBuilder message(){

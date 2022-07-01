@@ -32,7 +32,7 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         // then
-        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.sendType()).isEqualTo(SendType.MESSAGE);
         assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
         assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("help! hello!"));
     }
@@ -46,7 +46,7 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         // then
-        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.sendType()).isEqualTo(SendType.MESSAGE);
         assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
         assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("LOOKUP_SENTENCE : orange"));
     }
@@ -59,7 +59,7 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         // then
-        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.sendType()).isEqualTo(SendType.MESSAGE);
         assertThat(response.message()).isInstanceOf(MarkdownStringBuilder.class);
         assertThat(response.message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("LOOKUP_WORD : apple : 2149"));
     }
@@ -72,7 +72,7 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         // then
-        assertThat(response.type()).isEqualTo(SendType.MESSAGE);
+        assertThat(response.sendType()).isEqualTo(SendType.MESSAGE);
         assertThat(response.message().text()).contains("*apple*");
     }
 
