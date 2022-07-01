@@ -35,9 +35,9 @@ public class UpdateRequest {
     }
 
     public UpdateRequestMessage updateRequestMessage() {
-        if(type() == CHAT) return UpdateRequestFactory.resolve(update.getMessage().getText());
-        if(type() == DOCUMENT) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
-        if(type() == PHOTO) return UpdateRequestFactory.resolve(update.getMessage().getCaption());
+        if(type() == CHAT) return UpdateRequestParse.resolve(update.getMessage().getText());
+        if(type() == DOCUMENT) return UpdateRequestParse.resolve(update.getMessage().getCaption());
+        if(type() == PHOTO) return UpdateRequestParse.resolve(update.getMessage().getCaption());
         throw new TelegramServerException("unknown update type (2)");
     }
 
@@ -67,7 +67,7 @@ public class UpdateRequest {
     public Object toPhoto() throws Exception {
         throw new Exception(new UnsupportedOperationException("not support operation"));
     }
-    
+
     public Object getBodyByType(Class<?> type) {
         if(type == UpdateChat.class) return toChat();
         if(type == UpdateDocument.class) return toDocument();

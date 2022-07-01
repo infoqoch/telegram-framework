@@ -4,7 +4,6 @@ import infoqoch.dictionarybot.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
-import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -33,7 +32,7 @@ public class FakeController {
     @UpdateRequestMethodMapper(LOOKUP_WORD)
     public UpdateResponse lookupByWord(
             UpdateRequestMessage updateRequestMessage,
-            @UpdateRequestBodyParameterMapper UpdateChat chat
+            UpdateChat chat
     ) {
         System.out.println("updateRequestMessage = " + updateRequestMessage);
         System.out.println("chat = " + chat);

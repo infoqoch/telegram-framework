@@ -6,7 +6,6 @@ import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
-import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -57,7 +56,7 @@ public class WrongReturnControllerTest {
     @UpdateRequestMethodMapper(LOOKUP_WORD)
     public UpdateResponse lookupByWord(
             UpdateRequestMessage updateRequestMessage,
-            @UpdateRequestBodyParameterMapper UpdateChat chat
+            UpdateChat chat
     ) {
         StringBuilder sb = new StringBuilder();
         sb.append(updateRequestMessage.command()).append(" : ");

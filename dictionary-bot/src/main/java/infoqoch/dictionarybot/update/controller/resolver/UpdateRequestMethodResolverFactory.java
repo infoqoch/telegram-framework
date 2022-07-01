@@ -26,9 +26,7 @@ public class UpdateRequestMethodResolverFactory {
             methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, paramResolvers, returnResolvers));
         }
 
-        if(isNotConcretedEveryCommand(updateRequestMappers)){
-            throw new IllegalArgumentException("every mapper should be concreted. declared with mapper annotation commands: " + printAllCommands());
-        }
+        concretedEveryCommand(updateRequestMappers);
 
         return methodResolvers;
     }
@@ -47,8 +45,10 @@ public class UpdateRequestMethodResolverFactory {
         checkDuplicatedMapper.add(mapper);
     }
 
-    private static boolean isNotConcretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
-        return updateRequestMappers.size() != UpdateRequestCommand.values().length;
+    private static void concretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
+        if(updateRequestMappers.size() != UpdateRequestCommand.values().length){
+            throw new IllegalArgumentException("every mapper should be concreted. declared with mapper annotation commands: " + printAllCommands());
+        }
     }
 
     private static String printAllCommands() {

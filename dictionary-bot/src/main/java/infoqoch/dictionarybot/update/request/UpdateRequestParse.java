@@ -1,23 +1,23 @@
 package infoqoch.dictionarybot.update.request;
 
-public class UpdateRequestFactory {
+public class UpdateRequestParse {
     public static UpdateRequestMessage resolve(String input) {
-        String message = simpleString(input);
+        String message = flattingInput(input);
         final UpdateRequestCommand command = extractCommand(message);
 
         if(command==UpdateRequestCommand.UNKNOWN)
             return new UpdateRequestMessage(command, message);
 
-        return commandAndExtractedValue(message, command);
+        return extractValueWithCommand(message, command);
     }
 
-    private static UpdateRequestMessage commandAndExtractedValue(String message, UpdateRequestCommand command) {
+    private static UpdateRequestMessage extractValueWithCommand(String message, UpdateRequestCommand command) {
         final int firstSpaceIdx = message.indexOf(command.alias());
         String value = extractValue(message, firstSpaceIdx+ command.alias().length());
         return new UpdateRequestMessage(command, value);
     }
 
-    private static String simpleString(String input) {
+    private static String flattingInput(String input) {
         return input.replaceAll("_", " ").replaceAll("/", "").replaceAll("[\\t\\s]+", " ").trim();
     }
 

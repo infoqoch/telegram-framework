@@ -32,7 +32,7 @@ public class DictionaryRequestTest {
     }
 
     private void assertResolveMessage(String message, UpdateRequestCommand command, String value) {
-        UpdateRequestMessage request = UpdateRequestFactory.resolve(message);
+        UpdateRequestMessage request = UpdateRequestParse.resolve(message);
         assertThat(request.command()).isEqualTo(command);
         assertThat(request.value()).isEqualTo(value);
     }

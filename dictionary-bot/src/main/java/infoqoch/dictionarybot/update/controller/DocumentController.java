@@ -5,7 +5,6 @@ import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
-import infoqoch.dictionarybot.update.controller.resolver.param.mapper.UpdateRequestBodyParameterMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class DocumentController {
     private final TelegramFileHandler telegramFileHandler;
 
     @UpdateRequestMethodMapper(EXCEL_PUSH)
-    public String excelPush(@UpdateRequestBodyParameterMapper UpdateDocument document) {
+    public String excelPush(UpdateDocument document) {
         log.info("UpdateRequestMethodMapper : excel_push");
 
         final File file = telegramFileHandler.extractExcelFile(document);
