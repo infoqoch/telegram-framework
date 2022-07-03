@@ -11,6 +11,7 @@ import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -43,6 +44,7 @@ class DictionarySendRunnerTest {
     }
     
     @Test
+    @DisplayName("정상적으로 요청하고 정상적으로 응답함")
     void message_send_success() {
         // given
         // mock response.
@@ -62,9 +64,10 @@ class DictionarySendRunnerTest {
     }
 
     @Test
-    void message_send_response_error() {
+    @DisplayName("발송 자체에서 에러가 발생함")
+    void message_send_error() {
         // given
-        // mock response... 데이터는 잘 전송하였으나, 텔레그램에서 bad request로 응답하였음.
+        // mock response... 데이터 전송 과정에서 예외가 발생하였음.
         telegramSend.setThrowRuntimeException(true);
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
@@ -81,7 +84,8 @@ class DictionarySendRunnerTest {
     }
 
     @Test
-    void message_send_server_error() {
+    @DisplayName("잘 발송하였으나 응답이 부정적임")
+    void message_send_response_error() {
         // given
         // mock response... 데이터는 잘 전송하였으나, 텔레그램에서 bad request로 응답하였음.
         telegramSend.setMockMessageResponseJson("{\"ok\":false,\"error_code\":400,\"description\":\"Bad Request: chat not found\"}");

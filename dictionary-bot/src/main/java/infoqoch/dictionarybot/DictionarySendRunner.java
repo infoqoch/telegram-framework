@@ -3,7 +3,6 @@ package infoqoch.dictionarybot;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.send.repository.SendRepository;
-import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.system.exception.TelegramErrorResponseException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class DictionarySendRunner {
             send.sending();
 
             try {
-                SendResponse sendResponse = resolveSend(send.getRequest());
+                SendResponse sendResponse = sendDispatcher.process(send.getRequest());
                 send.success(sendResponse);
             } catch (TelegramErrorResponseException e){
                 log.error("[error : {}], ", "DictionarySendRunner", e);
@@ -38,9 +37,5 @@ public class DictionarySendRunner {
                 send.error(e);
             }
         }
-    }
-
-    private SendResponse resolveSend(SendRequest request) {
-        return sendDispatcher.process(request);
     }
 }
