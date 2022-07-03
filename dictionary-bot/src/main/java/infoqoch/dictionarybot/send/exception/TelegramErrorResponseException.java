@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.system.exception;
+package infoqoch.dictionarybot.send.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

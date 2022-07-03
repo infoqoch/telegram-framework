@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update.controller.file;
 
-import infoqoch.dictionarybot.system.exception.TelegramServerException;
+import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.entity.FilePath;

@@ -4,7 +4,7 @@ import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendDispatcher;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.send.response.SendResponse;
-import infoqoch.dictionarybot.system.exception.TelegramErrorResponseException;
+import infoqoch.dictionarybot.send.exception.TelegramErrorResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

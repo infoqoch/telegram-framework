@@ -2,7 +2,7 @@ package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.system.event.Events;
-import infoqoch.dictionarybot.system.exception.TelegramException;
+import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.dictionarybot.update.log.repository.UpdateLogRepository;
@@ -53,6 +53,25 @@ public class DictionaryUpdateRunner {
             LAST_UPDATE_ID = updateId;
     }
 
+    private void handleUpdate(Update update) {
+        final UpdateRequest updateRequest = new UpdateRequest(update);
+        log.debug("updateRequest = {}", updateRequest);
+
+        try{
+            final UpdateResponse updateResponse = resolveUpdate(updateRequest);
+            log.debug("updateResponse = {}", updateResponse);
+
+            saveUpdateInRepository(updateRequest, updateResponse);
+
+            requestSending(updateRequest, updateResponse);
+
+        } catch (Exception e){
+            log.error("[error] resolveUpdate, ", e);
+
+            requestSending(updateRequest, updateExceptionHandler(e));
+        }
+    }
+
     private UpdateResponse resolveUpdate(UpdateRequest request) {
         try{
             return updateDispatcher.process(request);
@@ -62,32 +81,12 @@ public class DictionaryUpdateRunner {
         }
     }
 
-    private void logging(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+    private void saveUpdateInRepository(UpdateRequest updateRequest, UpdateResponse updateResponse) {
         updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
     }
 
     private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse) {
         Events.raise(new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message()));
-    }
-
-    private void handleUpdate(Update update) {
-        final UpdateRequest updateRequest = new UpdateRequest(update);
-        log.debug("updateRequest = {}", updateRequest);
-
-        try{
-            final UpdateResponse updateResponse = resolveUpdate(updateRequest);
-            log.debug("updateResponse = {}", updateResponse);
-
-            logging(updateRequest, updateResponse);
-
-            requestSending(updateRequest, updateResponse);
-
-        } catch (Exception e){
-            log.error("[error] resolveUpdate, ", e);
-
-            requestSending(updateRequest, updateExceptionHandler(e));
-        }
-
     }
 
     private UpdateResponse updateExceptionHandler(Exception e) {

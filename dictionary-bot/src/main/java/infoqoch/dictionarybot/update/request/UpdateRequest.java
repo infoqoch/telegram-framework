@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update.request;
 
-import infoqoch.dictionarybot.system.exception.TelegramServerException;
+import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.request.body.UpdateDataType;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;

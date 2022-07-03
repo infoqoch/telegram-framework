@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
-import infoqoch.dictionarybot.system.exception.TelegramErrorResponseException;
+import infoqoch.dictionarybot.send.exception.TelegramErrorResponseException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

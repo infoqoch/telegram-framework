@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.system.exception;
+package infoqoch.dictionarybot.update.exception;
 
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
