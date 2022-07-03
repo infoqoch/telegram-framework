@@ -48,32 +48,54 @@ public class DictionaryUpdateRunner {
         }
     }
 
-    private void handleUpdate(Update update) {
-        final UpdateRequest updateRequest = new UpdateRequest(update);
-        log.debug("updateRequest = {}", updateRequest);
-
-        final UpdateResponse updateResponse = resolveUpdate(updateRequest);
-        log.debug("updateResponse = {}", updateResponse);
-
-        updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
-
-        Events.raise(new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message()));
+    private void upToDateUpdateId(Long updateId) {
+        if (updateId > LAST_UPDATE_ID)
+            LAST_UPDATE_ID = updateId;
     }
 
-    private UpdateResponse resolveUpdate(UpdateRequest updateWrap) {
+    private UpdateResponse resolveUpdate(UpdateRequest request) {
         try{
-            return updateDispatcher.process(updateWrap);
+            return updateDispatcher.process(request);
         } catch (Exception e){
             log.error("[error] resolveUpdate. ", e);
             return updateExceptionHandler(e);
         }
     }
 
+    private void logging(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+        updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
+    }
+
+    private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+        Events.raise(new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message()));
+    }
+
+    private void handleUpdate(Update update) {
+        final UpdateRequest updateRequest = new UpdateRequest(update);
+        log.debug("updateRequest = {}", updateRequest);
+
+        try{
+            final UpdateResponse updateResponse = resolveUpdate(updateRequest);
+            log.debug("updateResponse = {}", updateResponse);
+
+            logging(updateRequest, updateResponse);
+
+            requestSending(updateRequest, updateResponse);
+
+        } catch (Exception e){
+            log.error("[error] resolveUpdate, ", e);
+
+            requestSending(updateRequest, updateExceptionHandler(e));
+        }
+
+    }
+
     private UpdateResponse updateExceptionHandler(Exception e) {
         final Optional<TelegramException> telegramException = checkIfCausedByTelegramException(e);
+
         if(telegramException.isPresent()){
-            final TelegramException te = telegramException.get();
-            final MarkdownStringBuilder response = te.response();
+            final MarkdownStringBuilder response = telegramException.get().response();
+
             if (response != null) return new UpdateResponse(MESSAGE, response);
 
             return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)"));
@@ -87,10 +109,5 @@ public class DictionaryUpdateRunner {
         if(e.getCause() != null) checkIfCausedByTelegramException(e.getCause());
 
         return Optional.empty();
-    }
-
-    private void upToDateUpdateId(Long updateId) {
-        if (updateId > LAST_UPDATE_ID)
-            LAST_UPDATE_ID = updateId;
     }
 }

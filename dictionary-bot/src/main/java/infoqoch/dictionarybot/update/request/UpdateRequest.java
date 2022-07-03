@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.update.request;
 
 import infoqoch.dictionarybot.system.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
-import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.dictionarybot.update.request.body.UpdateDataType;
+import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Update;
 
 import static infoqoch.dictionarybot.update.request.body.UpdateDataType.*;
@@ -77,5 +77,20 @@ public class UpdateRequest {
         if(type == UpdateChat.class) return toChat();
         if(type == UpdateDocument.class) return toDocument();
         throw new TelegramServerException("not support data type (4)");
+    }
+
+    public Object findBodyByDataType() {
+        if(updateDataType() == CHAT) return toChat();
+        if(updateDataType() == DOCUMENT) return toDocument();
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "UpdateRequest{" +
+                "chatId=" + chatId() +
+                ", updateRequestMessage=" + updateRequestMessage() +
+                ", body=" + findBodyByDataType() +
+                '}';
     }
 }

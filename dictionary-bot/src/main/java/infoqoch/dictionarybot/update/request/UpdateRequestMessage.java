@@ -1,7 +1,9 @@
 package infoqoch.dictionarybot.update.request;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class UpdateRequestMessage {
     private final UpdateRequestCommand command;

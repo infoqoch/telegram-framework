@@ -11,8 +11,11 @@ import java.util.List;
 public class FakeTelegramUpdate implements TelegramUpdate {
     private Response<List<Update>> mock;
 
+    private boolean throwException;
+
     @Override
     public Response<List<Update>> get(long l) {
+        if(throwException) throw new RuntimeException("예외다!!");
         return mock;
     }
 }
