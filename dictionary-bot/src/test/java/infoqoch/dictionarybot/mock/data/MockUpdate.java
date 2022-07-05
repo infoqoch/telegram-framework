@@ -30,7 +30,7 @@ public class MockUpdate {
 
     public static String chatJson(String text, long chatId) {
         return "{\"ok\":true,\"result\":[{\"update_id\":567841804,\n" +
-                "\"message\":{\"message_id\":2102,\"from\":{\"id\":" + chatId + ",\"is_bot\":false,\"first_name\":\"\\uc11d\\uc9c4\",\"language_code\":\"ko\"},\"chat\":{\"id\":39327045,\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652025791,\"text\":\"" + text + "\"}}]}";
+                "\"message\":{\"message_id\":2102,\"from\":{\"id\":" + chatId + ",\"is_bot\":false,\"first_name\":\"\\uc11d\\uc9c4\",\"language_code\":\"ko\"},\"chat\":{\"id\":"+ chatId + ",\"first_name\":\"\\uc11d\\uc9c4\",\"type\":\"private\"},\"date\":1652025791,\"text\":\"" + text + "\"}}]}";
     }
 
     public static String documentJson(String caption) {

@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.update.controller.resolver;
 
-import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
@@ -48,7 +47,7 @@ public class UpdateRequestMethodResolver {
         try {
             return returnResolver.resolve(method.invoke(bean, args));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new TelegramServerException("can not resolve the return data (2)", e);
+            throw new IllegalStateException("can not resolve the return data (2)", e);
         }
     }
 

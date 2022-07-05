@@ -21,6 +21,11 @@ public class TelegramClientException extends RuntimeException implements Telegra
         this(null, message, cause);
     }
 
+    public TelegramClientException(MarkdownStringBuilder response, String message) {
+        super(message);
+        this.response = response;
+    }
+
     public TelegramClientException(MarkdownStringBuilder response, String message, Throwable cause) {
         super(message, cause);
         this.response = response;

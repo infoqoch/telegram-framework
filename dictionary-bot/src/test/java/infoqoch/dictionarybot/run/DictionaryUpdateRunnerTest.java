@@ -8,6 +8,7 @@ import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.dictionarybot.update.log.repository.MemoryUpdateLogRepository;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.bot.TelegramBot;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,11 +34,11 @@ class DictionaryUpdateRunnerTest {
 
     @BeforeEach
     void setUp(){
-        repository = new MemoryUpdateLogRepository();
         telegramUpdate = new FakeTelegramUpdate();
         bot = new FakeTelegramBot(telegramUpdate, null);
 
         updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
+        repository = new MemoryUpdateLogRepository();
         runner = new DictionaryUpdateRunner(bot, updateDispatcher, repository);
     }
     
@@ -74,30 +75,46 @@ class DictionaryUpdateRunnerTest {
         assertThat(logs.get(0).getUpdateValue()).isEqualTo("f89j45");
         assertThat(logs.get(0).getSendMessage()).isEqualTo("unknown??");
     }
-    
+
+    // TODO
+    // 현재 조건에서 아래에서 예외가 발생하더라도 처리할 방법이 특별하게 없음.
+    // 다만, 차후 모니터링을 위한 기능이 필요. 아마 이 부분은 스프링 컨테이너로 넘어가는 예외 처리하는 것이 나을 수도 있을텐데, 확인 필요.
     @Test
     void throw_update_exception() {
         // given
         telegramUpdate.setThrowException(true);
 
         // when
-        // 현재 조건에서 아래에서 예외가 발생하더라도 처리할 방법이 특별하게 없음.
-        // TODO
-        // 다만, 차후 모니터링을 위한 기능이 필요. 아마 이 부분은 스프링 컨테이너로 넘어가는 예외 처리하는 것이 나을 수도 있을텐데, 확인 필요.
         assertThatThrownBy(()->{
             runner.run();
         }).isInstanceOf(RuntimeException.class);
-
     }
 
-    // TODO
-    // 예외에 대한 테스트 코드를 작성해야 하나, 대역을 만들기 까다롭다.
-    // 고민이 든다.
+    // update를 분석할 때 예외가 발생한다.
+    // FakeController#help의 값이 exception이면 예외를 던지도록 한다.
     @Test
-    void throw_updateDispatcher_exception() {
+    void throw_resolve_update(){
+        // given
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/help_exception!", 123l));
+
+        // when
+        runner.run();
+
+        // then
+        final List<UpdateLog> logs = repository.findAll();
+
+        assertThat(logs).size().isEqualTo(1);
+        assertThat(logs.get(0).getSendMessage()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
+    }
+
+
+    // update_log를 repository에 등록할 때 실패한다.
+    // spy 처리가 까다로워서 단순하게 처리하였다. runner 시 예외가 터지지 않고, repository에 등록된 데이터가 없다.
+    @Test
+    void throw_update_log_save() {
         // setUp
         // repository를 mocking 한다.
-        setUp_updateDispatcher_exception();
+        repository_mocking();
 
         // given
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/f89j45", 123l));
@@ -105,9 +122,14 @@ class DictionaryUpdateRunnerTest {
 
         // when
         runner.run();
+
+        // then
+        final List<UpdateLog> logs = repository.findAll();
+
+        assertThat(logs).size().isEqualTo(0);
     }
 
-    private void setUp_updateDispatcher_exception() {
+    private void repository_mocking() {
         repository = mock(MemoryUpdateLogRepository.class);
 
         telegramUpdate = new FakeTelegramUpdate();

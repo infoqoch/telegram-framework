@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
@@ -46,6 +47,8 @@ public class FakeController {
 
     @UpdateRequestMethodMapper(HELP)
     public UpdateResponse help(UpdateRequestMessage request) {
+        if(request.getValue().contains("exception"))
+            throw new TelegramClientException(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다."), "사용자가 잘못된 데이터를 입력하였습니다.");
         return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("help! " + request.getValue()));
     }
 

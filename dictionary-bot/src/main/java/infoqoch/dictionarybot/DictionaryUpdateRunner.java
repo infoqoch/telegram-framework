@@ -93,7 +93,7 @@ public class DictionaryUpdateRunner {
     }
 
     private UpdateResponse updateExceptionHandler(Exception e) {
-        final Optional<TelegramException> telegramException = checkIfCausedByTelegramException(e);
+        final Optional<TelegramException> telegramException = TelegramException.checkIfCausedByTelegramException(e);
 
         if(telegramException.isPresent()){
             final MarkdownStringBuilder response = telegramException.get().response();
@@ -103,13 +103,5 @@ public class DictionaryUpdateRunner {
             return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)"));
         }
         return new UpdateResponse(MESSAGE, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)"));
-    }
-
-    private Optional<TelegramException> checkIfCausedByTelegramException(Throwable e) {
-        if(e instanceof TelegramException) return Optional.of((TelegramException)e);
-
-        if(e.getCause() != null) checkIfCausedByTelegramException(e.getCause());
-
-        return Optional.empty();
     }
 }

@@ -25,6 +25,9 @@ public class MemoryUpdateLogRepository implements UpdateLogRepository {
 
         repository.put(no, updateLog);
 
+        System.out.println("no = " + no);
+        System.out.println("updateLog = " + updateLog.getUpdateId());
+
         return updateLog;
     }
 
