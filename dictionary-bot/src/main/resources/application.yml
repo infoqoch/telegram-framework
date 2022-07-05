@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+#    url: jdbc:h2:mem:test
+    url: jdbc:h2:tcp://localhost/~/dic
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true # log
+
+logging:
+  level:
+    root: info
+
+logging.level:
+  org.hibernate.SQL: debug

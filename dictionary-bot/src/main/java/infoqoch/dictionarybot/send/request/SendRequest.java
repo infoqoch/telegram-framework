@@ -2,15 +2,24 @@ package infoqoch.dictionarybot.send.request;
 
 import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
-import lombok.ToString;
+import infoqoch.telegrambot.util.NotEscapedMSBException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@ToString
+import javax.persistence.*;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class SendRequest {
-    private final Long chatId;
-    private final SendType sendType;
-    private final MarkdownStringBuilder message;
+    private Long chatId;
 
-    private final String document;
+    @Enumerated(EnumType.STRING)
+    private SendType sendType;
+
+    @Convert(converter=MarkdownStringBuilderConverter.class)
+    private MarkdownStringBuilder message;
+
+    private String document;
 
     public SendRequest(Long chatId, SendType sendType, MarkdownStringBuilder msb) {
         this.chatId = chatId;
@@ -40,5 +49,21 @@ public class SendRequest {
 
     public String document() {
         return document;
+    }
+
+    public static class MarkdownStringBuilderConverter implements AttributeConverter<MarkdownStringBuilder, String> {
+        @Override
+        public String convertToDatabaseColumn(MarkdownStringBuilder markdownStringBuilder) {
+            return markdownStringBuilder.toString();
+        }
+
+        @Override
+        public MarkdownStringBuilder convertToEntityAttribute(String s) {
+            try {
+                return new MarkdownStringBuilder().notEscapedTest(s);
+            } catch (NotEscapedMSBException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
     }
 }

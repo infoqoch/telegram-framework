@@ -6,25 +6,32 @@ import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateDataType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
+import javax.persistence.*;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Getter
 @AllArgsConstructor @Builder
 public class UpdateLog {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
     private Long updateId;
     private Long chatId;
 
+    @Enumerated(EnumType.STRING)
     private UpdateRequestCommand updateCommand;
     private String updateValue;
+
+    @Enumerated(EnumType.STRING)
     private UpdateDataType updateDataType;
 
     private String updateFileId;
     private String updateFileName;
 
+    @Enumerated(EnumType.STRING)
     private SendType sendType;
     private String sendDocument;
     private String sendMessage;

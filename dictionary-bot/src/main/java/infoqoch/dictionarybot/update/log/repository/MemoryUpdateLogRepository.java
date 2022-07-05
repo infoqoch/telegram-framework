@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.update.log.repository;
 
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
 
+@Profile("test")
 @Repository
 public class MemoryUpdateLogRepository implements UpdateLogRepository {
     private final Map<Long, UpdateLog> repository = new HashMap<>();

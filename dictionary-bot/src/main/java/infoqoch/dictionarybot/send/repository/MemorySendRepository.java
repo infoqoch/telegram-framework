@@ -2,12 +2,14 @@ package infoqoch.dictionarybot.send.repository;
 
 import infoqoch.dictionarybot.send.Send;
 import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("test")
 @Repository
 public class MemorySendRepository implements SendRepository {
     private final Map<Long, Send> repository = new HashMap<>();

@@ -3,17 +3,24 @@ package infoqoch.dictionarybot.send;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.send.exception.TelegramErrorResponseException;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import javax.persistence.*;
 
 import static infoqoch.dictionarybot.send.Send.Status.*;
 
-@ToString
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Entity
 public class Send {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
+
+    @Embedded
     private SendRequest request;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
