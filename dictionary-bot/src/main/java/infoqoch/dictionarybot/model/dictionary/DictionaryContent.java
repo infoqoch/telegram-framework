@@ -1,19 +1,21 @@
 package infoqoch.dictionarybot.model.dictionary;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 @Getter
 @AllArgsConstructor @Builder
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class DictionaryContent implements Cloneable {
     private String word;
     private String pronunciation;
     private String partOfSpeech;
     private String source;
     private String definition;
+    @Column(length = 10000)
     private String sentence;
 
     @Override

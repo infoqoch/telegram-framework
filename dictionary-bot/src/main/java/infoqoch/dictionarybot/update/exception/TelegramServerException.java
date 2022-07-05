@@ -30,8 +30,7 @@ public class TelegramServerException extends RuntimeException implements Telegra
 
     @Override
     public MarkdownStringBuilder response(){
-        if(response==null)
-            return new MarkdownStringBuilder().plain(getMessage());
-        return response;
+        // if(response==null) return new MarkdownStringBuilder().plain(getMessage()); // message는 서버 내부의 로깅을 위한 내용임. 명시적으로 사용자에게 전달하기 위한 메시지는 아님.
+        return response; // 명시적으로 보내기 위한 데이터 타입이 MSB임.
     }
 }

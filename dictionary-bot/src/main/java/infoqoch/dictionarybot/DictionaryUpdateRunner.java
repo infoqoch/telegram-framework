@@ -66,7 +66,7 @@ public class DictionaryUpdateRunner {
             requestSending(updateRequest, updateResponse);
 
         } catch (Exception e){
-            log.error("[error] resolveUpdate, ", e);
+            log.error("[error] handleUpdate, ", e);
 
             requestSending(updateRequest, updateExceptionHandler(e));
         }

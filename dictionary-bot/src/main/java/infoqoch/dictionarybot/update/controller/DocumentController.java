@@ -8,6 +8,7 @@ import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 
@@ -16,6 +17,7 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_P
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class DocumentController {
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryService dictionaryService;

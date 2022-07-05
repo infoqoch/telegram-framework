@@ -73,7 +73,7 @@ public class MemoryDictionaryRepositoryTest {
         saveInRepo(createSimpleDictionaryContent("radio")); // 허수
 
         // when
-        List<Dictionary> result = repository.findByWord("apple");
+        List<Dictionary> result = repository.findByContentWord("apple");
 
         // then
         Assertions.assertThat(result).size().isEqualTo(1);
@@ -88,7 +88,7 @@ public class MemoryDictionaryRepositoryTest {
         saveInRepo(createSimpleDictionaryContent("kimchi")); // 허수
 
         // when
-        List<Dictionary> result = repository.findByWord("apple");
+        List<Dictionary> result = repository.findByContentWord("apple");
 
         // then
         Assertions.assertThat(result).size().isEqualTo(0);
@@ -97,7 +97,7 @@ public class MemoryDictionaryRepositoryTest {
 
     private Long saveInRepo(DictionaryContent dictionaryContent) {
         final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
-        return repository.save(dictionary);
+        return repository.save(dictionary).getNo();
     }
 
     private DictionaryContent createSimpleDictionaryContent(String word) {
@@ -118,7 +118,10 @@ public class MemoryDictionaryRepositoryTest {
         List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents());
 
         // when
-        repository.save(dictionaries);
+        for (Dictionary dictionary : dictionaries) {
+            repository.save(dictionary);
+        }
+
 
         // then
         final List<Dictionary> all = repository.findAll();
@@ -133,8 +136,7 @@ public class MemoryDictionaryRepositoryTest {
             for (DictionaryContent content : rowsData) {
                 final Dictionary dictionary = Dictionary.builder()
                         .content(content)
-                        .source(Dictionary.Source.EXCEL)
-                        .sourceId(sourceId)
+                        .insertType(Dictionary.InsertType.EXCEL)
                         .build();
                 dictionaries.add(dictionary);
             }

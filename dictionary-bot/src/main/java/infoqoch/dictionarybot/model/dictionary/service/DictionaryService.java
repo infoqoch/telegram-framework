@@ -7,14 +7,16 @@ import infoqoch.dictionarybot.system.excel.ExcelReader;
 import infoqoch.dictionarybot.system.excel.ExcelParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
+@Service
+@Transactional
 public class DictionaryService {
     private final DictionaryRepository dictionaryRepository;
 
@@ -23,7 +25,9 @@ public class DictionaryService {
         List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents(file));
 
         // when
-        dictionaryRepository.save(dictionaries);
+        for (Dictionary dictionary : dictionaries) {
+            dictionaryRepository.save(dictionary);
+        }
 
         return dictionaries.size();
     }
@@ -35,8 +39,7 @@ public class DictionaryService {
             for (DictionaryContent content : rowsData) {
                 final Dictionary dictionary = Dictionary.builder()
                         .content(content)
-                        .source(Dictionary.Source.EXCEL)
-                        .sourceId(sourceId)
+                        .insertType(Dictionary.InsertType.EXCEL)
                         .build();
                 dictionaries.add(dictionary);
             }

@@ -25,6 +25,6 @@ class DictionaryControllerTest {
 
     private Long saveInRepo(DictionaryContent dictionaryContent) {
         final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
-        return repository.save(dictionary);
+        return repository.save(dictionary).getNo();
     }
 }

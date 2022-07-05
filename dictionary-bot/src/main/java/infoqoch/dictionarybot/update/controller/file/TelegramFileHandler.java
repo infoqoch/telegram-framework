@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +33,12 @@ public class TelegramFileHandler {
 
     private File getFileByUrl(String filePath) {
         try(InputStream inputStream = new URL(telegramBot.url().getFile()+"/"+filePath).openStream();){
-            File file = File.createTempFile(LocalDateTime.now().toString(),".xlsx");
+            // File file = File.createTempFile(LocalDateTime.now().toString(),".xlsx");
+
+            File directory = new File("c:\\repository\\");
+            if(!directory.exists()) directory.mkdir();
+            File file = new File(directory, "aaa.xlsx");
+
             Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             return file;
         }catch (IOException e){

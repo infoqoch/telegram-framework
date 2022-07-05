@@ -8,6 +8,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class DictionaryController {
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryService dictionaryService;
@@ -35,14 +37,14 @@ public class DictionaryController {
     @UpdateRequestMethodMapper(LOOKUP_WORD)
     public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");
-        final List<Dictionary> result = dictionaryRepository.findByWord(updateRequestMessage.getValue());
+        final List<Dictionary> result = dictionaryRepository.findByContentWord(updateRequestMessage.getValue());
         return result;
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
     public String lookupBySentence(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupBySentence!");
-        final List<Dictionary> result = dictionaryRepository.findBySentence(updateRequestMessage.getValue());
+        final List<Dictionary> result = dictionaryRepository.findByContentSentence(updateRequestMessage.getValue());
         return result.toString();
     }
 

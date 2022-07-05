@@ -1,28 +1,23 @@
 package infoqoch.dictionarybot.model.dictionary.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("test")
 @Repository
 public class MemoryDictionaryRepository implements DictionaryRepository {
 
     private final Map<Long, Dictionary> repository = new HashMap<>();
 
     @Override
-    public Long save(Dictionary dictionary) {
+    public Dictionary save(Dictionary dictionary) {
         final Dictionary result = Dictionary.builder().no(maxNo()).content(dictionary.getContent()).build();
         repository.put(result.getNo(), result);
-        return result.getNo();
-    }
-
-    @Override
-    public void save(List<Dictionary> dictionaries) {
-        for (Dictionary dictionary : dictionaries) {
-            save(dictionary);
-        }
+        return result;
     }
 
     @Override
@@ -31,17 +26,17 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
     }
 
     @Override
-    public List<Dictionary> findByWord(String target) {
+    public List<Dictionary> findByContentWord(String target) {
         return repository.values().stream().filter(d -> d.getContent().getWord().contains(target)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Dictionary> findBySentence(String target) {
+    public List<Dictionary> findByContentSentence(String target) {
         return repository.values().stream().filter(d -> d.getContent().getSentence().contains(target)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Dictionary> findByDefinition(String target) {
+    public List<Dictionary> findByContentDefinition(String target) {
         return repository.values().stream().filter(d -> d.getContent().getDefinition().contains(target)).collect(Collectors.toList());
     }
 

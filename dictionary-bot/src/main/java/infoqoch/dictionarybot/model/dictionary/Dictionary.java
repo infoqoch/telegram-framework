@@ -6,24 +6,31 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Dictionary {
-    private Long no;
-    private Source source;
-    private String sourceId;
+import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+public class Dictionary {
+
+    @Id @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    private Long no;
+
+    @Enumerated(EnumType.STRING)
+    private InsertType insertType;
+
+    @Embedded
     private DictionaryContent content;
 
-    public enum Source{
+    public enum InsertType {
         NONE, EXCEL;
     }
 
     @Builder
-    public Dictionary(Long no, Source source, String sourceId, DictionaryContent content)  {
+    public Dictionary(Long no, InsertType insertType, DictionaryContent content)  {
         this.no = no;
         this.content = content.clone();
-        this.source = source == null ? Source.NONE : source;
+        this.insertType = insertType == null ? InsertType.NONE : insertType;
     }
 
     public MarkdownStringBuilder toMarkdown() {
