@@ -18,8 +18,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// 외부 api인 telegram-bot 만 대역으로 사용함.
-// 그 외는 스프링 통합 테스트를 진행함.
+// 외부 API를 대역으로 사용함. // FakeTelegramUpdate
+// repository는 MemoryUpdateLogRepository를 사용함.
 @SpringBootTest
 class DictionaryUpdateRunnerIntegrationTest {
 

@@ -3,11 +3,13 @@ package infoqoch.dictionarybot.send;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.send.response.SendResponse;
 import infoqoch.dictionarybot.send.exception.TelegramErrorResponseException;
+import infoqoch.dictionarybot.update.log.UpdateLog;
 import lombok.*;
 
 import javax.persistence.*;
 
 import static infoqoch.dictionarybot.send.Send.Status.*;
+import static javax.persistence.FetchType.LAZY;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,10 +22,21 @@ public class Send {
     @Embedded
     private SendRequest request;
 
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(nullable = true, name = "update_log_no")
+    private UpdateLog updateLog;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
+    public Send(Long no, SendRequest request, UpdateLog updateLog,  Status status) {
+        this.no = no;
+        this.request = request;
+        this.updateLog = updateLog;
+        this.status = status;
+    }
+
     public Send(Long no, SendRequest request, Status status) {
         this.no = no;
         this.request = request;
@@ -37,9 +50,10 @@ public class Send {
         REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
     }
 
-    public static Send of(SendRequest request) {
+    public static Send of(SendRequest request, UpdateLog updateLog) {
         return Send.builder()
                 .request(request)
+                .updateLog(updateLog)
                 .status(REQUEST)
                 .build();
     }

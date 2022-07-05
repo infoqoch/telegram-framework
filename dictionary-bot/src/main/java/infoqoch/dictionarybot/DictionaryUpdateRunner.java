@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot;
 
+import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.request.SendRequest;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.update.exception.TelegramException;
@@ -61,14 +62,14 @@ public class DictionaryUpdateRunner {
             final UpdateResponse updateResponse = resolveUpdate(updateRequest);
             log.debug("updateResponse = {}", updateResponse);
 
-            saveUpdateInRepository(updateRequest, updateResponse);
+            final UpdateLog updateLog = saveUpdateInRepository(updateRequest, updateResponse);
 
-            requestSending(updateRequest, updateResponse);
+            requestSending(updateRequest, updateResponse, updateLog);
 
         } catch (Exception e){
             log.error("[error] handleUpdate, ", e);
 
-            requestSending(updateRequest, updateExceptionHandler(e));
+            requestSending(updateRequest, updateExceptionHandler(e), null);
         }
     }
 
@@ -81,12 +82,14 @@ public class DictionaryUpdateRunner {
         }
     }
 
-    private void saveUpdateInRepository(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
+    private UpdateLog saveUpdateInRepository(UpdateRequest updateRequest, UpdateResponse updateResponse) {
+        return updateLogRepository.save(UpdateLog.of(updateRequest, updateResponse));
     }
 
-    private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        Events.raise(new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message()));
+    private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse, UpdateLog updateLog) {
+        final SendRequest sendRequest = new SendRequest(updateRequest.chatId(), updateResponse.sendType(), updateResponse.document(), updateResponse.message());
+        final Send send = Send.of(sendRequest, updateLog);
+        Events.raise(send);
     }
 
     private UpdateResponse updateExceptionHandler(Exception e) {
