@@ -14,7 +14,4 @@ public class SendRequestEventListener {
     public void handle(Send send) {
         store.save(send);
     }
-
-
-
 }
