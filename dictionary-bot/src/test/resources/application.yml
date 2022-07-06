@@ -22,3 +22,6 @@ logging:
 
 logging.level:
   org.hibernate.SQL: debug
+
+telegram:
+  token: "1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o"
