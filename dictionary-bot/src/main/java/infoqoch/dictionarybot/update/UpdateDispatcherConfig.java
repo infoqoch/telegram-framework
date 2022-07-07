@@ -56,6 +56,14 @@ public class UpdateDispatcherConfig {
     // 운영이 테스트를 위한 코드에 종속되는 것은 좋지 않아서 최대한 해소하려 하였으나 어쩔 수 없이 아래와 같이 코드를 작성하였음.
     // 이에 대한 개선책이 반드시 필요함.
     private Set<URL> getUrlsExcludeTest() {
-        return ClasspathHelper.forPackage(UpdateDispatcher.class.getPackageName()).stream().filter(url -> !url.toString().contains("/test-classes")).collect(Collectors.toSet());
+
+        final Set<URL> collect = ClasspathHelper.forPackage(UpdateDispatcher.class.getPackageName()).stream()
+                .filter(url -> !url.toString().contains("/test-classes"))
+                .filter(url -> !url.toString().contains("/test/classes"))
+                .collect(Collectors.toSet());
+        for (URL url : collect) {
+            System.out.println("url = " + url);
+        }
+        return collect;
     }
 }
