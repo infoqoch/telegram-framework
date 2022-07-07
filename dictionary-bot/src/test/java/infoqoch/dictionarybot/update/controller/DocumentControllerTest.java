@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
+import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
@@ -21,16 +21,16 @@ import static org.mockito.Mockito.when;
 
 class DocumentControllerTest {
     DocumentController dictionaryController;
-    DictionaryService dictionaryService;
+    DictionaryInsertBatchService dictionaryInsertBatchService;
     DictionaryRepository dictionaryRepository;
     TelegramFileHandler mockHandler;
 
     @BeforeEach
     void setUp(){
         dictionaryRepository = new MemoryDictionaryRepository();
-        dictionaryService = new DictionaryService(dictionaryRepository);
+        dictionaryInsertBatchService = new DictionaryInsertBatchService(dictionaryRepository);
         mockHandler = mock(TelegramFileHandler.class);
-        dictionaryController = new DocumentController(dictionaryRepository, dictionaryService, mockHandler);
+        dictionaryController = new DocumentController(dictionaryRepository, dictionaryInsertBatchService, mockHandler);
     }
 
     @Test

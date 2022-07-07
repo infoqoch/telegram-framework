@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class DictionaryService {
+public class DictionaryInsertBatchService {
     private final DictionaryRepository dictionaryRepository;
 
     public int saveExcel(File file){

@@ -21,8 +21,6 @@ public class DictionaryBotApplication {
         SpringApplication.run(DictionaryBotApplication.class, args);
     }
 
-    // @Component
-    // @ConditionalOnProperty(name = "is_test", havingValue = "N")
     @RequiredArgsConstructor
     public static class Printer implements CommandLineRunner {
 

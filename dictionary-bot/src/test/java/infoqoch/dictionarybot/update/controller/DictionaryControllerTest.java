@@ -4,12 +4,12 @@ import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
+import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import org.junit.jupiter.api.Test;
 
 class DictionaryControllerTest {
     DictionaryRepository repository = new MemoryDictionaryRepository();
-    DictionaryService service = new DictionaryService(repository);
+    DictionaryInsertBatchService service = new DictionaryInsertBatchService(repository);
     DictionaryController controller = new DictionaryController(repository, service);
 
     // TODO

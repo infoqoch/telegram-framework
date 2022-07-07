@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.model.dictionary.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
+import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,7 @@ import java.util.List;
 class DictionaryJpaRepositoryTest {
 
     @Autowired
-    DictionaryService dictionaryService;
+    DictionaryInsertBatchService dictionaryInsertBatchService;
 
     @Autowired
     DictionaryRepository repository;
@@ -32,7 +32,7 @@ class DictionaryJpaRepositoryTest {
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
 
         // when
-        dictionaryService.saveExcel(file);
+        dictionaryInsertBatchService.saveExcel(file);
         em.flush();
         em.clear();
 

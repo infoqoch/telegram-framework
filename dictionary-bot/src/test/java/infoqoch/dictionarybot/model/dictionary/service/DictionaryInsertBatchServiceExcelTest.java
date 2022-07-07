@@ -8,13 +8,13 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DictionaryServiceExcelTest {
+class DictionaryInsertBatchServiceExcelTest {
     DictionaryRepository dictionaryRepository = new MemoryDictionaryRepository();
-    DictionaryService dictionaryService = new DictionaryService(dictionaryRepository);
+    DictionaryInsertBatchService dictionaryInsertBatchService = new DictionaryInsertBatchService(dictionaryRepository);
     @Test
     void test(){
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
-        dictionaryService.saveExcel(file);
+        dictionaryInsertBatchService.saveExcel(file);
         assertThat(dictionaryRepository.findAll()).size().isEqualTo(47);
     }
 };

@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.update.controller;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.service.DictionaryService;
+import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 @Transactional
 public class DictionaryController {
     private final DictionaryRepository dictionaryRepository;
-    private final DictionaryService dictionaryService;
+    private final DictionaryInsertBatchService dictionaryInsertBatchService;
 
     @UpdateRequestMethodMapper(HELP)
     public String help() {

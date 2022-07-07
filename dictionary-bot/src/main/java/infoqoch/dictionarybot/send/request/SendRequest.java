@@ -17,6 +17,7 @@ public class SendRequest {
     private SendType sendType;
 
     @Convert(converter=MarkdownStringBuilderConverter.class)
+    @Column(length = 10000)
     private MarkdownStringBuilder message;
 
     private String document;

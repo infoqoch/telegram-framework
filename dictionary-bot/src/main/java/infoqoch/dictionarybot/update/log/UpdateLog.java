@@ -34,6 +34,8 @@ public class UpdateLog {
     @Enumerated(EnumType.STRING)
     private SendType sendType;
     private String sendDocument;
+
+    @Column(length = 10000)
     private String sendMessage;
 
     public static UpdateLog of(UpdateRequest updateRequest, UpdateResponse updateResponse) {
