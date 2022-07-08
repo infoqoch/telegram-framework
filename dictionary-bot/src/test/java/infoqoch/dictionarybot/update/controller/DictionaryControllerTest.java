@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class DictionaryControllerTest {
     DictionaryRepository repository = new MemoryDictionaryRepository();
     DictionaryInsertBatchService service = new DictionaryInsertBatchService(repository);
-    DictionaryController controller = new DictionaryController(repository, service);
+    DictionaryController controller = new DictionaryController(repository);
 
     // TODO
     @Test

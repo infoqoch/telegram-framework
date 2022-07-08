@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 @SpringBootTest
-@ActiveProfiles("dev") // test의 경우 Memory 등 DB를 직접 사용하지 않음.
+@ActiveProfiles("dev") // test의 경우 jpa를 사용하지 않는 메모리 DB만 바라봄. dev 이상부터 jpa를 사용함.
 @Transactional
 class DictionaryJpaRepositoryTest {
 
@@ -21,7 +21,7 @@ class DictionaryJpaRepositoryTest {
     DictionaryInsertBatchService dictionaryInsertBatchService;
 
     @Autowired
-    DictionaryRepository repository;
+    DictionaryJpaRepository repository;
 
     @Autowired
     EntityManager em;
@@ -40,5 +40,4 @@ class DictionaryJpaRepositoryTest {
         final List<Dictionary> all = repository.findAll();
         System.out.println(all.size());
     }
-
 }

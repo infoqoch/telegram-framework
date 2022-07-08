@@ -49,9 +49,8 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
         return new UpdateResponse(SendType.MESSAGE, msb);
     }
 
-    private MarkdownStringBuilder toMarkdown(List<Dictionary> target) {
+    private MarkdownStringBuilder toMarkdown(List<Dictionary> dictionaries) {
         MarkdownStringBuilder msb = new MarkdownStringBuilder();
-        final List<Dictionary> dictionaries = target;
         for (Dictionary dictionary : dictionaries) {
             msb.append(dictionary.toMarkdown()).lineSeparator();
         }
