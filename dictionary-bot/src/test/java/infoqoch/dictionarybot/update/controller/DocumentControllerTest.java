@@ -1,8 +1,8 @@
 package infoqoch.dictionarybot.update.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
+import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static infoqoch.dictionarybot.mock.data.MockUpdate.excelDocumentJson;
 import static infoqoch.dictionarybot.mock.data.MockUpdate.jsonToUpdateWrapper;
@@ -34,17 +35,18 @@ class DocumentControllerTest {
     }
 
     @Test
-    void test() throws JsonProcessingException {
+    void excel_push() {
         // given
         final UpdateDocument document = mockDocumentWithExcel("/excel_push");
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
         when(mockHandler.extractExcelFile(any())).thenReturn(file);
 
         // when
-        dictionaryController.excelPush(document);
+        dictionaryController.excelPush(document, null);
 
         // then
-        assertThat(dictionaryRepository.findAll().size()).isEqualTo(47);
+        final List<Dictionary> result = dictionaryRepository.findAll();
+        assertThat(result.size()).isEqualTo(47);
     }
 
     private UpdateDocument mockDocumentWithExcel(String caption) {

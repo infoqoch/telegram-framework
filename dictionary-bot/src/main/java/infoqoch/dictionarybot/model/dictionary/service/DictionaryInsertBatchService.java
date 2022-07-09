@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.model.dictionary.service;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.system.excel.ExcelReader;
 import infoqoch.dictionarybot.system.excel.ExcelParser;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ import java.util.UUID;
 public class DictionaryInsertBatchService {
     private final DictionaryRepository dictionaryRepository;
 
-    public int saveExcel(File file){
+    public int saveExcel(File file, ChatUser chatUser){
         // given
-        List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents(file));
+        List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents(file), chatUser);
 
         // when
         for (Dictionary dictionary : dictionaries) {
@@ -32,13 +33,14 @@ public class DictionaryInsertBatchService {
         return dictionaries.size();
     }
 
-    private List<Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {
+    private List<Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData, ChatUser chatUser) {
         List<Dictionary> dictionaries = new ArrayList<>();
         final String sourceId = UUID.randomUUID().toString();
         for (List<DictionaryContent> rowsData : sheetsData) {
             for (DictionaryContent content : rowsData) {
                 final Dictionary dictionary = Dictionary.builder()
                         .content(content)
+                        .chatUser(chatUser)
                         .insertType(Dictionary.InsertType.EXCEL)
                         .build();
                 dictionaries.add(dictionary);

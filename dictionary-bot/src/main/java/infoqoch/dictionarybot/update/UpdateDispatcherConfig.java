@@ -1,10 +1,12 @@
 package infoqoch.dictionarybot.update;
 
+import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
 import infoqoch.dictionarybot.update.controller.resolver.param.*;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
+import lombok.RequiredArgsConstructor;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +20,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
+@RequiredArgsConstructor
 public class UpdateDispatcherConfig {
+    private final ChatUserRepository chatUserRepository;
 
     @Bean
     public List<UpdateRequestReturn> returnResolvers(){
@@ -39,6 +43,7 @@ public class UpdateDispatcherConfig {
         paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
+        paramResolvers.add(new UpdateChatUserRequestParam(chatUserRepository));
         return paramResolvers;
     }
 
