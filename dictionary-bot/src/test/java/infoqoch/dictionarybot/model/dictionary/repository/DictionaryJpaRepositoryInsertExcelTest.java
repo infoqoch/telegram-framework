@@ -15,7 +15,7 @@ import java.util.List;
 @ActiveProfiles("test_jpa")
 @SpringBootTest
 @Transactional
-class DictionaryJpaRepositoryTest {
+class DictionaryJpaRepositoryInsertExcelTest {
 
     @Autowired
     DictionaryInsertBatchService dictionaryInsertBatchService;

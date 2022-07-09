@@ -25,11 +25,11 @@ public class LookupServiceTest {
 
     @BeforeEach
     void word_setUp() {
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("summer").build())); // exact match
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("summer vacation").build())); // startsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("hot summer").build())); // endsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("I like summer.").build())); // contains
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("winter").build())); // etc
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("summer").build())); // exact match
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("summer vacation").build())); // startsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("hot summer").build())); // endsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("winter").build())); // etc
 
         final TypedQuery<Dictionary> query = em.createQuery("select d from Dictionary d where d.content.word = :value", Dictionary.class);
         query.setParameter("value", "summer");

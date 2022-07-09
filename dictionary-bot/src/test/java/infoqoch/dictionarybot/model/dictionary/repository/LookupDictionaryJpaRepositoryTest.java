@@ -21,14 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LookupDictionaryJpaRepositoryTest {
     @Autowired EntityManager em;
 
-    @Autowired DictionaryJpaRepository repository;
+    @Autowired
+    DictionaryQueryRepository repository;
 
     void word_setUp() {
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("summer").build())); // exact match
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("summer vacation").build())); // startsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("hot summer").build())); // endsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("I like summer.").build())); // contains
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().word("winter").build())); // etc
+        em.persist(new Dictionary(null, null, null,  DictionaryContent.builder().word("summer").build())); // exact match
+        em.persist(new Dictionary(null, null, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
+        em.persist(new Dictionary(null, null, null,  DictionaryContent.builder().word("hot summer").build())); // endsWith
+        em.persist(new Dictionary(null, null, null,  DictionaryContent.builder().word("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, null, null,  DictionaryContent.builder().word("winter").build())); // etc
 
         final TypedQuery<Dictionary> query = em.createQuery("select d from Dictionary d where d.content.word = :value", Dictionary.class);
         query.setParameter("value", "summer");
@@ -59,11 +60,11 @@ class LookupDictionaryJpaRepositoryTest {
     }
 
     void definition_setUp() {
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().definition("summer").build())); // exact match
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().definition("summer vacation").build())); // startsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().definition("hot summer").build())); // endsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().definition("I like summer.").build())); // contains
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().definition("winter").build())); // etc
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().definition("summer").build())); // exact match
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().definition("summer vacation").build())); // startsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().definition("hot summer").build())); // endsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().definition("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().definition("winter").build())); // etc
     }
 
     @Test
@@ -89,11 +90,11 @@ class LookupDictionaryJpaRepositoryTest {
 
 
     void sentence_setUp() {
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().sentence("summer").build())); // exact match
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().sentence("summer vacation").build())); // startsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().sentence("hot summer").build())); // endsWith
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().sentence("I like summer.").build())); // contains
-        em.persist(new Dictionary(null, null, DictionaryContent.builder().sentence("winter").build())); // etc
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().sentence("summer").build())); // exact match
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().sentence("summer vacation").build())); // startsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().sentence("hot summer").build())); // endsWith
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().sentence("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().sentence("winter").build())); // etc
     }
 
     @Test

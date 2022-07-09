@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary;
 
+import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,13 +23,18 @@ public class Dictionary {
     @Embedded
     private DictionaryContent content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_user_id")
+    private ChatUser chatUser;
+
     public enum InsertType {
         NONE, EXCEL;
     }
 
     @Builder
-    public Dictionary(Long no, InsertType insertType, DictionaryContent content)  {
+    public Dictionary(Long no, ChatUser chatUser, InsertType insertType, DictionaryContent content)  {
         this.no = no;
+        this.chatUser = chatUser;
         this.content = content.clone();
         this.insertType = insertType == null ? InsertType.NONE : insertType;
     }
@@ -58,5 +64,4 @@ public class Dictionary {
         if(content.getPronunciation() ==null) return null;
         return new MarkdownStringBuilder().plain("(").plain(content.getPronunciation()).plain(")");
     }
-
 }

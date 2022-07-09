@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DictionaryTest {
+class DictionaryPrintTest {
     @Test
-    void printOne(){
+    void print(){
         final Dictionary simpleDictionary = MockDictionary.createSimpleDictionary(MockDictionary.createSimpleDictionaryContent(), 123l);
         MarkdownStringBuilder msb = simpleDictionary.toMarkdown();
         assertThat(msb.toString()).contains("*apple*\\(애포얼\\)", "_사과_, Iphone 7 is the latest model");

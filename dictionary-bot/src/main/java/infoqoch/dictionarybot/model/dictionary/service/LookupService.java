@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.model.dictionary.service;
 
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.model.dictionary.repository.DictionaryJpaRepository;
+import infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class LookupService {
-    private final DictionaryJpaRepository repository;
+    private final DictionaryQueryRepository repository;
 
     public List<Dictionary> word(String value, int limit, int offset) {
         checkLimit(limit);
