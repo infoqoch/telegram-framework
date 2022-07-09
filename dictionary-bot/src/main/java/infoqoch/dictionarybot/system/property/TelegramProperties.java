@@ -9,4 +9,10 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "telegram")
 public class TelegramProperties {
     private String token;
+
+    public String getToken() {
+        if(token==null||token.length()==0)
+            throw new IllegalArgumentException("telegram.token cannot be null");
+        return token;
+    }
 }

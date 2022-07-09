@@ -1,19 +1,14 @@
 spring:
   profiles:
-    active: dev
+    active: default, window, dev
   datasource:
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password:
-##    url: jdbc:h2:mem:test
-#    url: jdbc:h2:tcp://localhost/~/dic
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/newdic
-    username: newdic
-    password: newdic
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true # log
@@ -24,9 +19,14 @@ logging:
   level:
     root: info
     infoqoch: debug
+  pattern:
+    rolling-file-name: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
+  file:
+    path: # 입력해야 합니다.
+    max-size: 10MB
 
 logging.level:
   org.hibernate.SQL: debug
 
 telegram:
-  token: "1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o"
+  token: # 입력해야 합니다.

@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  FakeTelegramUpdate을 통해 가상의 update를 전달한다.
 */
 
-@ActiveProfiles({"fake_send_listener"})
+@ActiveProfiles({"test", "fake_send_listener"})
 @SpringBootTest
 @Transactional
 class DictionaryUpdateRunnerIntegrationTest {
