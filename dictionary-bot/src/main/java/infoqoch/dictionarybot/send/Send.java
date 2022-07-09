@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Entity
 public class Send {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long no;
 
     @Embedded

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor @Builder
 public class UpdateLog {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long no;
 
     private Long updateId;

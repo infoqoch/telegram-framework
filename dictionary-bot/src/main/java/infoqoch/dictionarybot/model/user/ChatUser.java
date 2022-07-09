@@ -27,7 +27,7 @@ import java.util.List;
 @Entity
 public class ChatUser {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue
     private Long no;
 
     @Column(unique = true)

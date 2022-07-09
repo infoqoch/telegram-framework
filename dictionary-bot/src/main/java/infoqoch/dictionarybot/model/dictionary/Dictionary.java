@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 public class Dictionary {
 
-    @Id @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long no;
 
     @Enumerated(EnumType.STRING)
