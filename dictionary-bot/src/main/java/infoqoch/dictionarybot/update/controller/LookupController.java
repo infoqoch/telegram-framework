@@ -28,12 +28,12 @@ public class LookupController {
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
     public List<Dictionary> lookupBySentence(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupBySentence!");
-        return lookupService.sentence(updateRequestMessage.getValue());
+        return lookupService.sentence(updateRequestMessage.getValue(), 10, 0);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
     public List<Dictionary> lookupByDefinition(UpdateRequestMessage updateRequestMessage) {
         log.info("UpdateRequestMethodMapper : lookupByDefinition!");
-        return lookupService.definition(updateRequestMessage.getValue());
+        return lookupService.definition(updateRequestMessage.getValue(), 10, 0);
     }
 }

@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.update.controller;
 
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,16 @@ public class DictionaryController {
     private final DictionaryRepository dictionaryRepository;
 
     @UpdateRequestMethodMapper(HELP)
-    public String help() {
+    public MarkdownStringBuilder help() {
         log.info("UpdateRequestMethodMapper : help!");
-        return "요래 저래 쓰면 된단다!";
+        return new MarkdownStringBuilder()
+                .bold("=== 사용방법 ===").lineSeparator()
+                .plain("원하는 명령어를 입력하세요!");
     }
 
     @UpdateRequestMethodMapper(UNKNOWN)
-    public String unknown() {
+    public MarkdownStringBuilder unknown() {
         log.info("UpdateRequestMethodMapper : unknown");
         return help();
     }
-
 }
