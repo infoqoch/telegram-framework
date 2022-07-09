@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.log.UpdateLog;
-import infoqoch.dictionarybot.update.log.repository.MemoryUpdateLogRepository;
+import infoqoch.dictionarybot.mock.repository.MemoryUpdateLogRepository;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;

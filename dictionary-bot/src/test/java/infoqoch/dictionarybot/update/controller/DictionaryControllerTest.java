@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
+import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import org.junit.jupiter.api.Test;
 

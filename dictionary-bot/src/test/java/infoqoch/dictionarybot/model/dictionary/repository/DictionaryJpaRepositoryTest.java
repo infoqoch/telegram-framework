@@ -12,8 +12,8 @@ import javax.persistence.EntityManager;
 import java.io.File;
 import java.util.List;
 
+@ActiveProfiles("test_jpa")
 @SpringBootTest
-@ActiveProfiles("dev") // test의 경우 jpa를 사용하지 않는 메모리 DB만 바라봄. dev 이상부터 jpa를 사용함.
 @Transactional
 class DictionaryJpaRepositoryTest {
 

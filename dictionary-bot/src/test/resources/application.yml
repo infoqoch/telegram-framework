@@ -1,6 +1,22 @@
 spring:
-  profiles:
-    active: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+telegram:
+  token: "1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test_jpa
   datasource:
     driver-class-name: org.h2.Driver
     username: sa
@@ -22,6 +38,3 @@ logging:
 
 logging.level:
   org.hibernate.SQL: debug
-
-telegram:
-  token: "1959903402:AAFfvMCssvDcESLewCDvj5WZk83cbnIZ08o"

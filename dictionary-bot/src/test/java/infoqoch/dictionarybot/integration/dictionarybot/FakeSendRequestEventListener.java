@@ -10,7 +10,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Data
-@Profile({"test", "sendtest"})
+@Profile({"fake_send_listener"})
 @Primary
 @Component
 @RequiredArgsConstructor

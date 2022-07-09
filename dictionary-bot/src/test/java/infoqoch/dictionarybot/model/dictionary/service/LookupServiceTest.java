@@ -16,8 +16,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ActiveProfiles("test_jpa")
 @Transactional
-@ActiveProfiles("dev")
 @SpringBootTest
 public class LookupServiceTest {
     @Autowired
@@ -42,11 +42,9 @@ public class LookupServiceTest {
 
     @Test
 	void contains_exactly() {
-		List<Dictionary> result = service.word("summer", 3, 0);
-		assertThat(result).size().isEqualTo(3);
-		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
-		assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
-		assertThat(result.get(2).getContent().getWord()).isEqualTo("hot summer.");
+		List<Dictionary> result = service.word("summer", 4, 0);
+		assertThat(result).size().isEqualTo(4);
+		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
 	}
 
 	@Test
@@ -75,11 +73,7 @@ public class LookupServiceTest {
 	void limit_over_total_count() {
 		List<Dictionary> result = service.word("summer", 999999, 0);
 		assertThat(result).size().isEqualTo(4);
-		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
-        assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
-        // 순서는 입력한 순서로 들어가므로, 원칙적으로 보장하는 것을 기대할 수 없지만 그렇게 가정하고 하였음.
-        assertThat(result.get(2).getContent().getWord()).isEqualTo("hot summer");
-		assertThat(result.get(3).getContent().getWord()).isEqualTo("I like summer.");
+		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
 	}
 
 	@Test

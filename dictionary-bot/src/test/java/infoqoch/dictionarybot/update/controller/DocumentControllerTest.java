@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.update.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
+import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.UpdateRequest;

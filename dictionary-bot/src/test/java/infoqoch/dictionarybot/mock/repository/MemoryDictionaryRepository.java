@@ -1,13 +1,16 @@
-package infoqoch.dictionarybot.model.dictionary.repository;
+package infoqoch.dictionarybot.mock.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Profile("test")
+@Primary
+@Profile("!test_jpa")
 @Repository
 public class MemoryDictionaryRepository implements DictionaryRepository {
 

@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.model.dictionary.service;
 
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
-import infoqoch.dictionarybot.model.dictionary.repository.MemoryDictionaryRepository;
+import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

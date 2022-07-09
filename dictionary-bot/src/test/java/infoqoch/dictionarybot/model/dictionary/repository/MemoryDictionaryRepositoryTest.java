@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary.repository;
 
+import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.system.excel.ExcelReader;
@@ -7,6 +8,9 @@ import infoqoch.dictionarybot.system.excel.ExcelParser;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.util.*;
@@ -14,7 +18,9 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@Primary
+@Profile("!test_jpa")
+@Repository
 public class MemoryDictionaryRepositoryTest {
     DictionaryRepository repository;
 

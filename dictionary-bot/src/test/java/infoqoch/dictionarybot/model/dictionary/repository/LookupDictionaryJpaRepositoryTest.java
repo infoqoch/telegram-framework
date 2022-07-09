@@ -15,8 +15,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test_jpa")
 @SpringBootTest
-@ActiveProfiles("dev") // test의 경우 jpa를 사용하지 않는 메모리 DB만 바라봄. dev 이상부터 jpa를 사용함.
 @Transactional
 class LookupDictionaryJpaRepositoryTest {
     @Autowired EntityManager em;
