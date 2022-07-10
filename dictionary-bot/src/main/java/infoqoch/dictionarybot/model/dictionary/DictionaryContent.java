@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary;
 
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -25,5 +26,31 @@ public class DictionaryContent implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public MarkdownStringBuilder toMarkdown() {
+        return new MarkdownStringBuilder()
+                .append(wordAndPronunciationMSB())
+                .append(definitionAndSentenceMSB());
+    }
+
+    private MarkdownStringBuilder definitionAndSentenceMSB() {
+        if(getSentence()==null) return null;
+        return new MarkdownStringBuilder().append(definitionMSB()).plain(getSentence());
+    }
+
+    private MarkdownStringBuilder definitionMSB() {
+        if(getDefinition() == null) return null;
+        return new MarkdownStringBuilder().italic(getDefinition()).plain(", ");
+    }
+
+    private MarkdownStringBuilder wordAndPronunciationMSB() {
+        if(getWord() == null) return null;
+        return new MarkdownStringBuilder().bold(getWord()).append(pronunciationMSB()).lineSeparator();
+    }
+
+    private MarkdownStringBuilder pronunciationMSB() {
+        if(getPronunciation() ==null) return null;
+        return new MarkdownStringBuilder().plain("(").plain(getPronunciation()).plain(")");
     }
 }
