@@ -63,8 +63,9 @@ public class UpdateDispatcherConfig {
     private Set<URL> getUrlsExcludeTest() {
 
         final Set<URL> collect = ClasspathHelper.forPackage(UpdateDispatcher.class.getPackageName()).stream()
-                .filter(url -> !url.toString().contains("/test-classes"))
-                .filter(url -> !url.toString().contains("/test/classes"))
+                .filter(url -> !url.toString().contains("/test-classes")) // maven
+                .filter(url -> !url.toString().contains("/test/classes")) // gradle
+                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
                 .collect(Collectors.toSet());
         for (URL url : collect) {
             System.out.println("url = " + url);
