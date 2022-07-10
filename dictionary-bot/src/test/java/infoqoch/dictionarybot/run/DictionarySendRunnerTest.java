@@ -4,7 +4,6 @@ import infoqoch.dictionarybot.DictionarySendRunner;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
 import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -41,7 +40,7 @@ class DictionarySendRunnerTest {
         telegramSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/w_hi", 1235l));
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, new SendRequest(1235l, SendType.MESSAGE, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), REQUEST));
+        repository.save(new Send(1l, SendRequest.requestMessage(1235l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), REQUEST));
 
         // when
         runner.run();
@@ -60,7 +59,7 @@ class DictionarySendRunnerTest {
         telegramSend.setThrowRuntimeException(true);
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, new SendRequest(324893249234l, SendType.MESSAGE, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
+        repository.save(new Send(1l, SendRequest.requestMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
 
         // when
         runner.run();
@@ -80,7 +79,7 @@ class DictionarySendRunnerTest {
         telegramSend.setMockMessageResponseJson("{\"ok\":false,\"error_code\":400,\"description\":\"Bad Request: chat not found\"}");
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, new SendRequest(324893249234l, SendType.MESSAGE, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
+        repository.save(new Send(1l, SendRequest.requestMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
 
         // when
         runner.run();

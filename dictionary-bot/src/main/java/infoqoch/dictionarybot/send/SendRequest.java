@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import infoqoch.telegrambot.util.NotEscapedMSBException;
 import lombok.AccessLevel;
@@ -22,18 +21,19 @@ public class SendRequest {
 
     private String document;
 
-    public SendRequest(Long chatId, SendType sendType, MarkdownStringBuilder msb) {
-        this.chatId = chatId;
-        this.sendType = sendType;
-        this.message = msb;
-        this.document = null;
-    }
-
-    public SendRequest(Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
+    private SendRequest(Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
         this.chatId = chatId;
         this.sendType = sendType;
         this.document = document;
         this.message = msb;
+    }
+
+    public static SendRequest requestMessage(long chatId, MarkdownStringBuilder msb) {
+        return new SendRequest(chatId, SendType.MESSAGE, null, msb);
+    }
+
+    public static SendRequest sendDocument(Long chatId, String document, MarkdownStringBuilder msb) {
+        return new SendRequest(chatId, SendType.DOCUMENT, document, msb);
     }
 
     public SendType sendType() {

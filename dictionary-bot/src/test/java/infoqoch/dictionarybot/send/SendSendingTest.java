@@ -23,7 +23,7 @@ public class SendSendingTest {
     void message(){
         // given. sendRequest를 telegram에 보내고 telegram의 정상 응답값을 받았음. 해당 응답값에 대한 대역
         fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
-        final SendRequest sendRequest = new SendRequest(12345l, SendType.MESSAGE, new MarkdownStringBuilder().plain("/help"));
+        final SendRequest sendRequest = SendRequest.requestMessage(12345l, new MarkdownStringBuilder().plain("/help"));
 
         // when
         final Send send = Send.of(sendRequest, null);
@@ -43,7 +43,7 @@ public class SendSendingTest {
         // given
         fakeSend.setMockDocumentResponseJson(MockSendResponse.sendDocument(12345l));
         assert fakeSend.isDocumentCalled() == false;
-        final SendRequest sendRequest = new SendRequest(12345l, SendType.DOCUMENT, "fake document", new MarkdownStringBuilder().plain("fake text"));
+        final SendRequest sendRequest = SendRequest.sendDocument(12345l, "fake document", new MarkdownStringBuilder().plain("fake text"));
 
         // when
         final Send send = Send.of(sendRequest, null);
