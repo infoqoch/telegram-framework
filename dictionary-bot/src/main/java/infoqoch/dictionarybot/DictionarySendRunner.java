@@ -6,7 +6,6 @@ import infoqoch.telegrambot.bot.TelegramSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -23,7 +22,12 @@ public class DictionarySendRunner {
         List<Send> sendRequests = sendRepository.findByStatus(Send.Status.REQUEST);
 
         for (Send send : sendRequests) {
-            send.sending(telegramSend);
+            try{
+                send.sending(telegramSend);
+            }catch (Exception e){
+                e.printStackTrace();
+                continue;
+            }
         }
     }
 }
