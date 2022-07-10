@@ -26,7 +26,7 @@ public class ExcelParserTest {
         assertThat(sheetsData.get(0).get(0).getPartOfSpeech()).isEqualTo("sen.");
         assertThat(sheetsData.get(0).get(0).getDefinition()).isEqualTo("He hung up on me ; 그가 화가나서 내 전화를 끊었다는 의미");
         assertThat(sheetsData.get(0).get(0).getPronunciation()).isEqualTo(null);
-        assertThat(sheetsData.get(0).get(0).getSource()).isEqualTo("SO book7");
+        assertThat(sheetsData.get(0).get(0).getQuotation()).isEqualTo("SO book7");
         assertThat(sheetsData.get(0).get(0).getSentence()).isEqualTo(null);
 
     }

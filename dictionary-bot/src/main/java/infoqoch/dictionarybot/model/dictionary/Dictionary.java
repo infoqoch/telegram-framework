@@ -21,9 +21,6 @@ public class Dictionary {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dictionary_sequences")
     private Long no;
 
-    @Enumerated(EnumType.STRING)
-    private InsertType insertType;
-
     @Embedded
     private DictionaryContent content;
 
@@ -31,16 +28,15 @@ public class Dictionary {
     @JoinColumn(name = "chat_user_no", nullable = false)
     private ChatUser chatUser;
 
-    public enum InsertType {
-        NONE, EXCEL;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DictionarySource source;
 
     @Builder
-    public Dictionary(Long no, ChatUser chatUser, InsertType insertType, DictionaryContent content)  {
+    public Dictionary(Long no, ChatUser chatUser, DictionarySource source, DictionaryContent content)  {
         this.no = no;
         this.chatUser = chatUser;
         this.content = content.clone();
-        this.insertType = insertType == null ? InsertType.NONE : insertType;
+        this.source = source;
     }
 
     public MarkdownStringBuilder toMarkdown() {

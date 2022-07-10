@@ -13,9 +13,9 @@ public class DictionaryContent implements Cloneable {
     private String word;
     private String pronunciation;
     private String partOfSpeech;
-    private String source;
+    private String quotation;
     private String definition;
-    @Column(columnDefinition = "varchar2(10000)")
+    @Column(columnDefinition = "varchar(10000)")
     private String sentence;
 
     @Override

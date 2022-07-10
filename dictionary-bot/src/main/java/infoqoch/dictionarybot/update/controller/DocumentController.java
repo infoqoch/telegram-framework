@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
+import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 
+import static infoqoch.dictionarybot.model.dictionary.DictionarySource.Type.EXCEL;
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_PUSH;
 
 @Slf4j
@@ -30,7 +32,9 @@ public class DocumentController {
 
         final File file = telegramFileHandler.extractExcelFile(document);
 
-        final int saved = dictionaryInsertBatchService.saveExcel(file, chatUser).size();
+        final DictionarySource source = new DictionarySource(document.getDocument().getFileId(), EXCEL, chatUser);
+
+        final int saved = dictionaryInsertBatchService.saveExcel(file, source, chatUser).size();
 
         return saved + "의 사전이 등록되었습니다!";
     }

@@ -30,7 +30,7 @@ public class Send {
     private Status status;
 
     @Builder
-    public Send(Long no, SendRequest request, UpdateLog updateLog,  Status status) {
+    public Send(Long no, SendRequest request, UpdateLog updateLog, Status status) {
         this.no = no;
         this.request = request;
         this.updateLog = updateLog;

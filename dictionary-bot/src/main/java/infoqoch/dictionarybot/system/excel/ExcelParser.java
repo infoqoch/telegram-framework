@@ -29,7 +29,7 @@ public class ExcelParser {
                         .partOfSpeech(firstRow.get(2))
                         .definition(firstRow.get(3))
                         .pronunciation(secondRow.get(1))
-                        .source(secondRow.get(2))
+                        .quotation(secondRow.get(2))
                         .sentence(secondRow.get(3))
                         .build();
 

@@ -13,7 +13,7 @@ public class MockDictionary {
                 .word("apple")
                 .pronunciation("애포얼")
                 .partOfSpeech("noun")
-                .source("아낌없이 주는 나무")
+                .quotation("아낌없이 주는 나무")
                 .definition("사과")
                 .sentence("Iphone 7 is the latest model")
                 .build();

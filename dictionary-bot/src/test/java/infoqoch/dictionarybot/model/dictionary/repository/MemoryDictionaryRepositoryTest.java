@@ -111,7 +111,7 @@ public class MemoryDictionaryRepositoryTest {
                 .word(word)
                 .pronunciation("애포얼")
                 .partOfSpeech("noun")
-                .source("아낌없이 주는 나무")
+                .quotation("아낌없이 주는 나무")
                 .definition("사과")
                 .sentence("Iphone 7 is the latest model")
                 .build();
@@ -137,12 +137,10 @@ public class MemoryDictionaryRepositoryTest {
 
     private List<Dictionary> contentsToDictionaries(List<List<DictionaryContent>> sheetsData) {
         List<Dictionary> dictionaries = new ArrayList<>();
-        final String sourceId = UUID.randomUUID().toString();
         for (List<DictionaryContent> rowsData : sheetsData) {
             for (DictionaryContent content : rowsData) {
                 final Dictionary dictionary = Dictionary.builder()
                         .content(content)
-                        .insertType(Dictionary.InsertType.EXCEL)
                         .build();
                 dictionaries.add(dictionary);
             }
