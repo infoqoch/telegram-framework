@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.send.request;
+package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;

@@ -6,7 +6,7 @@ import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.send.repository.SendRepository;
-import infoqoch.dictionarybot.send.request.SendRequest;
+import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

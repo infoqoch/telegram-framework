@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.send.response;
+package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.send.Send.Status;
 import lombok.Getter;

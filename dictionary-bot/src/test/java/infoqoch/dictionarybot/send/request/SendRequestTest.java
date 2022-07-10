@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.send.request;
 
+import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,5 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.send.request.SendRequest;
-import infoqoch.dictionarybot.send.response.SendResult;
 import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.telegrambot.bot.TelegramSend;
