@@ -1,10 +1,6 @@
 spring:
   profiles:
     active: test_oracle_jpa
-
----
-spring:
-  profiles:
     group:
       "test": "mem,window,dev"
       "test_mem_jpa": "mem,window,dev"
