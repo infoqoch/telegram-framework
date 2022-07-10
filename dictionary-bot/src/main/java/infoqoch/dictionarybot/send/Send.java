@@ -23,7 +23,7 @@ public class Send {
     private SendRequest request;
 
     @OneToOne(fetch = LAZY)
-    @JoinColumn(nullable = true, name = "update_log_no")
+    @JoinColumn(name = "update_log_no")
     private UpdateLog updateLog;
 
     @Enumerated(EnumType.STRING)

@@ -1,17 +1,12 @@
 spring:
   profiles:
-    active: test
-
----
-
-#spring:
-#  config:
-#    activate:
-#      on-profile: test
+    active: test_oracle_jpa
 
 ---
 spring:
   profiles:
     group:
-      "test": "default,window,dev"
-      "test_jpa": "default,window,dev"
+      "test": "mem,window,dev"
+      "test_mem_jpa": "mem,window,dev"
+      "test_oracle_jpa": "oracle,window,dev"
+      "test_maria_jpa": "maria,window,dev"

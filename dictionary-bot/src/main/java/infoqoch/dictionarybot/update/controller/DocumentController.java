@@ -30,7 +30,7 @@ public class DocumentController {
 
         final File file = telegramFileHandler.extractExcelFile(document);
 
-        final int saved = dictionaryInsertBatchService.saveExcel(file, chatUser);
+        final int saved = dictionaryInsertBatchService.saveExcel(file, chatUser).size();
 
         return saved + "의 사전이 등록되었습니다!";
     }

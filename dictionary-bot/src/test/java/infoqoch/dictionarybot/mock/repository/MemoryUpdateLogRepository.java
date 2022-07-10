@@ -3,9 +3,6 @@ package infoqoch.dictionarybot.mock.repository;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.dictionarybot.update.log.repository.UpdateLogRepository;
 import lombok.SneakyThrows;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,9 +11,6 @@ import java.util.Map;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
 
-@Primary
-@Profile("!test_jpa")
-@Repository
 public class MemoryUpdateLogRepository implements UpdateLogRepository {
     private final Map<Long, UpdateLog> repository = new HashMap<>();
 

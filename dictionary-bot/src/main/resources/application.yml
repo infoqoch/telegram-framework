@@ -1,21 +1,25 @@
 spring:
   profiles:
-    active: default, window, dev
+    active: default, mem, window, dev
   datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    url: jdbc:h2:mem:test
+    driver-class-name: # 입력해야 합니다.
+    username: # 입력해야 합니다.
+    password: # 입력해야 합니다.
+    url: # 입력해야 합니다.
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: # 입력해야 합니다.
     properties:
       hibernate:
         format_sql: true # log
+        order_inserts: true
+        order_updates: true
         jdbc:
-          batch_size: 500
+          batch_size: 1000
+        default_batch_fetch_size: 100
+        # https://jaehun2841.github.io/2020/11/22/2020-11-22-spring-data-jpa-batch-insert/#%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90
 
-logging:
+slogging:
   level:
     root: info
     infoqoch: debug
@@ -30,3 +34,24 @@ logging.level:
 
 telegram:
   token: # 입력해야 합니다.
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: mem
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:test
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true # log
+        jdbc:
+          batch_size: 500

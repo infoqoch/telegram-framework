@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@TableGenerator(
+        name = "dictionary_seq_generator",
+        table = "dictionary_sequences",
+        allocationSize = 1000)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Dictionary {
-
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dictionary_sequences")
     private Long no;
 
     @Enumerated(EnumType.STRING)
@@ -24,7 +28,7 @@ public class Dictionary {
     private DictionaryContent content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_user_id")
+    @JoinColumn(name = "chat_user_no", nullable = false)
     private ChatUser chatUser;
 
     public enum InsertType {

@@ -6,16 +6,16 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test_jpa")
 @SpringBootTest
 @Transactional
 class DictionaryJpaRepositoryInsertExcelTest {
@@ -34,17 +34,17 @@ class DictionaryJpaRepositoryInsertExcelTest {
         // given
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
 
-        ChatUser chatUser = new ChatUser(123l, "kim");
+        ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
         em.persist(chatUser);
 
         // when
-        dictionaryInsertBatchService.saveExcel(file, chatUser);
+        final List<Dictionary> saved = dictionaryInsertBatchService.saveExcel(file, chatUser);
         em.flush();
         em.clear();
 
         // then
-        final List<Dictionary> result = repository.findAll();
+        final List<Dictionary> result = repository.findByNoIn(saved.stream().map(d -> d.getNo()).collect(Collectors.toList()));
         assertThat(result).size().isEqualTo(47);
-        assertThat(result.get(0).getChatUser().getChatId()).isEqualTo(123l);
+        assertThat(result.get(0).getChatUser().getChatId()).isEqualTo(chatUser.getChatId());
     }
 }

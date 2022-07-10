@@ -14,6 +14,9 @@ public class ExcelReaderTest {
         final ExcelReader excelReader = new ExcelReader(file, 4);
         final List<List<List<String>>> extract = excelReader.extract();
         assertThat(extract.toString()).isEqualTo("[[[a, b, c, d], [1.0, null, 3.0, null], [null, null, null, null], [null, null, null, end]]]");
+        for (List<List<String>> lists : extract) {
+            System.out.println("lists = " + lists);
+        }
     }
 
     @Test

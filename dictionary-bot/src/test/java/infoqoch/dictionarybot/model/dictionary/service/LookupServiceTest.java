@@ -2,21 +2,21 @@ package infoqoch.dictionarybot.model.dictionary.service;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ActiveProfiles("test_jpa")
 @Transactional
 @SpringBootTest
 public class LookupServiceTest {
@@ -25,11 +25,14 @@ public class LookupServiceTest {
 
     @BeforeEach
     void word_setUp() {
-        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("summer").build())); // exact match
-        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("summer vacation").build())); // startsWith
-        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("hot summer").build())); // endsWith
-        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("I like summer.").build())); // contains
-        em.persist(new Dictionary(null, null, null, DictionaryContent.builder().word("winter").build())); // etc
+		ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
+		em.persist(chatUser);
+
+        em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("summer").build())); // exact match
+        em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("summer vacation").build())); // startsWith
+        em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("hot summer").build())); // endsWith
+        em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("winter").build())); // etc
 
         final TypedQuery<Dictionary> query = em.createQuery("select d from Dictionary d where d.content.word = :value", Dictionary.class);
         query.setParameter("value", "summer");

@@ -11,9 +11,6 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Primary
-@Profile("!test_jpa")
-@Repository
 public class MemorySendRepository implements SendRepository {
     private final Map<Long, Send> repository = new HashMap<>();
 
