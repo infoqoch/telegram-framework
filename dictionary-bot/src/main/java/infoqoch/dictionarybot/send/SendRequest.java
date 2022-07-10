@@ -21,6 +21,7 @@ public class SendRequest {
 
     private String document;
 
+    // 생성자
     private SendRequest(Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
         this.chatId = chatId;
         this.sendType = sendType;
@@ -36,6 +37,7 @@ public class SendRequest {
         return new SendRequest(chatId, SendType.DOCUMENT, document, msb);
     }
 
+    // getter
     public SendType sendType() {
         return sendType;
      }
@@ -52,6 +54,7 @@ public class SendRequest {
         return document;
     }
 
+    // MarkdownStringBuilder 에 대한 JPA 컨버터
     public static class MarkdownStringBuilderConverter implements AttributeConverter<MarkdownStringBuilder, String> {
         @Override
         public String convertToDatabaseColumn(MarkdownStringBuilder markdownStringBuilder) {
