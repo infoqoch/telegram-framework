@@ -41,7 +41,7 @@ public class SendRequest {
      }
 
     public MarkdownStringBuilder message() {
-        return message;
+        return new MarkdownStringBuilder().append(message);
     }
 
     public Long chatId() {

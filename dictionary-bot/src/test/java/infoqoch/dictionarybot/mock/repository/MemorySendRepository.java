@@ -3,9 +3,6 @@ package infoqoch.dictionarybot.mock.repository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import lombok.SneakyThrows;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -27,7 +24,7 @@ public class MemorySendRepository implements SendRepository {
 
     @Override
     public List<Send> findByStatus(Send.Status status) {
-        return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
+        return repository.values().stream().filter(s -> s.status()==status).collect(Collectors.toList());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot;
 
+import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.system.property.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -13,8 +14,15 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class DictionaryBotConfig {
     private final TelegramProperties telegramProperties;
+    private final SendRepository sendRepository;
+
     @Bean
     TelegramBot telegramBot(){
         return DefaultTelegramBotFactory.init(telegramProperties.getToken());
+    }
+
+    @Bean
+    DictionarySendRunner dictionarySendRunner(){
+        return new DictionarySendRunner(telegramBot().send(), sendRepository);
     }
 }
