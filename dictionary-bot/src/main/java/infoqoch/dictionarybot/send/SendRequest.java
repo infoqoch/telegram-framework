@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+// !! 불변객체이며 이를 유지해야 함.
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class SendRequest {
@@ -27,6 +28,10 @@ public class SendRequest {
         this.sendType = sendType;
         this.document = document;
         this.message = msb;
+    }
+
+    public SendRequest(SendRequest request) {
+        this(request.chatId(), request.sendType(), request.document(), request.message());
     }
 
     public static SendRequest requestMessage(long chatId, MarkdownStringBuilder msb) {

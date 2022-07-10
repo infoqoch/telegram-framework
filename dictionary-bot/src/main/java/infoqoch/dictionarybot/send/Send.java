@@ -70,7 +70,7 @@ public class Send {
 
     // 발송 결과
     public SendResult result(){
-        return new SendResult(status, errorCode, errorMessage);
+        return new SendResult(status, errorCode, errorMessage, new SendRequest(request));
     }
 
     // 실제 발송 로직
@@ -78,8 +78,6 @@ public class Send {
         this.status = SENDING;
         try {
             Response<?> sendResponse = sendDispatcher(telegramSend); // telegram-bot의 응답 데이터를 받는다. 이하 이를 분석하고 결과값을 전달한다.
-            System.out.println("sendResponse.getDescription() = " + sendResponse.getDescription());
-            System.out.println("sendResponse.getErrorCode() = " + sendResponse.getErrorCode());
             resolveResponse(sendResponse);
         }catch (Exception e) {
             log.error("[error : {}], ", "DictionarySendRunner", e);
@@ -94,7 +92,6 @@ public class Send {
     }
 
     private void resolveResponse(Response response) {
-        System.out.println("response !@# = " + response);
         if(response.isOk()){
             success(response);
         }else{
