@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class LookupDictionaryJpaRepositoryTest {
+class DictionaryQueryRepositoryTest {
     @Autowired EntityManager em;
 
     @Autowired
@@ -55,7 +55,6 @@ class LookupDictionaryJpaRepositoryTest {
         final List<Dictionary> end = repository.findByContentWordEndsWith("summer");
         assertThat(end).size().isEqualTo(2);
         assertThat(end.stream().map(d -> d.getContent().getWord())).contains("summer", "hot summer");
-
 
         final List<Dictionary> contains = repository.findByContentWordContains("summer");
         assertThat(contains).size().isEqualTo(4);

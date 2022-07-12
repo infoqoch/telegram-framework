@@ -1,35 +1,82 @@
 package infoqoch.dictionarybot.model.dictionary.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
+import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
+
 @Repository
-public interface DictionaryQueryRepository extends JpaRepository<Dictionary, Long> {
-    List<Dictionary> findByContentWordStartsWith(String value);
+public class DictionaryQueryRepository {
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
-    List<Dictionary> findByContentWordEndsWith(String value);
+    public DictionaryQueryRepository(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
-    List<Dictionary> findByContentWordContains(String value);
+    // word
+    public List<Dictionary> findByContentWord(String value){
+        return findDictionary(dictionary.content.word.eq(value));
+    }
 
-    List<Dictionary> findByContentDefinitionStartsWith(String value);
+    public List<Dictionary> findByContentWordStartsWith(String value){
+        return findDictionary(dictionary.content.word.startsWith(value));
+    }
 
-    List<Dictionary> findByContentDefinitionEndsWith(String value);
+    public List<Dictionary> findByContentWordEndsWith(String value){
+        return findDictionary(dictionary.content.word.endsWith(value));
+    }
+    
+    public List<Dictionary> findByContentWordContains(String value){
+        return findDictionary(dictionary.content.word.contains(value));
+    }
 
-    List<Dictionary> findByContentDefinitionContains(String value);
+    // definition
+    public List<Dictionary> findByContentDefinition(String value){
+        return findDictionary(dictionary.content.definition.eq(value));
+    }
 
-    List<Dictionary> findByContentSentenceStartsWith(String value);
+    public List<Dictionary> findByContentDefinitionStartsWith(String value){
+        return findDictionary(dictionary.content.definition.startsWith(value));
+    }
 
-    List<Dictionary> findByContentSentenceEndsWith(String value);
+    public List<Dictionary> findByContentDefinitionEndsWith(String value){
+        return findDictionary(dictionary.content.definition.endsWith(value));
+    }
 
-    List<Dictionary> findByContentSentenceContains(String value);
+    public List<Dictionary> findByContentDefinitionContains(String value){
+        return findDictionary(dictionary.content.definition.contains(value));
+    }
 
-    List<Dictionary> findByContentWord(String value);
+    // sentence
+    public List<Dictionary> findByContentSentence(String value){
+        return findDictionary(dictionary.content.sentence.eq(value));
+    }
 
-    List<Dictionary> findByContentDefinition(String value);
+    public List<Dictionary> findByContentSentenceStartsWith(String value){
+        return findDictionary(dictionary.content.sentence.startsWith(value));
+    }
 
-    List<Dictionary> findByContentSentence(String value);
+    public List<Dictionary> findByContentSentenceEndsWith(String value){
+        return findDictionary(dictionary.content.sentence.endsWith(value));
+    }
+
+    public List<Dictionary> findByContentSentenceContains(String value){
+        return findDictionary(dictionary.content.sentence.contains(value));
+    }
+
+    // 공통 메서드
+    private List<Dictionary> findDictionary(BooleanExpression where) {
+        return queryFactory
+                .selectFrom(dictionary)
+                .where(where)
+                .fetch();
+    }
 }
 
