@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.update.controller;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.service.LookupService;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +21,20 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 public class LookupController {
     private final LookupService lookupService;
     @UpdateRequestMethodMapper(LOOKUP_WORD)
-    public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage) {
+    public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");
-        return lookupService.word(updateRequestMessage.getValue(), 10, 0);
+        return lookupService.word(chatUser, updateRequestMessage.getValue(), 10, 0);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_SENTENCE)
-    public List<Dictionary> lookupBySentence(UpdateRequestMessage updateRequestMessage) {
+    public List<Dictionary> lookupBySentence(UpdateRequestMessage updateRequestMessage, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : lookupBySentence!");
-        return lookupService.sentence(updateRequestMessage.getValue(), 10, 0);
+        return lookupService.sentence(chatUser, updateRequestMessage.getValue(), 10, 0);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
-    public List<Dictionary> lookupByDefinition(UpdateRequestMessage updateRequestMessage) {
+    public List<Dictionary> lookupByDefinition(UpdateRequestMessage updateRequestMessage, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : lookupByDefinition!");
-        return lookupService.definition(updateRequestMessage.getValue(), 10, 0);
+        return lookupService.definition(chatUser, updateRequestMessage.getValue(), 10, 0);
     }
 }

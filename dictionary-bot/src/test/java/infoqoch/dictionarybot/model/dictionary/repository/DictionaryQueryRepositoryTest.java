@@ -24,8 +24,10 @@ class DictionaryQueryRepositoryTest {
     @Autowired
     DictionaryQueryRepository repository;
 
+    ChatUser chatUser = null;
+
     void word_setUp() {
-        final ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
+        chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
         em.persist(chatUser);
 
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer").build())); // exact match
@@ -44,19 +46,19 @@ class DictionaryQueryRepositoryTest {
     void findByWord() {
         word_setUp();
 
-        final List<Dictionary> exact = repository.findByContentWord("summer");
+        final List<Dictionary> exact = repository.findByContentWord(chatUser, "summer");
         assertThat(exact).size().isEqualTo(1);
         assertThat(exact.get(0).getContent().getWord()).isEqualTo("summer");
 
-        final List<Dictionary> start = repository.findByContentWordStartsWith("summer");
+        final List<Dictionary> start = repository.findByContentWordStartsWith(chatUser, "summer");
         assertThat(start).size().isEqualTo(2);
         assertThat(start.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation");
 
-        final List<Dictionary> end = repository.findByContentWordEndsWith("summer");
+        final List<Dictionary> end = repository.findByContentWordEndsWith(chatUser, "summer");
         assertThat(end).size().isEqualTo(2);
         assertThat(end.stream().map(d -> d.getContent().getWord())).contains("summer", "hot summer");
 
-        final List<Dictionary> contains = repository.findByContentWordContains("summer");
+        final List<Dictionary> contains = repository.findByContentWordContains(chatUser, "summer");
         assertThat(contains).size().isEqualTo(4);
         assertThat(contains.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
     }
@@ -76,19 +78,19 @@ class DictionaryQueryRepositoryTest {
     void findByDefinition() {
         definition_setUp();
 
-        final List<Dictionary> exact = repository.findByContentDefinition("summer");
+        final List<Dictionary> exact = repository.findByContentDefinition(chatUser, "summer");
         assertThat(exact).size().isEqualTo(1);
         assertThat(exact.get(0).getContent().getDefinition()).isEqualTo("summer");
 
-        final List<Dictionary> start = repository.findByContentDefinitionStartsWith("summer");
+        final List<Dictionary> start = repository.findByContentDefinitionStartsWith(chatUser, "summer");
         assertThat(start).size().isEqualTo(2);
         assertThat(start.stream().map(d -> d.getContent().getDefinition())).contains("summer", "summer vacation");
 
-        final List<Dictionary> end = repository.findByContentDefinitionEndsWith("summer");
+        final List<Dictionary> end = repository.findByContentDefinitionEndsWith(chatUser, "summer");
         assertThat(end).size().isEqualTo(2);
         assertThat(end.stream().map(d -> d.getContent().getDefinition())).contains("summer", "hot summer");
 
-        final List<Dictionary> contains = repository.findByContentDefinitionContains("summer");
+        final List<Dictionary> contains = repository.findByContentDefinitionContains(chatUser, "summer");
         assertThat(contains).size().isEqualTo(4);
         assertThat(contains.stream().map(d -> d.getContent().getDefinition())).contains("summer", "summer vacation", "hot summer", "I like summer.");
     }
@@ -109,19 +111,19 @@ class DictionaryQueryRepositoryTest {
     void findBySentence() {
         sentence_setUp();
 
-        final List<Dictionary> exact = repository.findByContentSentence("summer");
+        final List<Dictionary> exact = repository.findByContentSentence(chatUser, "summer");
         assertThat(exact).size().isEqualTo(1);
         assertThat(exact.get(0).getContent().getSentence()).isEqualTo("summer");
 
-        final List<Dictionary> start = repository.findByContentSentenceStartsWith("summer");
+        final List<Dictionary> start = repository.findByContentSentenceStartsWith(chatUser, "summer");
         assertThat(start).size().isEqualTo(2);
         assertThat(start.stream().map(d -> d.getContent().getSentence())).contains("summer", "summer vacation");
 
-        final List<Dictionary> end = repository.findByContentSentenceEndsWith("summer");
+        final List<Dictionary> end = repository.findByContentSentenceEndsWith(chatUser, "summer");
         assertThat(end).size().isEqualTo(2);
         assertThat(end.stream().map(d -> d.getContent().getSentence())).contains("summer", "hot summer");
 
-        final List<Dictionary> contains = repository.findByContentSentenceContains("summer");
+        final List<Dictionary> contains = repository.findByContentSentenceContains(chatUser, "summer");
         assertThat(contains).size().isEqualTo(4);
         assertThat(contains.stream().map(d -> d.getContent().getSentence())).contains("summer", "summer vacation", "hot summer", "I like summer.");
     }

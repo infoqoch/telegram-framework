@@ -4,6 +4,7 @@ import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,9 +38,18 @@ public class ChatUser {
     @OneToMany(mappedBy = "chatUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dictionary> dictionaries = new ArrayList<>();
 
+    @Setter
+    private boolean openDataPublic;
+
+    @Setter
+    private boolean lookupPublicData;
+
     public ChatUser(Long chatId, String nickName) {
         this.chatId = chatId;
         this.nickName = nickName;
+        this.openDataPublic = true;
+        this.lookupPublicData = true;
+
     }
 
     public static ChatUser createUser(Long chatId, String nickName){

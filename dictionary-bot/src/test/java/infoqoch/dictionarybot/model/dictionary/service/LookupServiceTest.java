@@ -20,12 +20,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Transactional
 @SpringBootTest
 public class LookupServiceTest {
-    @Autowired
-    EntityManager em;
+    @Autowired EntityManager em;
+	@Autowired  LookupService service;
+
+	ChatUser chatUser = null;
 
     @BeforeEach
     void word_setUp() {
-		ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
+		chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
 		em.persist(chatUser);
 
         em.persist(new Dictionary(null, chatUser, null, DictionaryContent.builder().word("summer").build())); // exact match
@@ -40,19 +42,16 @@ public class LookupServiceTest {
         assert resultList.size()==1;
     }
 
-    @Autowired
-    LookupService service;
-
     @Test
 	void contains_exactly() {
-		List<Dictionary> result = service.word("summer", 4, 0);
+		List<Dictionary> result = service.word(chatUser, "summer", 4, 0);
 		assertThat(result).size().isEqualTo(4);
 		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
 	}
 
 	@Test
 	void exact_and_startWith() {
-		List<Dictionary> result = service.word("summer", 2, 0);
+		List<Dictionary> result = service.word(chatUser, "summer", 2, 0);
 		assertThat(result).size().isEqualTo(2);
 		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
 		assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
@@ -60,7 +59,7 @@ public class LookupServiceTest {
 
 	@Test
 	void exact() {
-		List<Dictionary> result = service.word("summer", 1, 0);
+		List<Dictionary> result = service.word(chatUser, "summer", 1, 0);
 		assertThat(result).size().isEqualTo(1);
 		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
 	}
@@ -68,20 +67,20 @@ public class LookupServiceTest {
 	@Test
 	void limit_0() {
 		assertThatThrownBy(()->{
-			service.word("summer", 0, 0);
+			service.word(chatUser, "summer", 0, 0);
 		}).isExactlyInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	void limit_over_total_count() {
-		List<Dictionary> result = service.word("summer", 999999, 0);
+		List<Dictionary> result = service.word(chatUser, "summer", 999999, 0);
 		assertThat(result).size().isEqualTo(4);
 		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
 	}
 
 	@Test
 	void offset_summer_second() {
-		List<Dictionary> result = service.word("summer", 1, 1);
+		List<Dictionary> result = service.word(chatUser, "summer", 1, 1);
 		assertThat(result).size().isEqualTo(1);
 		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer vacation");
 	}

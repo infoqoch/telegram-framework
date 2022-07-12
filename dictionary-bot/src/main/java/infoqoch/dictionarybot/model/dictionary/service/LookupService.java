@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.model.dictionary.service;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepository;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,52 +19,52 @@ import java.util.stream.Collectors;
 public class LookupService {
     private final DictionaryQueryRepository repository;
 
-    public List<Dictionary> word(String value, int limit, int offset) {
+    public List<Dictionary> word(ChatUser chatUser, String value, int limit, int offset) {
         checkLimit(limit);
 
         Set<Dictionary> result = new LinkedHashSet<>();
 
-        result.addAll(repository.findByContentWord(value));
+        result.addAll(repository.findByContentWord(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentWordStartsWith(value));
+        result.addAll(repository.findByContentWordStartsWith(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentWordContains(value));
+        result.addAll(repository.findByContentWordContains(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
         return result.stream().collect(Collectors.toList());
     }
 
-    public List<Dictionary> sentence(String value, int limit, int offset) {
+    public List<Dictionary> sentence(ChatUser chatUser, String value, int limit, int offset) {
         checkLimit(limit);
 
         Set<Dictionary> result = new LinkedHashSet<>();
 
-        result.addAll(repository.findByContentSentence(value));
+        result.addAll(repository.findByContentSentence(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentSentenceStartsWith(value));
+        result.addAll(repository.findByContentSentenceStartsWith(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentSentenceContains(value));
+        result.addAll(repository.findByContentSentenceContains(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
         return result.stream().collect(Collectors.toList());
     }
 
-    public List<Dictionary> definition(String value, int limit, int offset) {
+    public List<Dictionary> definition(ChatUser chatUser, String value, int limit, int offset) {
         checkLimit(limit);
 
         Set<Dictionary> result = new LinkedHashSet<>();
 
-        result.addAll(repository.findByContentDefinition(value));
+        result.addAll(repository.findByContentDefinition(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentDefinitionStartsWith(value));
+        result.addAll(repository.findByContentDefinitionStartsWith(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
-        result.addAll(repository.findByContentDefinitionContains(value));
+        result.addAll(repository.findByContentDefinitionContains(chatUser, value));
         if(result.size()>=(limit+offset)) return setToList(result, limit, offset);
 
         return result.stream().collect(Collectors.toList());

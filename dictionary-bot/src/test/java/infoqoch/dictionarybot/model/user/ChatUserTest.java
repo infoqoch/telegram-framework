@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 class ChatUserTest {
+
     @Autowired
     EntityManager em;
 
@@ -51,4 +52,25 @@ class ChatUserTest {
         assertThat(dictionaries.get(0).getContent().getWord()).isEqualTo("hot summer");
     }
 
+    @Test
+    void setup_booleans(){
+        // given
+        final ChatUser givenUser = ChatUser.createUser(123l, "김갑순");
+        em.persist(givenUser);
+        em.flush();
+        em.clear();
+
+        final ChatUser findUser = em.find(ChatUser.class, givenUser.getNo());
+        assert findUser.isOpenDataPublic();
+        assert findUser.isLookupPublicData();
+
+        // when
+        findUser.setOpenDataPublic(false);
+        findUser.setLookupPublicData(false);
+
+        // then
+        final ChatUser result = em.find(ChatUser.class, givenUser.getNo());
+        assertThat(result.isOpenDataPublic()).isFalse();
+        assertThat(result.isLookupPublicData()).isFalse();
+    }
 }
