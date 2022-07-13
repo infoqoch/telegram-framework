@@ -40,7 +40,7 @@ class DictionarySendRunnerTest {
         telegramSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/w_hi", 1235l));
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, SendRequest.requestMessage(1235l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), REQUEST));
+        repository.save(new Send(1l, SendRequest.sendMessage(1235l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), REQUEST));
 
         // when
         runner.run();
@@ -59,7 +59,7 @@ class DictionarySendRunnerTest {
         telegramSend.setThrowRuntimeException(true);
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, SendRequest.requestMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
+        repository.save(new Send(1l, SendRequest.sendMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
 
         // when
         runner.run();
@@ -79,7 +79,7 @@ class DictionarySendRunnerTest {
         telegramSend.setMockMessageResponseJson("{\"ok\":false,\"error_code\":400,\"description\":\"Bad Request: chat not found\"}");
 
         // REQUEST 상태의 값이 리포지터리에 대기 중이다.
-        repository.save(new Send(1l, SendRequest.requestMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
+        repository.save(new Send(1l, SendRequest.sendMessage(324893249234l, new MarkdownStringBuilder().plain("hi의 검색결과는 다음과 같습니다")), Send.Status.REQUEST));
 
         // when
         runner.run();

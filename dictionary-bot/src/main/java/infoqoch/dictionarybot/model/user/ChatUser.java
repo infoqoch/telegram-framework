@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 /*
 *
 * 기본적인 흐름은 chat_id를 통해 움직인다.
@@ -35,20 +37,20 @@ public class ChatUser {
     private Long chatId;
     private String nickName;
 
-    @OneToMany(mappedBy = "chatUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "chatUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = LAZY)
     private List<Dictionary> dictionaries = new ArrayList<>();
 
     @Setter
-    private boolean openDataPublic;
+    private boolean shareMine;
 
     @Setter
-    private boolean lookupPublicData;
+    private boolean lookupAllUsers;
 
     public ChatUser(Long chatId, String nickName) {
         this.chatId = chatId;
         this.nickName = nickName;
-        this.openDataPublic = true;
-        this.lookupPublicData = true;
+        this.shareMine = true;
+        this.lookupAllUsers = true;
 
     }
 

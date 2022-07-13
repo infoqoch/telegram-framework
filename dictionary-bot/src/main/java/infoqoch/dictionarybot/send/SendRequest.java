@@ -34,12 +34,18 @@ public class SendRequest {
         this(request.chatId(), request.sendType(), request.document(), request.message());
     }
 
-    public static SendRequest requestMessage(long chatId, MarkdownStringBuilder msb) {
+    public static SendRequest sendMessage(long chatId, MarkdownStringBuilder msb) {
         return new SendRequest(chatId, SendType.MESSAGE, null, msb);
     }
 
     public static SendRequest sendDocument(Long chatId, String document, MarkdownStringBuilder msb) {
         return new SendRequest(chatId, SendType.DOCUMENT, document, msb);
+    }
+
+    public static SendRequest send(Long chatId, String document, MarkdownStringBuilder message) {
+        if(document==null || document.length()==0)
+            return sendMessage(chatId, message);
+        return sendDocument(chatId, document, message);
     }
 
     // getter

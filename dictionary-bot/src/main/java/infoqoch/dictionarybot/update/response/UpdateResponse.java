@@ -13,7 +13,7 @@ public class UpdateResponse {
     public UpdateResponse(SendType sendType, MarkdownStringBuilder message) {
         this.sendType = sendType;
         this.message = message;
-        this.document = document();
+        this.document = null;
     }
 
     public UpdateResponse(SendType sendType, MarkdownStringBuilder message, String document) {

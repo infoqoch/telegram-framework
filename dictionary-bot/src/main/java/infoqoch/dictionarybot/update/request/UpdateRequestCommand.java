@@ -1,7 +1,11 @@
 package infoqoch.dictionarybot.update.request;
 
 public enum UpdateRequestCommand {
-    HELP("help"), LOOKUP_WORD("w"),  LOOKUP_SENTENCE("s"), LOOKUP_DEFINITION("d"),  UNKNOWN("unknown"), EXCEL_PUSH("excel push");
+    HELP("help")
+    , LOOKUP_WORD("w"),  LOOKUP_SENTENCE("s"), LOOKUP_DEFINITION("d")
+    ,  UNKNOWN("unknown")
+    , EXCEL_PUSH("excel push")
+    , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users");
 
     private final String alias;
 

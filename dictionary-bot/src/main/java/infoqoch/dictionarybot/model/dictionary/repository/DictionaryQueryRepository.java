@@ -12,6 +12,7 @@ import java.util.List;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
 
+
 @Repository
 public class DictionaryQueryRepository {
     private final EntityManager em;
@@ -86,9 +87,8 @@ public class DictionaryQueryRepository {
     * 남의 것을 검색....내 것을 숨긴 것은 다른 사람 것은 검색 안함 but 나의 것은 검색에 포함해야함.
     */
     private BooleanExpression findWithChatUser(ChatUser chatUser) {
-        if(!chatUser.isLookupPublicData()) return dictionary.chatUser.eq(chatUser);
-        return dictionary.chatUser.eq(chatUser).or(QChatUser.chatUser.openDataPublic.eq(true));
-
+        if(!chatUser.isLookupAllUsers()) return dictionary.chatUser.eq(chatUser);
+            return dictionary.chatUser.eq(chatUser).or(QChatUser.chatUser.shareMine.eq(true));
     }
 
 }

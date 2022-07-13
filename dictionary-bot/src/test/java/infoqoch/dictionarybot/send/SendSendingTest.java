@@ -24,7 +24,7 @@ public class SendSendingTest {
     void message(){
         // given
         fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
-        final SendRequest sendRequest = SendRequest.requestMessage(12345l, new MarkdownStringBuilder().plain("/help"));
+        final SendRequest sendRequest = SendRequest.sendMessage(12345l, new MarkdownStringBuilder().plain("/help"));
         final Send send = Send.of(sendRequest, null);
         assert send.status() == REQUEST;
 

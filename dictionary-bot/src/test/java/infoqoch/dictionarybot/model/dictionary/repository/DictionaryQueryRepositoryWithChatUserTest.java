@@ -28,14 +28,14 @@ class DictionaryQueryRepositoryWithChatUserTest {
     void lookup_public_data(){
         // given
         ChatUser narcissus = new ChatUser(123L, "narcissus");
-        narcissus.setOpenDataPublic(true);
-        narcissus.setLookupPublicData(false);
+        narcissus.setShareMine(true);
+        narcissus.setLookupAllUsers(false);
         em.persist(narcissus);
         em.persist(new Dictionary(null, narcissus, null, DictionaryContent.builder().word("apple").sentence("누가 세상에서 가장 단어정리를 잘할까? 바로 나야^^ 내 것만 보기에도 시간이 없어.").build()));
 
         ChatUser opened = new ChatUser(345L, "opened");
-        opened.setOpenDataPublic(true);
-        opened.setLookupPublicData(true);
+        opened.setShareMine(true);
+        opened.setLookupAllUsers(true);
         em.persist(opened);
         em.persist(new Dictionary(null, opened, null, DictionaryContent.builder().word("apple").sentence("다른 사람과 공유하고 싶어!").build()));
 
@@ -55,14 +55,14 @@ class DictionaryQueryRepositoryWithChatUserTest {
     void open_data_public(){
         // given
         ChatUser closed = new ChatUser(123L, "closed");
-        closed.setOpenDataPublic(false);
-        closed.setLookupPublicData(true);
+        closed.setShareMine(false);
+        closed.setLookupAllUsers(true);
         em.persist(closed);
         em.persist(new Dictionary(null, closed, null, DictionaryContent.builder().word("apple").sentence("나만 알고 싶은 단어^^ 남들에게는 안보여주지롱~").build()));
 
         ChatUser opened = new ChatUser(345L, "opened");
-        opened.setOpenDataPublic(true);
-        opened.setLookupPublicData(true);
+        opened.setShareMine(true);
+        opened.setLookupAllUsers(true);
         em.persist(opened);
         em.persist(new Dictionary(null, opened, null, DictionaryContent.builder().word("apple").sentence("다른 사람과 공유하고 싶어!").build()));
 

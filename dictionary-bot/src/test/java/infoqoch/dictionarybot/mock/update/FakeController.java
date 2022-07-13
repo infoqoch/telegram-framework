@@ -61,4 +61,16 @@ public class FakeController {
     public String excelpush() {
         return "excep push!!";
     }
+
+    @UpdateRequestMethodMapper(SHARE_MINE)
+    public String shareMine() {
+        return "unknown??";
+    }
+
+
+    @UpdateRequestMethodMapper(LOOKUP_ALL_USERS)
+    public String lookupAllUsers() {
+        return "unknown??";
+    }
+
 }

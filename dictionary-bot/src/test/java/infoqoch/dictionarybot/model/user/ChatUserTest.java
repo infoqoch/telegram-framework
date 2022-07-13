@@ -61,16 +61,16 @@ class ChatUserTest {
         em.clear();
 
         final ChatUser findUser = em.find(ChatUser.class, givenUser.getNo());
-        assert findUser.isOpenDataPublic();
-        assert findUser.isLookupPublicData();
+        assert findUser.isShareMine();
+        assert findUser.isLookupAllUsers();
 
         // when
-        findUser.setOpenDataPublic(false);
-        findUser.setLookupPublicData(false);
+        findUser.setShareMine(false);
+        findUser.setLookupAllUsers(false);
 
         // then
         final ChatUser result = em.find(ChatUser.class, givenUser.getNo());
-        assertThat(result.isOpenDataPublic()).isFalse();
-        assertThat(result.isLookupPublicData()).isFalse();
+        assertThat(result.isShareMine()).isFalse();
+        assertThat(result.isLookupAllUsers()).isFalse();
     }
 }

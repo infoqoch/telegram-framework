@@ -4,6 +4,7 @@ import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestPara
 import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
+import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,11 +44,12 @@ public class UpdateRequestMethodResolver {
         return args;
     }
 
+    @SneakyThrows
     private UpdateResponse resolveReturn(Object[] args){
         try {
             return returnResolver.resolve(method.invoke(bean, args));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("can not resolve the return data (2)", e);
+            throw e.getCause();
         }
     }
 
