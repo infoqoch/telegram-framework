@@ -4,10 +4,12 @@ import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodReso
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers;
 

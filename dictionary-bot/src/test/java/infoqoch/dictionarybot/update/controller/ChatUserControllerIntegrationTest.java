@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,6 +64,41 @@ class ChatUserControllerIntegrationTest {
         // given
         final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
         assert beforeChatUser.isEmpty();
+
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
+
+        // when
+        dictionaryUpdateRunner.run();
+
+        // then
+        final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
+        assertThat(afterChatUser).isPresent();
+        assertThat(afterChatUser.get().isShareMine()).isFalse();
+    }
+
+    @Autowired
+    EntityManager em;
+
+    /*
+    *
+    * TODO
+    * no session 문제가 발생하였다. 정확하게는 requestParamResolver에서 chatId를 기준으로 repository에 존재하면 Optional#get을 리턴하고, 그렇지 않으면 JpaRepository#save 객체를 리턴한다.
+    * save를 한 객체는 controller로 넘어가는데, 이때 영속성이 유지가 된다. 그러니까 엔티티그래프를 통해 다른 객체를 호출할 수 있다.
+    * find한 객체는 controller로 넘어가면 영속성이 끝나버리고 no session 에러가 발생한다.
+    * 이 두 개의 차이는 무엇일까?
+    * 일단은 front controller가 발생하는 곳에 @Transactional를 선언하여 해소할 수 있었다. 차후 이러한 문제가 발생하는 이유를 분명하게 이해하기를 바란다.
+    *
+    */
+    @Test
+    @DisplayName("chatuser의 1차 캐시의 유지")
+    void share_mine_change_in_session() {
+        // given
+        em.persist(new ChatUser(123l, "kim"));
+        em.flush();
+        em.clear();;
+
+        final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
+        assert beforeChatUser.isPresent();
 
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.LOOKUP_ALL_USERS;
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.SHARE_MINE;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.MY_STATUS;
 
 @Slf4j
 @Component
@@ -41,10 +42,25 @@ public class ChatUserController {
                 .plain(message.getValue());
     }
 
+    @UpdateRequestMethodMapper(MY_STATUS)
+    public MarkdownStringBuilder myStatus(ChatUser chatUser) {
+        System.out.println("chatUser = " + chatUser);
+        log.info("UpdateRequestMethodMapper : SHARE_MINE");
+        return new MarkdownStringBuilder()
+
+                .bold("==나의 상태==").lineSeparator()
+                .plain("모든 회원 검색 여부 : ").plain(booleanToYnValue(chatUser.isLookupAllUsers())).lineSeparator()
+                .italic(" 수정 : ").command(LOOKUP_ALL_USERS.alias(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
+                .plain("사전 공개 여부 : ").plain(booleanToYnValue(chatUser.isShareMine())).lineSeparator()
+                .italic(" 수정 : ").command(SHARE_MINE.alias(), booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
+                .plain("등록한 사전의 갯수 : ").plain(String.valueOf(chatUser.getDictionaries().size()))
+                ;
+    }
+
     private boolean shareMine(UpdateRequestMessage message) {
-        if(ynToBoolean(message, "Y")){
+        if(ynToBoolean(message.getValue(), "Y")){
             return true;
-        }else if(ynToBoolean(message, "N")){
+        }else if(ynToBoolean(message.getValue(), "N")){
             return false;
         }
 
@@ -58,9 +74,9 @@ public class ChatUserController {
     }
 
     private boolean lookupAllUsers(UpdateRequestMessage message) {
-        if(ynToBoolean(message, "Y")){
+        if(ynToBoolean(message.getValue(), "Y")){
             return true;
-        }else if(ynToBoolean(message, "N")){
+        }else if(ynToBoolean(message.getValue(), "N")){
             return false;
         }
 
@@ -73,7 +89,11 @@ public class ChatUserController {
         );
     }
 
-    private boolean ynToBoolean(UpdateRequestMessage message, String Y) {
-        return message.getValue().trim().equalsIgnoreCase(Y);
+    private boolean ynToBoolean(String target, String expect) {
+        return target.trim().equalsIgnoreCase(expect);
+    }
+
+    private String booleanToYnValue(boolean target) {
+        return target?"Y":"N";
     }
 }

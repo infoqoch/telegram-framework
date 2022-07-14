@@ -5,7 +5,7 @@ public enum UpdateRequestCommand {
     , LOOKUP_WORD("w"),  LOOKUP_SENTENCE("s"), LOOKUP_DEFINITION("d")
     ,  UNKNOWN("unknown")
     , EXCEL_PUSH("excel push")
-    , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users");
+    , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users"), MY_STATUS("status");
 
     private final String alias;
 
