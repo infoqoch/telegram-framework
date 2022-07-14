@@ -46,11 +46,15 @@ public class ChatUser {
     @Setter
     private boolean lookupAllUsers;
 
+    @Setter
+    private boolean hourlyAlarm;
+
     public ChatUser(Long chatId, String nickName) {
         this.chatId = chatId;
         this.nickName = nickName;
         this.shareMine = true;
         this.lookupAllUsers = true;
+        this.hourlyAlarm = true;
 
     }
 

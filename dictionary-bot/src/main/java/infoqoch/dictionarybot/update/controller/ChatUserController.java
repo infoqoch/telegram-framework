@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.LOOKUP_ALL_USERS;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.SHARE_MINE;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.MY_STATUS;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 
 @Slf4j
 @Component
@@ -24,7 +22,6 @@ public class ChatUserController {
     public MarkdownStringBuilder lookupAllUsers(ChatUser chatUser, UpdateRequestMessage message) {
         log.info("UpdateRequestMethodMapper : LOOKUP_ALL_USERS");
         chatUser.setLookupAllUsers(lookupAllUsers(message));
-        chatUserRepository.save(chatUser);
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
                 .plain("모든 회원의 검색 여부 : ")
@@ -35,11 +32,19 @@ public class ChatUserController {
     public MarkdownStringBuilder shareMine(ChatUser chatUser, UpdateRequestMessage message) {
         log.info("UpdateRequestMethodMapper : SHARE_MINE");
         chatUser.setShareMine(shareMine(message));
-        chatUserRepository.save(chatUser);
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
                 .plain("사전 공개 여부 : ")
                 .plain(message.getValue());
+    }
+
+    @UpdateRequestMethodMapper(HOURLY_ALARM)
+    public MarkdownStringBuilder hourlyAlarm(ChatUser chatUser, UpdateRequestMessage message) {
+        log.info("UpdateRequestMethodMapper : HOURLY_ALARM");
+        chatUser.setHourlyAlarm(hourlyAlarm(message.getValue()));
+        return new MarkdownStringBuilder()
+                .bold("정상적으로 변경되었습니다!").lineSeparator()
+                .plain("매시 알림 여부 : ").plain(message.getValue());
     }
 
     @UpdateRequestMethodMapper(MY_STATUS)
@@ -57,20 +62,24 @@ public class ChatUserController {
                 ;
     }
 
-    private boolean shareMine(UpdateRequestMessage message) {
-        if(ynToBoolean(message.getValue(), "Y")){
+    private boolean hourlyAlarm(String value) {
+        if(ynToBoolean(value, "Y")){
             return true;
-        }else if(ynToBoolean(message.getValue(), "N")){
+        }else if(ynToBoolean(value, "N")){
             return false;
         }
 
         throw new TelegramClientException(
-                new MarkdownStringBuilder().bold("=나의 사전 공개 여부=").lineSeparator()
+                new MarkdownStringBuilder().bold("=매시 사전 알람=").lineSeparator()
                         .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                        .command(SHARE_MINE.alias(), "Y").lineSeparator()
-                        .command(SHARE_MINE.alias(), "N").lineSeparator()
-                , "SHARE_MINE에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
+                        .command(HOURLY_ALARM.alias(), "Y").lineSeparator()
+                        .command(HOURLY_ALARM.alias(), "N").lineSeparator()
+                , "HOURLY_ALARM에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
+    }
+
+    private boolean shareMine(UpdateRequestMessage message) {
+        return hourlyAlarm(message.getValue());
     }
 
     private boolean lookupAllUsers(UpdateRequestMessage message) {

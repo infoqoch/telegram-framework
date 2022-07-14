@@ -1,8 +1,9 @@
-package infoqoch.dictionarybot.model.dictionary.repository;
+package infoqoch.dictionarybot.model.user;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
-import infoqoch.dictionarybot.model.user.ChatUser;
+import infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class DictionaryQueryRepositoryWithChatUserTest {
+class ChatUserIntegrationTest {
 
     @Autowired
     EntityManager em;
@@ -25,6 +26,7 @@ class DictionaryQueryRepositoryWithChatUserTest {
     DictionaryQueryRepository dictionaryQueryRepository;
 
     @Test
+    @DisplayName("chatUser의 데이터 공개여부에 따른 사전 조회")
     void lookup_public_data(){
         // given
         ChatUser narcissus = new ChatUser(123L, "narcissus");
@@ -52,6 +54,7 @@ class DictionaryQueryRepositoryWithChatUserTest {
     }
 
     @Test
+    @DisplayName("chatUser의 탐색 데이터 수준에 따른 사전 조회")
     void open_data_public(){
         // given
         ChatUser closed = new ChatUser(123L, "closed");

@@ -63,6 +63,14 @@ public class Send {
                 .build();
     }
 
+    public static Send of(SendRequest request) {
+        return Send.builder()
+                .request(request)
+                .updateLog(null)
+                .status(REQUEST)
+                .build();
+    }
+
     // 상태 전달
     public Status status() {
         return status;

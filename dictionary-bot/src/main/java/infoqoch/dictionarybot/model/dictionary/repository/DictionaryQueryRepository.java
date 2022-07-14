@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
 
@@ -74,6 +76,27 @@ public class DictionaryQueryRepository {
         return findDictionary(dictionary.content.sentence.contains(value));
     }
 
+    public Optional<Dictionary> getRandom() {
+        return getRandom(null);
+    }
+
+    public Optional<Dictionary> getRandom(ChatUser chatUser) {
+        final Long total = queryFactory
+                .select(dictionary.count())
+                .from(dictionary)
+                .where(chatUserEq(chatUser))
+                .fetchOne();
+
+        if(total==null||total==0) return Optional.empty();
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(dictionary)
+                .where(chatUserEq(chatUser))
+                .limit(1)
+                .offset(ThreadLocalRandom.current().nextLong(0, total))
+                .fetchOne());
+    }
+
     // 공통 메서드
     private List<Dictionary> findDictionary(BooleanExpression expression, BooleanExpression ... expressions) {
         return queryFactory
@@ -87,9 +110,13 @@ public class DictionaryQueryRepository {
     * 남의 것을 검색....내 것을 숨긴 것은 다른 사람 것은 검색 안함 but 나의 것은 검색에 포함해야함.
     */
     private BooleanExpression findWithChatUser(ChatUser chatUser) {
-        if(!chatUser.isLookupAllUsers()) return dictionary.chatUser.eq(chatUser);
-            return dictionary.chatUser.eq(chatUser).or(QChatUser.chatUser.shareMine.eq(true));
+        if(!chatUser.isLookupAllUsers()) return chatUserEq(chatUser);
+            return chatUserEq(chatUser).or(QChatUser.chatUser.shareMine.eq(true));
     }
 
+    private BooleanExpression chatUserEq(ChatUser chatUser) {
+        if(chatUser == null) return null;
+        return dictionary.chatUser.eq(chatUser);
+    }
 }
 

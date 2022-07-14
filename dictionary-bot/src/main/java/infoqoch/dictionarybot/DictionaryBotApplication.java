@@ -18,7 +18,8 @@ import java.util.List;
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaAuditing
-public class DictionaryBotApplication {
+public class
+DictionaryBotApplication {
     public static void main(String[] args) {
         SpringApplication.run(DictionaryBotApplication.class, args);
     }

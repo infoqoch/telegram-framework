@@ -63,14 +63,17 @@ class ChatUserTest {
         final ChatUser findUser = em.find(ChatUser.class, givenUser.getNo());
         assert findUser.isShareMine();
         assert findUser.isLookupAllUsers();
+        assert findUser.isHourlyAlarm();
 
         // when
         findUser.setShareMine(false);
         findUser.setLookupAllUsers(false);
+        findUser.setHourlyAlarm(false);
 
         // then
         final ChatUser result = em.find(ChatUser.class, givenUser.getNo());
         assertThat(result.isShareMine()).isFalse();
         assertThat(result.isLookupAllUsers()).isFalse();
+        assertThat(result.isHourlyAlarm()).isFalse();
     }
 }

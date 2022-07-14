@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,5 +77,13 @@ public class LookupService {
 
     private void checkLimit(int limit) {
         if(limit ==0) throw new IllegalArgumentException("limit 은 0이 될 수 없습니다.");
+    }
+
+    public Optional<Dictionary> getRandom() {
+        return repository.getRandom();
+    }
+
+    public Optional<Dictionary> getRandom(ChatUser chatUser) {
+        return repository.getRandom(chatUser);
     }
 }
