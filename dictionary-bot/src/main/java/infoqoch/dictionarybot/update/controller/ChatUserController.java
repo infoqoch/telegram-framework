@@ -42,9 +42,9 @@ public class ChatUserController {
     }
 
     private boolean shareMine(UpdateRequestMessage message) {
-        if(message.getValue().trim().equalsIgnoreCase("Y")){
+        if(ynToBoolean(message, "Y")){
             return true;
-        }else if(message.getValue().trim().equalsIgnoreCase("N")){
+        }else if(ynToBoolean(message, "N")){
             return false;
         }
 
@@ -58,9 +58,9 @@ public class ChatUserController {
     }
 
     private boolean lookupAllUsers(UpdateRequestMessage message) {
-        if(message.getValue().trim().equalsIgnoreCase("Y")){
+        if(ynToBoolean(message, "Y")){
             return true;
-        }else if(message.getValue().trim().equalsIgnoreCase("N")){
+        }else if(ynToBoolean(message, "N")){
             return false;
         }
 
@@ -71,5 +71,9 @@ public class ChatUserController {
                         .command(LOOKUP_ALL_USERS.alias(), "N").lineSeparator()
                 , "LOOKUP_ALL_USERS에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
+    }
+
+    private boolean ynToBoolean(UpdateRequestMessage message, String Y) {
+        return message.getValue().trim().equalsIgnoreCase(Y);
     }
 }

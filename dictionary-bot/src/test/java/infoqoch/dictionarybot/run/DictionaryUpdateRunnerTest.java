@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static infoqoch.dictionarybot.send.SendType.MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,6 +58,7 @@ class DictionaryUpdateRunnerTest {
         assertThat(logs.get(0).getUpdateCommand()).isEqualTo(UpdateRequestCommand.LOOKUP_WORD);
         assertThat(logs.get(0).getUpdateValue()).isEqualTo("hi");
         assertThat(logs.get(0).getSendMessage()).isEqualTo("LOOKUP\\_WORD : hi : 2102");
+        assertThat(logs.get(0).getSendType()).isEqualTo(MESSAGE);
     }
 
     @Test
@@ -104,7 +106,9 @@ class DictionaryUpdateRunnerTest {
         final List<UpdateLog> logs = repository.findAll();
 
         assertThat(logs).size().isEqualTo(1);
-        assertThat(logs.get(0).getSendMessage()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
+        final UpdateLog updateLog = logs.get(0);
+        assertThat(updateLog.getSendMessage()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
+        assertThat(updateLog.getSendType()).isEqualTo(MESSAGE);
     }
 
 
