@@ -40,7 +40,7 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getSavedSend();
+        final Send sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
                 sent.getRequest().getMessage().toString()
         ).isEqualTo(
@@ -64,7 +64,7 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getSavedSend();
+        final Send sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
                 sent.getRequest().getMessage().toString()
         ).isEqualTo(
@@ -88,7 +88,7 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getSavedSend();
+        final Send sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
                 sent.getRequest().getMessage().toString()
         ).isEqualTo(

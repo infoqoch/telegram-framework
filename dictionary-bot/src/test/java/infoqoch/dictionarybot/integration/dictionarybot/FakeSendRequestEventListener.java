@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Profile({"fake_send_listener"})
 @Primary
@@ -18,12 +21,14 @@ public class FakeSendRequestEventListener {
 	private final SendRepository store;
 
     private boolean called = false;
-    private Send savedSend;
+    private Send latestSent;
+    private List<Send> sentList = new ArrayList<>();
 
     @EventListener(Send.class)
     public void handle(Send send) {
         System.out.println("== FakeSendRequestEventListener CALLED!! === ");
         called = true;
-        savedSend = store.save(send);
+        latestSent = store.save(send);
+        sentList.add(send);
     }
 }
