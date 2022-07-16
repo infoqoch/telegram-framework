@@ -2,9 +2,11 @@ package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
+import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.system.event.Events;
-import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.exception.TelegramClientException;
+import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.dictionarybot.update.log.repository.UpdateLogRepository;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
@@ -21,7 +23,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static infoqoch.dictionarybot.send.SendType.MESSAGE;
+import static infoqoch.dictionarybot.send.SendType.CLIENT_ERROR;
+import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
 
 @Slf4j
 @Component
@@ -68,8 +71,8 @@ public class DictionaryUpdateRunner {
 
         } catch (Exception e){
             log.error("[error] handleUpdate, ", e);
-
-            requestSending(updateRequest, updateExceptionHandler(e), null);
+            final UpdateResponse updateResponse = updateExceptionHandler(e);
+            requestSending(updateRequest, updateResponse, null);
         }
     }
 
@@ -87,21 +90,29 @@ public class DictionaryUpdateRunner {
     }
 
     private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse, UpdateLog updateLog) {
-        final SendRequest sendRequest = SendRequest.send(updateRequest.chatId(), updateResponse.document(), updateResponse.message());
+        final SendRequest sendRequest = SendRequest.send(updateRequest.chatId(), updateResponse.getDocument(), updateResponse.getMessage());
         final Send send = Send.of(sendRequest, updateLog);
         Events.raise(send);
     }
 
     private UpdateResponse updateExceptionHandler(Exception e) {
-        final Optional<TelegramException> telegramException = TelegramException.checkIfCausedByTelegramException(e);
+        final Optional<TelegramException> opTelegramException = TelegramException.checkIfCausedByTelegramException(e);
 
-        if(telegramException.isPresent()){
-            final MarkdownStringBuilder response = telegramException.get().response();
+        if(opTelegramException.isPresent()){
+            final TelegramException telegramException = opTelegramException.get();
+            SendType sendType = resolveErrorType(telegramException);
 
-            if (response != null) return new UpdateResponse(MESSAGE, response);
+            final MarkdownStringBuilder response = telegramException.response();
 
-            return new UpdateResponse(MESSAGE,  new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)"));
+            if (response != null) return UpdateResponse.send(sendType, response);
+
+            return UpdateResponse.send(sendType, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)"));
         }
-        return new UpdateResponse(MESSAGE, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)"));
+
+        return UpdateResponse.send(SERVER_ERROR, new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)"));
+    }
+
+    private SendType resolveErrorType(TelegramException telegramException) {
+        return telegramException instanceof TelegramClientException ? CLIENT_ERROR: SERVER_ERROR;
     }
 }

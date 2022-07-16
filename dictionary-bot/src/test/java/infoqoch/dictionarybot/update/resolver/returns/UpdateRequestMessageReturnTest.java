@@ -31,7 +31,7 @@ class UpdateRequestMessageReturnTest {
 
         // resolve
         UpdateResponse result =  resolver.resolve(body);
-        assertThat(result.message().text()).isEqualTo(expected);
+        assertThat(result.getMessage().text()).isEqualTo(expected);
     }
 
     @Test
@@ -50,8 +50,8 @@ class UpdateRequestMessageReturnTest {
 
         // resolve
         UpdateResponse result =  resolver.resolve(target);
-        assertThat(result.message()).usingRecursiveComparison().isEqualTo(target);
-        assertThat(result.message().text()).isEqualTo(expected);
+        assertThat(result.getMessage()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(result.getMessage().text()).isEqualTo(expected);
     }
 
     @Test
@@ -77,6 +77,6 @@ class UpdateRequestMessageReturnTest {
 
         // resolve
         UpdateResponse result =  resolver.resolve(target);
-        assertThat(result.message().text()).contains(expected);
+        assertThat(result.getMessage().text()).contains(expected);
     }
 }

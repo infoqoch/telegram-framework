@@ -35,7 +35,7 @@ public class DictionaryBotApplication {
             final Response<List<Update>> listResponse = new DefaultJsonBind().toList(json, Update.class);
             final Update update = listResponse.getResult().get(0);
             final UpdateResponse process = updateDispatcher.process(new UpdateRequest(update));
-            System.out.println("process.message() = " + process.message());
+            System.out.println("process.message() = " + process.getMessage());
         }
     }
 }

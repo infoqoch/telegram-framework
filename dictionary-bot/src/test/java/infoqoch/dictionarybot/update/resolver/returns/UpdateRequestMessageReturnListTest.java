@@ -37,7 +37,7 @@ class UpdateRequestMessageReturnListTest {
         //then
         assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(MSBUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).message()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target);
     }
 
     @Test
@@ -51,7 +51,7 @@ class UpdateRequestMessageReturnListTest {
         //then
         assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(StringUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).message()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
+        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
     }
 
     @Test
@@ -65,7 +65,7 @@ class UpdateRequestMessageReturnListTest {
         //then
         assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(DictionaryUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).message()).usingRecursiveComparison().isEqualTo(target.toMarkdown());
+        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target.toMarkdown());
     }
 
     @Test
@@ -83,7 +83,7 @@ class UpdateRequestMessageReturnListTest {
         //then
         assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(DictionariesUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).message().text()).contains(d1.toMarkdown().text());
-        assertThat(resolver.get().resolve(target).message().text()).contains(d2.toMarkdown().text());
+        assertThat(resolver.get().resolve(target).getMessage().text()).contains(d1.toMarkdown().text());
+        assertThat(resolver.get().resolve(target).getMessage().text()).contains(d2.toMarkdown().text());
     }
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static infoqoch.dictionarybot.send.SendType.CLIENT_ERROR;
 import static infoqoch.dictionarybot.send.SendType.MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -108,7 +109,7 @@ class DictionaryUpdateRunnerTest {
         assertThat(logs).size().isEqualTo(1);
         final UpdateLog updateLog = logs.get(0);
         assertThat(updateLog.getSendMessage()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
-        assertThat(updateLog.getSendType()).isEqualTo(MESSAGE);
+        assertThat(updateLog.getSendType()).isEqualTo(CLIENT_ERROR);
     }
 
 

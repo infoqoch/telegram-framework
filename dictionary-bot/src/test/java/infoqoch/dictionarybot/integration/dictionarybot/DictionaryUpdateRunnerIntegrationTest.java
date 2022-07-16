@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static infoqoch.dictionarybot.send.Send.Status.REQUEST;
+import static infoqoch.dictionarybot.send.SendType.CLIENT_ERROR;
+import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
+import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.SHARE_MINE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -95,10 +98,28 @@ class DictionaryUpdateRunnerIntegrationTest {
         assertThatThrownBy(()-> dictionaryUpdateRunner.run()).isInstanceOf(RuntimeException.class);
     }
 
-    // TODO
-    @DisplayName("update를 object로 파싱을 실패하여 예외가 발생")
-    void exception_updating(){
+    // SHARE_MINE 컨트롤러를 사용할 경우 param을 받는 과정에서 예외가 발생한다. 이로 인하여 UpdateDispatcher에 예외가 발생한다.
+    @DisplayName("UpdateDispatcher에서 RuntimeException이 발생")
+    @Test
+    void exception_update_dispatcher(){
+        // given
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/"+SHARE_MINE.alias()+" hihi", 123l));
 
+        // when
+        dictionaryUpdateRunner.run();
+
+        // then
+        final List<UpdateLog> logs = repository.findAll();
+
+        assertThat(logs).size().isEqualTo(1);
+        assertThat(logs.get(0).getSendMessage()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
+        assertThat(logs.get(0).getSendType()).isEqualTo(SERVER_ERROR);
+
+        assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
+
+        final Send savedSend = fakeSendRequestEventListener.getLatestSent();
+        assertThat(savedSend.status()).isEqualTo(REQUEST);
+        assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
     }
 
     // @UpdateRequestMethodMapper의 Command.HELP 에서 value에 exception을 넣으면 예외가 발생하도록 하였음.
@@ -116,6 +137,7 @@ class DictionaryUpdateRunnerIntegrationTest {
 
         assertThat(logs).size().isEqualTo(1);
         assertThat(logs.get(0).getSendMessage()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
+        assertThat(logs.get(0).getSendType()).isEqualTo(CLIENT_ERROR);
 
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
 

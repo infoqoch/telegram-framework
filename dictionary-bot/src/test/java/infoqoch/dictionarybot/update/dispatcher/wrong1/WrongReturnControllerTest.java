@@ -1,13 +1,12 @@
 package infoqoch.dictionarybot.update.dispatcher.wrong1;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.resolver.bean.FakeMapBeanContext;
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Disabled;
@@ -50,7 +49,7 @@ public class WrongReturnControllerTest {
 
     @UpdateRequestMethodMapper(LOOKUP_DEFINITION)
     public UpdateResponse lookupByDefinition(UpdateRequestMessage request) {
-        return new UpdateResponse(SendType.MESSAGE, null);
+        return UpdateResponse.message(null);
     }
 
     @UpdateRequestMethodMapper(LOOKUP_WORD)
@@ -63,12 +62,12 @@ public class WrongReturnControllerTest {
         sb.append(updateRequestMessage.getValue()).append(" : ");
         sb.append(chat.getMessageId());
 
-        return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder(sb.toString()));
+        return UpdateResponse.message(new MarkdownStringBuilder(sb.toString()));
     }
 
     @UpdateRequestMethodMapper(HELP)
     public UpdateResponse help(UpdateRequestMessage request) {
-        return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("help! " + request.getValue()));
+        return UpdateResponse.message(new MarkdownStringBuilder("help! " + request.getValue()));
     }
 
     @UpdateRequestMethodMapper(UNKNOWN)

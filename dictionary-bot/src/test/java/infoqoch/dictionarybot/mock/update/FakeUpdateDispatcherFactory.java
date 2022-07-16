@@ -34,6 +34,7 @@ public class FakeUpdateDispatcherFactory {
 
     public static List<UpdateRequestParam> paramResolvers(){
         List<UpdateRequestParam> paramResolvers = new ArrayList<>();
+        paramResolvers.add(new ThrowRuntimeExceptionRequestParam());
         paramResolvers.add(new UpdateRequestUpdateRequestParam());
         paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
         paramResolvers.add(new UpdateChatUpdateRequestParam());

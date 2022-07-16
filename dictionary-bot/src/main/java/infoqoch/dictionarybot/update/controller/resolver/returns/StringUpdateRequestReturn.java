@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
@@ -19,6 +18,6 @@ public class StringUpdateRequestReturn implements UpdateRequestReturn {
 
     @Override
     public UpdateResponse resolve(Object target) {
-        return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder().plain((String) target));
+        return UpdateResponse.message(new MarkdownStringBuilder().plain((String) target));
     }
 }

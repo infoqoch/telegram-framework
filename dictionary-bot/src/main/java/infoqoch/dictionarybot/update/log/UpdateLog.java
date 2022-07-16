@@ -60,9 +60,9 @@ public class UpdateLog {
                 .updateFileId(fileId)
                 .updateFileName(fileName)
 
-                .sendType(updateResponse.sendType())
-                .sendDocument(updateResponse.document())
-                .sendMessage(updateResponse.message().toString())
+                .sendType(updateResponse.getSendType())
+                .sendDocument(updateResponse.getDocument())
+                .sendMessage(updateResponse.getMessage().toString())
                 .build();
     }
 }

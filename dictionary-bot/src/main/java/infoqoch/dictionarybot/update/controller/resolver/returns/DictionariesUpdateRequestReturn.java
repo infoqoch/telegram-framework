@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
@@ -44,9 +43,9 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
     @Override
     public UpdateResponse resolve(Object target) {
         MarkdownStringBuilder msb = toMarkdown((List<Dictionary>) target);
-        if(msb.size()==0) return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
+        if(msb.size()==0) UpdateResponse.message(new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
 
-        return new UpdateResponse(SendType.MESSAGE, msb);
+        return UpdateResponse.message(msb);
     }
 
     private MarkdownStringBuilder toMarkdown(List<Dictionary> dictionaries) {
