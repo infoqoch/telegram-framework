@@ -44,10 +44,8 @@ public class SendRequest {
         return new SendRequest(chatId, SendType.DOCUMENT, document, msb);
     }
 
-    public static SendRequest send(Long chatId, String document, MarkdownStringBuilder message) {
-        if(document==null || document.length()==0)
-            return sendMessage(chatId, message);
-        return sendDocument(chatId, document, message);
+    public static SendRequest send(Long chatId, SendType sendType, MarkdownStringBuilder message, String document) {
+        return new SendRequest(chatId, sendType, document, message);
     }
 
     // getter

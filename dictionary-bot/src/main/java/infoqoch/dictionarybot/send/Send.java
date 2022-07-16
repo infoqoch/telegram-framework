@@ -8,6 +8,7 @@ import infoqoch.telegrambot.bot.request.SendDocumentRequest;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Send {
     @Id @GeneratedValue
@@ -73,17 +75,8 @@ public class Send {
                 .build();
     }
 
-    // getter
-    public Status status() {
-        return status;
-    }
-
     public SendResult result(){
         return new SendResult(status, errorCode, errorMessage, request.copy());
-    }
-
-    public SendRequest getRequest() {
-        return request;
     }
 
     // 실제 발송 로직

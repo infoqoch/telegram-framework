@@ -24,7 +24,7 @@ public class MemorySendRepository implements SendRepository {
 
     @Override
     public List<Send> findByStatus(Send.Status status) {
-        return repository.values().stream().filter(s -> s.status()==status).collect(Collectors.toList());
+        return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
     }
 
     @Override

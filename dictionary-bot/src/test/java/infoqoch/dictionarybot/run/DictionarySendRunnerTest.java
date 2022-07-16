@@ -68,7 +68,7 @@ class DictionarySendRunnerTest {
         final List<Send> sends = repository.findByStatus(ERROR);
         assertThat(sends).size().isEqualTo(1);
         assertThat(sends.get(0).result().getErrorMessage()).isEqualTo("예외닷!");
-        assertThat(sends.get(0).status()).isEqualTo(ERROR);
+        assertThat(sends.get(0).getStatus()).isEqualTo(ERROR);
     }
 
     @Test
@@ -88,6 +88,6 @@ class DictionarySendRunnerTest {
         final List<Send> sends = repository.findByStatus(RESPONSE_ERROR);
         assertThat(sends).size().isEqualTo(1);
         assertThat(sends.get(0).result().getErrorMessage()).isEqualTo("Bad Request: chat not found");
-        assertThat(sends.get(0).status()).isEqualTo(RESPONSE_ERROR);
+        assertThat(sends.get(0).getStatus()).isEqualTo(RESPONSE_ERROR);
     }
 }

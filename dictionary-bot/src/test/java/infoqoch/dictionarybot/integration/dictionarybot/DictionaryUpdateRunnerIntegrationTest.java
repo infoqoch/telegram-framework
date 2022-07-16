@@ -84,7 +84,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
 
         final Send savedSend = fakeSendRequestEventListener.getLatestSent();
-        assertThat(savedSend.status()).isEqualTo(REQUEST);
+        assertThat(savedSend.getStatus()).isEqualTo(REQUEST);
         assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo("LOOKUP\\_WORD : hihi : 2102");
     }
 
@@ -118,7 +118,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
 
         final Send savedSend = fakeSendRequestEventListener.getLatestSent();
-        assertThat(savedSend.status()).isEqualTo(REQUEST);
+        assertThat(savedSend.getStatus()).isEqualTo(REQUEST);
         assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
     }
 
@@ -142,7 +142,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
 
         final Send savedSend = fakeSendRequestEventListener.getLatestSent();
-        assertThat(savedSend.status()).isEqualTo(REQUEST);
+        assertThat(savedSend.getStatus()).isEqualTo(REQUEST);
         assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
     }
 }

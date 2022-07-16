@@ -90,7 +90,7 @@ public class DictionaryUpdateRunner {
     }
 
     private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse, UpdateLog updateLog) {
-        final SendRequest sendRequest = SendRequest.send(updateRequest.chatId(), updateResponse.getDocument(), updateResponse.getMessage());
+        final SendRequest sendRequest = SendRequest.send(updateRequest.chatId(), updateResponse.getSendType(), updateResponse.getMessage(), updateResponse.getDocument());
         final Send send = Send.of(sendRequest, updateLog);
         Events.raise(send);
     }

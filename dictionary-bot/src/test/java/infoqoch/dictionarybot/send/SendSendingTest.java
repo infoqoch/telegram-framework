@@ -26,7 +26,7 @@ public class SendSendingTest {
         fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
         final SendRequest sendRequest = SendRequest.sendMessage(12345l, new MarkdownStringBuilder().plain("/help"));
         final Send send = Send.of(sendRequest, null);
-        assert send.status() == REQUEST;
+        assert send.getStatus() == REQUEST;
 
         // when
         send.sending(fakeSend);
@@ -47,7 +47,7 @@ public class SendSendingTest {
         assert fakeSend.isDocumentCalled() == false;
         final SendRequest sendRequest = SendRequest.sendDocument(12345l, "fake document", new MarkdownStringBuilder().plain("fake text"));
         final Send send = Send.of(sendRequest, null);
-        assert send.status() == REQUEST;
+        assert send.getStatus() == REQUEST;
 
         // when
         send.sending(fakeSend);
