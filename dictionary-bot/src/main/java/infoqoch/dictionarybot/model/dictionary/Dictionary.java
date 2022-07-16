@@ -34,9 +34,14 @@ public class Dictionary {
     @Builder
     public Dictionary(Long no, ChatUser chatUser, DictionarySource source, DictionaryContent content)  {
         this.no = no;
-        this.chatUser = chatUser;
+        changeChatUser(chatUser);
         this.content = content.clone();
         this.source = source;
+    }
+
+    private void changeChatUser(ChatUser chatUser){
+        this.chatUser = chatUser;
+        chatUser.addDictionary(this);
     }
 
     public MarkdownStringBuilder toMarkdown() {

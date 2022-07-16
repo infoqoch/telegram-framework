@@ -49,16 +49,22 @@ public class ChatUser {
     @Setter
     private boolean hourlyAlarm;
 
+    // 생성자
     public ChatUser(Long chatId, String nickName) {
         this.chatId = chatId;
         this.nickName = nickName;
         this.shareMine = true;
         this.lookupAllUsers = true;
         this.hourlyAlarm = true;
-
     }
 
     public static ChatUser createUser(Long chatId, String nickName){
         return new ChatUser(chatId, nickName);
     }
+
+    // getter
+    public void addDictionary(Dictionary dictionary){
+        dictionaries.add(dictionary);
+    }
+
 }

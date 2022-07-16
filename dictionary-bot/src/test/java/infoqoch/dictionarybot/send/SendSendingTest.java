@@ -35,8 +35,8 @@ public class SendSendingTest {
         final SendResult result = send.result();
         assertThat(result.getStatus()).isEqualTo(SUCCESS);
         assertThat(result.getErrorMessage()).isNull();
-        assertThat(result.getRequest().chatId()).isEqualTo(12345l);
-        assertThat(result.getRequest().message().toString()).isEqualTo(new MarkdownStringBuilder().plain("/help").toString());
+        assertThat(result.getRequest().getChatId()).isEqualTo(12345l);
+        assertThat(result.getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder().plain("/help").toString());
     }
 
     @DisplayName("가상의 응답값(SendResponse)의 정상처리 여부, sendtype = document")
@@ -58,7 +58,7 @@ public class SendSendingTest {
         final SendResult result = send.result();
         assertThat(result.getStatus()).isEqualTo(SUCCESS);
         assertThat(result.getErrorMessage()).isNull();
-        assertThat(result.getRequest().chatId()).isEqualTo(12345l);
-        assertThat(result.getRequest().message().toString()).isEqualTo(new MarkdownStringBuilder().plain("fake text").toString());
+        assertThat(result.getRequest().getChatId()).isEqualTo(12345l);
+        assertThat(result.getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder().plain("fake text").toString());
     }
 }

@@ -3,11 +3,13 @@ package infoqoch.dictionarybot.send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import infoqoch.telegrambot.util.NotEscapedMSBException;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 // !! 불변객체이며 이를 유지해야 함.
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class SendRequest {
@@ -30,8 +32,8 @@ public class SendRequest {
         this.message = msb;
     }
 
-    public SendRequest(SendRequest request) {
-        this(request.chatId(), request.sendType(), request.document(), request.message());
+    public SendRequest copy() {
+        return new SendRequest(getChatId(), getSendType(), getDocument(), getMessage());
     }
 
     public static SendRequest sendMessage(long chatId, MarkdownStringBuilder msb) {
@@ -49,20 +51,8 @@ public class SendRequest {
     }
 
     // getter
-    public SendType sendType() {
-        return sendType;
-     }
-
-    public MarkdownStringBuilder message() {
+    public MarkdownStringBuilder getMessage() {
         return new MarkdownStringBuilder().append(message);
-    }
-
-    public Long chatId() {
-        return chatId;
-    }
-
-    public String document() {
-        return document;
     }
 
     // MarkdownStringBuilder 에 대한 JPA 컨버터

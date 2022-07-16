@@ -37,6 +37,12 @@ public class Send {
     private String errorCode;
     private String errorMessage;
 
+    public enum Status{
+        REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
+    }
+
+    // 생성자
+
     @Builder
     public Send(Long no, SendRequest request, UpdateLog updateLog, Status status) {
         this.no = no;
@@ -49,10 +55,6 @@ public class Send {
         this.no = no;
         this.request = request;
         this.status = status;
-    }
-
-    public enum Status{
-        REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
     }
 
     public static Send of(SendRequest request, UpdateLog updateLog) {
@@ -71,14 +73,17 @@ public class Send {
                 .build();
     }
 
-    // 상태 전달
+    // getter
     public Status status() {
         return status;
     }
 
-    // 발송 결과
     public SendResult result(){
-        return new SendResult(status, errorCode, errorMessage, new SendRequest(request));
+        return new SendResult(status, errorCode, errorMessage, request.copy());
+    }
+
+    public SendRequest getRequest() {
+        return request;
     }
 
     // 실제 발송 로직
@@ -94,8 +99,8 @@ public class Send {
     }
 
     private Response<?> sendDispatcher(TelegramSend telegramSend) {
-        if(request.sendType() == SendType.MESSAGE) return telegramSend.message(new SendMessageRequest(request.chatId(), request.message()));
-        if(request.sendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(request.chatId(), request.document(), request.message()));
+        if(request.getSendType() == SendType.MESSAGE) return telegramSend.message(new SendMessageRequest(request.getChatId(), request.getMessage()));
+        if(request.getSendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(request.getChatId(), request.getDocument(), request.getMessage()));
         throw new TelegramServerException("not supported SendType");
     }
 

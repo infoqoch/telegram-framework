@@ -82,7 +82,7 @@ class DictionaryUpdateRunnerIntegrationTest {
 
         final Send savedSend = fakeSendRequestEventListener.getSavedSend();
         assertThat(savedSend.status()).isEqualTo(REQUEST);
-        assertThat(savedSend.result().getRequest().message().toString()).isEqualTo("LOOKUP\\_WORD : hihi : 2102");
+        assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo("LOOKUP\\_WORD : hihi : 2102");
     }
 
     @Test
@@ -121,6 +121,6 @@ class DictionaryUpdateRunnerIntegrationTest {
 
         final Send savedSend = fakeSendRequestEventListener.getSavedSend();
         assertThat(savedSend.status()).isEqualTo(REQUEST);
-        assertThat(savedSend.result().getRequest().message().toString()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
+        assertThat(savedSend.result().getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다.").toString());
     }
 }

@@ -23,37 +23,61 @@ public class ChatUserRunner {
     private final ChatUserRepository chatUserRepository;
     private final LookupService lookupService;
 
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void hourlyDictionaryRun() {
-        log.info("ChatUserRunner#hourlyDictionaryRun");
-        // 기본적인 값이 있음을 상정한다.
         final Optional<Dictionary> random = lookupService.getRandom();
+        if (existsDictionary(random)) return;
+        sending(random.get());
+    }
+
+    private boolean existsDictionary(Optional<Dictionary> random) {
         if(random.isEmpty()){
-            log.info("아직 없어ㅠ ");
-            return;
+            log.info("등록된 사전이 없습니다. 스케줄러가 동작하지 않습니다.");
+            return true;
         }
+        return false;
+    }
 
-        Dictionary dictionary = random.get();
-
+    private void sending(Dictionary dictionary) {
         List<ChatUser> chatUsers = chatUserRepository.findByHourlyAlarm(true);
         for (ChatUser chatUser : chatUsers) {
+            sendingEachChatUser(chatUser, dictionary);
+        }
+    }
 
-            if(chatUser.isLookupAllUsers()){
-                Optional<Dictionary> myDictionary = lookupService.getRandom(chatUser);
-
-                if(myDictionary.isEmpty())
-                    Events.raise(Send.of(SendRequest.sendMessage(
-                            chatUser.getChatId()
-                            , new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().plain("아직 등록한 사전이 없습니다!")
-                    )));
-
-                final Send send = Send.of(SendRequest.sendMessage(chatUser.getChatId(), new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(myDictionary.get().toMarkdown())));
-                Events.raise(send);
-            }else {
-                final Send send = Send.of(SendRequest.sendMessage(chatUser.getChatId(), new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(dictionary.toMarkdown())));
-                Events.raise(send);
+    private void sendingEachChatUser(ChatUser chatUser, Dictionary dictionary) {
+        if(chatUser.isLookupAllUsers()){
+            sendingDictionary(dictionary, chatUser);
+        } else {
+            Optional<Dictionary> myDictionary = lookupService.getRandom(chatUser);
+            if(myDictionary.isPresent()){
+                sendingMyDictionary(chatUser, myDictionary);
+            }else{
+                sendingNoResult(chatUser);
             }
         }
+    }
 
+    private void sendingDictionary(Dictionary dictionary, ChatUser chatUser) {
+        final Send send = Send.of(SendRequest.sendMessage(chatUser.getChatId(), msgHeader().append(dictionary.toMarkdown())));
+        Events.raise(send);
+    }
+
+    private void sendingMyDictionary(ChatUser chatUser, Optional<Dictionary> myDictionary) {
+        Events.raise(Send.of(SendRequest.sendMessage(
+                chatUser.getChatId()
+                , msgHeader().append(myDictionary.get().toMarkdown())
+        )));
+    }
+
+    private void sendingNoResult(ChatUser chatUser) {
+        Events.raise(Send.of(SendRequest.sendMessage(
+                chatUser.getChatId()
+                , msgHeader().plain("아직 등록한 사전이 없습니다!")
+        )));
+    }
+
+    private MarkdownStringBuilder msgHeader() {
+        return new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator();
     }
 }

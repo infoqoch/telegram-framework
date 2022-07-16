@@ -22,6 +22,7 @@ public class FakeSendRequestEventListener {
 
     @EventListener(Send.class)
     public void handle(Send send) {
+        System.out.println("== FakeSendRequestEventListener CALLED!! === ");
         called = true;
         savedSend = store.save(send);
     }
