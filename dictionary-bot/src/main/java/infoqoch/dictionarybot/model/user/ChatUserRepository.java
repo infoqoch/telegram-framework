@@ -11,4 +11,6 @@ public interface ChatUserRepository extends JpaRepository<ChatUser, Long> {
     Optional<ChatUser> findByChatId(Long chatId);
 
     List<ChatUser> findByHourlyAlarm(boolean hourlyAlarm);
+
+    List<ChatUser> findByRole(ChatUser.Role role);
 }
