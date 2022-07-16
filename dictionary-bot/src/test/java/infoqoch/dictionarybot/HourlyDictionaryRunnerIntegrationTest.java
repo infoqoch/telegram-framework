@@ -20,14 +20,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles({"test", "fake_send_listener"})
 @SpringBootTest
 @Transactional
-class ChatUserRunnerIntegrationTest {
+class HourlyDictionaryRunnerIntegrationTest {
     @Autowired EntityManager em;
 
     // FAKE
     @Autowired FakeSendRequestEventListener fakeSendRequestEventListener;
 
     // 타겟 객체
-    @Autowired ChatUserRunner runner;
+    @Autowired
+    HourlyDictionaryRunner runner;
 
     @Test
     void get_mine(){

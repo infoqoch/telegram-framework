@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ChatUserRunner {
+public class HourlyDictionaryRunner {
     private final ChatUserRepository chatUserRepository;
     private final LookupService lookupService;
 
