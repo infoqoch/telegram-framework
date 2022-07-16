@@ -38,8 +38,8 @@ public class FakeController {
         System.out.println("updateRequestMessage = " + updateRequestMessage);
         System.out.println("chat = " + chat);
         StringBuilder sb = new StringBuilder();
-        sb.append(updateRequestMessage.command()).append(" : ");
-        sb.append(updateRequestMessage.value()).append(" : ");
+        sb.append(updateRequestMessage.getCommand()).append(" : ");
+        sb.append(updateRequestMessage.getValue()).append(" : ");
         sb.append(chat.getMessageId());
 
         return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder(sb.toString()));
@@ -70,6 +70,20 @@ public class FakeController {
 
     @UpdateRequestMethodMapper(LOOKUP_ALL_USERS)
     public String lookupAllUsers() {
+        return "unknown??";
+    }
+
+    @UpdateRequestMethodMapper(PROMOTION_ROLE)
+    public String promotion() {
+        return "unknown??";
+    }
+
+    @UpdateRequestMethodMapper(HOURLY_ALARM)
+    public String hourly() {
+        return "unknown??";
+    }
+    @UpdateRequestMethodMapper(MY_STATUS)
+    public String status() {
         return "unknown??";
     }
 

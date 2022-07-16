@@ -54,7 +54,7 @@ public class UpdateLog {
                 .chatId(updateRequest.chatId())
 
                 .updateCommand(updateRequestMessage.getCommand())
-                .updateValue(updateRequestMessage.value())
+                .updateValue(updateRequestMessage.getValue())
                 .updateDataType(updateRequest.updateDataType())
 
                 .updateFileId(fileId)

@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
+import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UpdateDispatcherConfig {
     private final ChatUserRepository chatUserRepository;
+    private final TelegramProperties telegramProperties;
 
     @Bean
     public List<UpdateRequestReturn> returnResolvers(){
@@ -44,6 +46,7 @@ public class UpdateDispatcherConfig {
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
         paramResolvers.add(new UpdateChatUserRequestParam(chatUserRepository));
+        paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties));
         return paramResolvers;
     }
 

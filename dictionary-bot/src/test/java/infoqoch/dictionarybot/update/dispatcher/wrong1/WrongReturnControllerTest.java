@@ -59,8 +59,8 @@ public class WrongReturnControllerTest {
             UpdateChat chat
     ) {
         StringBuilder sb = new StringBuilder();
-        sb.append(updateRequestMessage.command()).append(" : ");
-        sb.append(updateRequestMessage.value()).append(" : ");
+        sb.append(updateRequestMessage.getCommand()).append(" : ");
+        sb.append(updateRequestMessage.getValue()).append(" : ");
         sb.append(chat.getMessageId());
 
         return new UpdateResponse(SendType.MESSAGE, new MarkdownStringBuilder(sb.toString()));

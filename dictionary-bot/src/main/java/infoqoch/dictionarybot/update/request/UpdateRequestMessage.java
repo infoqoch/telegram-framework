@@ -13,11 +13,4 @@ public class UpdateRequestMessage {
         this.command = command;
         this.value = value;
     }
-
-    public UpdateRequestCommand command() {
-        return getCommand();
-    }
-    public String value() {
-        return getValue();
-    }
 }

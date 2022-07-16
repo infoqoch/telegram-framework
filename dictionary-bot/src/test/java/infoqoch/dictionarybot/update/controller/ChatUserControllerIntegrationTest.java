@@ -7,6 +7,7 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.run.FakeTelegramBot;
 import infoqoch.dictionarybot.run.FakeTelegramUpdate;
+import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.log.repository.UpdateLogJpaRepository;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
+import static infoqoch.dictionarybot.model.user.ChatUser.Role.ADMIN;
+import static infoqoch.dictionarybot.model.user.ChatUser.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // jpa의 트랜잭션 동작 유무를 확인해야 하기 때문에 불가피하게 통합테스트를 진행
@@ -31,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ChatUserControllerIntegrationTest {
     @Autowired UpdateLogJpaRepository repository;
     @Autowired UpdateDispatcher updateDispatcher;
+    @Autowired TelegramProperties telegramProperties;
 
     // fake. 가상의 update를 보냄.
     FakeTelegramUpdate telegramUpdate;
@@ -55,6 +59,66 @@ class ChatUserControllerIntegrationTest {
         return new FakeTelegramBot(telegramUpdate, null);
     }
 
+    @Test
+    @DisplayName("어드민으로 프로모션 성공")
+    void success_promotion(){
+        // given
+        assert telegramProperties.user().promotionToAdmin()!=null;
+        System.out.println("telegramProperties.user().promotionToAdmin() = " + telegramProperties.user().promotionToAdmin());
+
+        final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
+        assert beforeChatUser.isEmpty();
+
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+telegramProperties.user().promotionToAdmin(), 123l));
+
+        // when
+        dictionaryUpdateRunner.run();
+
+        // then
+        final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
+        assertThat(afterChatUser).isPresent();
+        assertThat(afterChatUser.get().getRole()).isEqualTo(ADMIN);
+    }
+    
+    @Test
+    @DisplayName("어드민으로 프로모션 성공, 언더스코어")
+    void success_promotion_underscore(){
+        // given
+        final String expectCode = telegramProperties.user().promotionToAdmin().replaceAll(" ", "_");
+        assert expectCode !=null;
+        System.out.println("telegramProperties.user().promotionToAdmin() = " + expectCode);
+
+        final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
+        assert beforeChatUser.isEmpty();
+
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+ expectCode, 123l));
+
+        // when
+        dictionaryUpdateRunner.run();
+
+        // then
+        final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
+        assertThat(afterChatUser).isPresent();
+        assertThat(afterChatUser.get().getRole()).isEqualTo(ADMIN);
+    }
+
+    @Test
+    @DisplayName("어드민으로 프로모션 실패")
+    void fail_promotion_underscore(){
+        // given
+        final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
+        assert beforeChatUser.isEmpty();
+
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_wrong_code!!", 123l));
+
+        // when
+        dictionaryUpdateRunner.run();
+
+        // then
+        final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
+        assertThat(afterChatUser).isPresent();
+        assertThat(afterChatUser.get().getRole()).isEqualTo(USER);
+    }
 
     // UpdateRequestMethod와 관련한 resolver는 빈으로 등록하지 않고 이로 인하여 트랜잭션 흐름이 생길 수 없음.
     // 결과적으로 controller에서 repository를 호출하여 save 하는 형태로 개발하였음. 정상 동작함을 확인

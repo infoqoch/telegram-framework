@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.send.repository.SendRepository;
-import infoqoch.dictionarybot.system.property.TelegramProperties;
+import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class DictionaryBotConfig {
 
     @Bean
     TelegramBot telegramBot(){
-        return DefaultTelegramBotFactory.init(telegramProperties.getToken());
+        return DefaultTelegramBotFactory.init(telegramProperties.token());
     }
 
     @Bean

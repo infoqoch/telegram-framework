@@ -45,8 +45,8 @@ class UpdateRequestMessageBodyParsingTest {
     }
 
     private void assertUpdateRequest(UpdateRequestMessage request, UpdateRequestCommand command, String value) {
-        assertThat(request.command()).isEqualTo(command);
-        assertThat(request.value()).isEqualTo(value);
+        assertThat(request.getCommand()).isEqualTo(command);
+        assertThat(request.getValue()).isEqualTo(value);
     }
 
     @Test

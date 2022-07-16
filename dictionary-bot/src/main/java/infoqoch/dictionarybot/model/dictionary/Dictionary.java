@@ -35,11 +35,17 @@ public class Dictionary {
     public Dictionary(Long no, ChatUser chatUser, DictionarySource source, DictionaryContent content)  {
         this.no = no;
         changeChatUser(chatUser);
-        this.content = content.clone();
+        this.content = setDictionaryContent(content);
         this.source = source;
     }
 
+    private DictionaryContent setDictionaryContent(DictionaryContent content) {
+        if(content==null) throw new IllegalArgumentException("DictionaryContent is not nullable");
+        return content.clone();
+    }
+
     private void changeChatUser(ChatUser chatUser){
+        if(chatUser==null) throw new IllegalArgumentException("ChatUser is not nullable");
         this.chatUser = chatUser;
         chatUser.addDictionary(this);
     }

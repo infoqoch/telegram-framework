@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.model.dictionary.repository;
 import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.system.excel.ExcelReader;
 import infoqoch.dictionarybot.system.excel.ExcelParser;
 import org.assertj.core.api.Assertions;
@@ -102,7 +103,7 @@ public class MemoryDictionaryRepositoryTest {
 
 
     private Long saveInRepo(DictionaryContent dictionaryContent) {
-        final Dictionary dictionary = Dictionary.builder().content(dictionaryContent).build();
+        final Dictionary dictionary = Dictionary.builder().chatUser(new ChatUser(123l, "kim")).content(dictionaryContent).build();
         return repository.save(dictionary).getNo();
     }
 
@@ -140,6 +141,7 @@ public class MemoryDictionaryRepositoryTest {
         for (List<DictionaryContent> rowsData : sheetsData) {
             for (DictionaryContent content : rowsData) {
                 final Dictionary dictionary = Dictionary.builder()
+                        .chatUser(new ChatUser(123l, "kim"))
                         .content(content)
                         .build();
                 dictionaries.add(dictionary);

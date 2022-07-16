@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static infoqoch.dictionarybot.model.user.ChatUser.Role.USER;
 import static javax.persistence.FetchType.LAZY;
 
 /*
@@ -49,6 +50,13 @@ public class ChatUser {
     @Setter
     private boolean hourlyAlarm;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public enum Role {
+        USER, ADMIN
+    }
+
     // 생성자
     public ChatUser(Long chatId, String nickName) {
         this.chatId = chatId;
@@ -56,15 +64,19 @@ public class ChatUser {
         this.shareMine = true;
         this.lookupAllUsers = true;
         this.hourlyAlarm = true;
+        this.role = USER;
     }
 
     public static ChatUser createUser(Long chatId, String nickName){
         return new ChatUser(chatId, nickName);
     }
 
-    // getter
     public void addDictionary(Dictionary dictionary){
         dictionaries.add(dictionary);
+    }
+
+    public void changeRole(Role role){
+        this.role = role;
     }
 
 }

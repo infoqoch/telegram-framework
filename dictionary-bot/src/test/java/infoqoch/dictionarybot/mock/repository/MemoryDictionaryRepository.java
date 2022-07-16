@@ -12,7 +12,7 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
 
     @Override
     public Dictionary save(Dictionary dictionary) {
-        final Dictionary result = Dictionary.builder().no(maxNo()).content(dictionary.getContent()).build();
+        final Dictionary result = Dictionary.builder().no(maxNo()).chatUser(dictionary.getChatUser()).content(dictionary.getContent()).build();
         repository.put(result.getNo(), result);
         return result;
     }

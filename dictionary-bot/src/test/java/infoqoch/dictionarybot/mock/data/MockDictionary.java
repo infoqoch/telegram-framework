@@ -2,10 +2,11 @@ package infoqoch.dictionarybot.mock.data;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.user.ChatUser;
 
 public class MockDictionary {
     public static Dictionary createSimpleDictionary(DictionaryContent content, long no) {
-        return Dictionary.builder().no(no).content(content).build();
+        return Dictionary.builder().no(no).content(content).chatUser(new ChatUser(123l, "kim")).build();
     }
 
     public static DictionaryContent createSimpleDictionaryContent() {

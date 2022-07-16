@@ -32,11 +32,11 @@ public class UpdateRequest {
     }
 
     public UpdateRequestCommand command(){
-        return updateRequestMessage().command();
+        return updateRequestMessage().getCommand();
     }
 
     public String value(){
-        return updateRequestMessage().value();
+        return updateRequestMessage().getValue();
     }
 
     public UpdateRequestMessage updateRequestMessage() {

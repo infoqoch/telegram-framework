@@ -38,6 +38,8 @@ public class FakeUpdateDispatcherFactory {
         paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
+        paramResolvers.add(new UpdateChatUserRequestParam(null));
+        paramResolvers.add(new TelegramPropertiesRequestParam(null));
         return paramResolvers;
     }
 

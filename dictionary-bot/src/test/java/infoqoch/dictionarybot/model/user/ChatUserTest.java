@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static infoqoch.dictionarybot.model.user.ChatUser.Role.ADMIN;
+import static infoqoch.dictionarybot.model.user.ChatUser.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -64,16 +66,19 @@ class ChatUserTest {
         assert findUser.isShareMine();
         assert findUser.isLookupAllUsers();
         assert findUser.isHourlyAlarm();
+        assert findUser.getRole().equals(USER);
 
         // when
         findUser.setShareMine(false);
         findUser.setLookupAllUsers(false);
         findUser.setHourlyAlarm(false);
+        findUser.changeRole(ADMIN);
 
         // then
         final ChatUser result = em.find(ChatUser.class, givenUser.getNo());
         assertThat(result.isShareMine()).isFalse();
         assertThat(result.isLookupAllUsers()).isFalse();
         assertThat(result.isHourlyAlarm()).isFalse();
+        assertThat(result.getRole()).isEqualTo(ADMIN);
     }
 }

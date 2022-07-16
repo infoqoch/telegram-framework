@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.update.controller;
 
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
+import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
@@ -45,6 +46,22 @@ public class ChatUserController {
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
                 .plain("매시 알림 여부 : ").plain(message.getValue());
+    }
+
+    @UpdateRequestMethodMapper(PROMOTION_ROLE)
+    public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestMessage message, TelegramProperties telegramProperties) {
+        log.info("UpdateRequestMethodMapper : PROMOTION_ROLE");
+        if(matchesPromotionCode(message, telegramProperties)){
+            chatUser.changeRole(ChatUser.Role.ADMIN);
+            return new MarkdownStringBuilder()
+                    .bold("정상적으로 변경되었습니다!").lineSeparator()
+                    .plain("현재 역할 : ").plain(chatUser.getRole().toString());
+        }
+        return new MarkdownStringBuilder("코드가 일치하지 않습니다.");
+    }
+
+    private boolean matchesPromotionCode(UpdateRequestMessage message, TelegramProperties telegramProperties) {
+        return telegramProperties.user().promotionToAdmin().equals(message.getValue().trim().replaceAll("_", " "));
     }
 
     @UpdateRequestMethodMapper(MY_STATUS)
