@@ -36,17 +36,52 @@ public class DictionaryQueryRepositoryV2 {
         }
     }
 
-    public List<Dictionary> lookup(int limit, int offset, String target, FindBy findBy) {
-        final BooleanExpression[] expressions = lookupConditionOrderByPriority(target, dictionary.content.word);
+    public List<Dictionary> lookup(int limit, int offset, String target, FindBy firstFindBy, FindBy ... findBy) {
+        final List<FindBy> findByList = gatheringFindBy(firstFindBy, findBy);
+        final BooleanExpression[] expressions = lookupConditionOrderByPriority(target, findByList);
         return unionDictionary(limit, offset, expressions);
     }
 
-    private BooleanExpression[] lookupConditionOrderByPriority(String value, StringPath path) {
+    private List<FindBy> gatheringFindBy(FindBy firstFindBy, FindBy[] findBys) {
+        List<FindBy> result = new ArrayList<>();
+        result.add(firstFindBy);
+
+        if(findBys==null||findBys.length==0) return result;
+
+        result.addAll(List.of(findBys));
+        return result;
+    }
+
+    private BooleanExpression[] lookupConditionOrderByPriority(String value, List<FindBy> findBy) {
         BooleanExpression[] expressions = new BooleanExpression[3];
-        expressions[0] = path.eq(value);
-        expressions[1] = path.startsWith(value);
-        expressions[2] = path.contains(value);
+        expressions[0] = eq(value, findBy);
+        expressions[1] = startsWith(value, findBy);
+        expressions[2] = contains(value, findBy);
         return expressions;
+    }
+
+    private BooleanExpression eq(String value, List<FindBy> findBy) {
+        BooleanExpression result = findBy.get(0).path.eq(value);
+        for(int i=1; i<findBy.size(); i++){
+            result = result.or(findBy.get(i).path.eq(value));
+        }
+        return result;
+    }
+
+    private BooleanExpression startsWith(String value, List<FindBy> findBy) {
+        BooleanExpression result = findBy.get(0).path.startsWith(value);
+        for(int i=1; i<findBy.size(); i++){
+            result = result.or(findBy.get(i).path.startsWith(value));
+        }
+        return result;
+    }
+
+    private BooleanExpression contains(String value, List<FindBy> findBy) {
+        BooleanExpression result = findBy.get(0).path.contains(value);
+        for(int i=1; i<findBy.size(); i++){
+            result = result.or(findBy.get(i).path.contains(value));
+        }
+        return result;
     }
 
     public List<Dictionary> unionDictionary(long limit, long offset, BooleanExpression...args) {
@@ -55,7 +90,7 @@ public class DictionaryQueryRepositoryV2 {
 
         List<Dictionary> result = new ArrayList<>();
         for(int i=0; i<args.length; i++){
-            BooleanExpression[] expressions = generateExpressionGradually(i, args);
+            BooleanExpression[] expressions = generateExpressionGradually(args, i);
 
             final List<Dictionary> dictionaries = findDictionary(rLimit, rOffset, expressions);
             result.addAll(dictionaries);
@@ -68,18 +103,18 @@ public class DictionaryQueryRepositoryV2 {
         return result;
     }
 
-    private BooleanExpression[] generateExpressionGradually(int i, BooleanExpression[] args) {
-        BooleanExpression[] expressions = new BooleanExpression[i +1];
+    private BooleanExpression[] generateExpressionGradually(BooleanExpression[] args, int lastOf) {
+        BooleanExpression[] expressions = new BooleanExpression[lastOf +1];
         for (int j=0; j<expressions.length; j++) {
-            expressions[j] = negativeExcludeLast(expressions, j, args);
+            expressions[j] = makeLastNegative(args[j], expressions.length, j);
         }
         return expressions;
     }
 
-    private BooleanExpression negativeExcludeLast(BooleanExpression[] expressions, int j, BooleanExpression[] args) {
-        if(j == expressions.length-1)
-            return args[j];
-        return args[j].not();
+    private BooleanExpression makeLastNegative(BooleanExpression arg, int length, int index) {
+        if(index == length -1)
+            return arg;
+        return arg.not();
 
     }
 
@@ -109,4 +144,3 @@ public class DictionaryQueryRepositoryV2 {
     }
 
 }
-

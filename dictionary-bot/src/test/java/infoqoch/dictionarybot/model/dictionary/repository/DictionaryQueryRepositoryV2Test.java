@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
-import static infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepositoryV2.FindBy.WORD;
+import static infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepositoryV2.FindBy.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -150,57 +150,55 @@ class DictionaryQueryRepositoryV2Test {
     * FindBy에 따른 테스트
     */
 
-//    @Test
-//    void find_by_nothing() {
-//        // given
-//        chatUser_setUp();
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("winter").build())); // etc
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("I like summer.").build())); // contains
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer").build())); // exact match
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
-//
-//        // when
-//        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
-//
-//        // then
-//        assertThat(result).size().isEqualTo(0);
-//    }
-//
-//    @Test
-//    void find_by_mixed_data() {
-//        // given
-//        chatUser_setUp();
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("winter").build())); // etc
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().sentence("I like summer.").build())); // contains
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("summer").build())); // exact match
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
-//
-//        // when
-//        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
-//
-//        // then
-//        assertThat(result.stream().map(s -> s.getContent().getSentence())).containsExactly("I like summer.");
-//    }
-//
-//
-//    @Commit
-//    @Test
-//    void mixed_find_by_but_ordered_priority() {
-//        // given
-//        chatUser_setUp();
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("winter").build())); // etc
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().sentence("I like summer.").build())); // contains
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("summer").build())); // exact match
-//        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
-//
-//        // when
-//        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD, DEFINITION, SENTENCE);
-//
-//        // then
-//        assertThat(result.get(0).getContent().getDefinition()).isEqualTo("summer");
-//        assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
-//        assertThat(result.get(2).getContent().getSentence()).isEqualTo("I like summer.");
-//    }
+    @Test
+    void find_by_nothing() {
+        // given
+        chatUser_setUp();
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("winter").build())); // etc
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer").build())); // exact match
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
+
+        // when
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
+
+        // then
+        assertThat(result).size().isEqualTo(0);
+    }
+
+    @Test
+    void find_by_mixed_data() {
+        // given
+        chatUser_setUp();
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("winter").build())); // etc
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().sentence("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("summer").build())); // exact match
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
+
+        // when
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
+
+        // then
+        assertThat(result.stream().map(s -> s.getContent().getSentence())).containsExactly("I like summer.");
+    }
+
+    @Test
+    void mixed_find_by_but_ordered_priority() {
+        // given
+        chatUser_setUp();
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("winter").build())); // etc
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().sentence("I like summer.").build())); // contains
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("summer").build())); // exact match
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
+
+        // when
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD, DEFINITION, SENTENCE);
+
+        // then
+        assertThat(result.get(0).getContent().getDefinition()).isEqualTo("summer");
+        assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
+        assertThat(result.get(2).getContent().getSentence()).isEqualTo("I like summer.");
+    }
 
 
     /*
