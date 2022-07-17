@@ -61,25 +61,25 @@ public class DictionaryQueryRepositoryV2 {
     }
 
     private BooleanExpression eq(String value, List<FindBy> findBy) {
-        BooleanExpression result = findBy.get(0).path.eq(value);
+        BooleanExpression result = findBy.get(0).path.eq(value).and(findBy.get(0).path.isNotNull());
         for(int i=1; i<findBy.size(); i++){
-            result = result.or(findBy.get(i).path.eq(value));
+            result = result.or(findBy.get(i).path.eq(value).and(findBy.get(i).path.isNotNull()));
         }
         return result;
     }
 
     private BooleanExpression startsWith(String value, List<FindBy> findBy) {
-        BooleanExpression result = findBy.get(0).path.startsWith(value);
+        BooleanExpression result = findBy.get(0).path.startsWith(value).and(findBy.get(0).path.isNotNull());
         for(int i=1; i<findBy.size(); i++){
-            result = result.or(findBy.get(i).path.startsWith(value));
+            result = result.or(findBy.get(i).path.startsWith(value).and(findBy.get(i).path.isNotNull()));
         }
         return result;
     }
 
     private BooleanExpression contains(String value, List<FindBy> findBy) {
-        BooleanExpression result = findBy.get(0).path.contains(value);
+        BooleanExpression result = findBy.get(0).path.contains(value).and(findBy.get(0).path.isNotNull());
         for(int i=1; i<findBy.size(); i++){
-            result = result.or(findBy.get(i).path.contains(value));
+            result = result.or(findBy.get(i).path.contains(value).and(findBy.get(i).path.isNotNull()));
         }
         return result;
     }

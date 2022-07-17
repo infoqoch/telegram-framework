@@ -7,6 +7,8 @@ import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -166,6 +168,7 @@ class DictionaryQueryRepositoryV2Test {
         assertThat(result).size().isEqualTo(0);
     }
 
+    @Disabled("FindBy가 존재하나, eq-startsWith-contains가 우선하여 이에 따라 정렬됨")
     @Test
     void find_by_mixed_data() {
         // given
@@ -182,8 +185,9 @@ class DictionaryQueryRepositoryV2Test {
         assertThat(result.stream().map(s -> s.getContent().getSentence())).containsExactly("I like summer.");
     }
 
+    @DisplayName("FindBy가 복수")
     @Test
-    void mixed_find_by_but_ordered_priority() {
+    void multiple_find_by() {
         // given
         chatUser_setUp();
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("winter").build())); // etc
@@ -198,6 +202,24 @@ class DictionaryQueryRepositoryV2Test {
         assertThat(result.get(0).getContent().getDefinition()).isEqualTo("summer");
         assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
         assertThat(result.get(2).getContent().getSentence()).isEqualTo("I like summer.");
+    }
+
+    @DisplayName("findBy 순서 까지는 보장하지 않음.")
+    @Test
+    void multiple_find_by_order_by_like() {
+        // given
+        chatUser_setUp();
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().definition("summer").build()));
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().sentence("summer").build()));
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer").build()));
+        em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("I love summer!").build()));
+
+        // when
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD, DEFINITION, SENTENCE);
+
+        // then
+        assertThat(result).size().isEqualTo(4);
+        assertThat(result.get(3).getContent().getWord()).isEqualTo("I love summer!");
     }
 
 
