@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
@@ -92,9 +91,9 @@ public class Send {
     }
 
     private Response<?> sendDispatcher(TelegramSend telegramSend) {
-        if(request.getSendType() == SendType.MESSAGE) return telegramSend.message(new SendMessageRequest(request.getChatId(), request.getMessage()));
         if(request.getSendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(request.getChatId(), request.getDocument(), request.getMessage()));
-        throw new TelegramServerException("not supported SendType");
+        return telegramSend.message(new SendMessageRequest(request.getChatId(), request.getMessage()));
+        // throw new TelegramServerException("not supported SendType");
     }
 
     private void resolveResponse(Response response) {

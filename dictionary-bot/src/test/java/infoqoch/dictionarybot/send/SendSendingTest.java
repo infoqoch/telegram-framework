@@ -61,4 +61,27 @@ public class SendSendingTest {
         assertThat(result.getRequest().getChatId()).isEqualTo(12345l);
         assertThat(result.getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder().plain("fake text").toString());
     }
+
+    // SendType이 DOCUMENT가 아닐 경우 언제나 MESSAGE로 전달한다.
+    @DisplayName("sendtype이 null")
+    @Test
+    void sendtype_null(){
+        // given
+        fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
+        assert !fakeSend.isDocumentCalled();
+        assert !fakeSend.isMessageCalled();
+
+        // sendType == null;
+        final SendRequest sendRequest = SendRequest.send(12345l, null, new MarkdownStringBuilder().plain("/help"), null);
+        final Send send = Send.of(sendRequest, null);
+        assert send.getStatus() == REQUEST;
+
+        // when
+        send.sending(fakeSend);
+
+        // then
+        assertThat(fakeSend.isDocumentCalled()).isFalse();
+        assertThat(fakeSend.isMessageCalled()).isTrue();
+    }
 }
+
