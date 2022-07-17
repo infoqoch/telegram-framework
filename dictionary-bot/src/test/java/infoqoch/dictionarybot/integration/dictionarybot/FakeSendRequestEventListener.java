@@ -31,4 +31,10 @@ public class FakeSendRequestEventListener {
         latestSent = store.save(send);
         sentList.add(send);
     }
+
+    public void clear() {
+        called = false;
+        latestSent = null;
+        sentList = new ArrayList<>();
+    }
 }

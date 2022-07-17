@@ -33,7 +33,7 @@ class SendJpaRepositoryTest {
         saveSend(MESSAGE);
         Long first = sendRepository.maxNo();
         assertThat(first).isNotNull();
-        assertThat(first).isEqualTo(1l);
+        assertThat(first).isGreaterThan(0l);
 
         // save one more
         saveSend(MESSAGE);

@@ -9,6 +9,7 @@ import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +37,13 @@ class AdminUserRunnerIntegrationTest {
     // 타겟 객체
     @Autowired
     AdminUserRunner runner;
+
+    @BeforeEach
+    void setUp(){
+        // 각 테스트는 하나의 컨텍스트를 돌려 쓴다. 트랜잭션은 아마 db에 대한 롤백은 진행하는 것 같다. 그 외의 빈에 대해서는 초기화를 해야 한다.
+        fakeSendRequestEventListener.clear();
+
+    }
 
     @Test
     void no_result(){
