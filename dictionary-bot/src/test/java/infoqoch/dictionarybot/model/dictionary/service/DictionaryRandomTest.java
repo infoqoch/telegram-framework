@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.model.dictionary.service;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,13 +18,13 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @SpringBootTest
-public class LookupServiceTest {
+public class DictionaryRandomTest {
     @Autowired EntityManager em;
-	@Autowired  LookupService service;
+	@Autowired
+	LookupRepository repository;
 
 	ChatUser chatUser = null;
 
@@ -45,7 +46,7 @@ public class LookupServiceTest {
     }
 	@Test
 	void random_no_data() {
-		final Optional<Dictionary> random = service.getRandom(randomUser());
+		final Optional<Dictionary> random = repository.getRandom(randomUser());
 		assertThat(random).isEmpty();
 	}
 
@@ -62,7 +63,7 @@ public class LookupServiceTest {
 
 		// then
 		for(int i=0; i<100; i++){
-			final Optional<Dictionary> random = service.getRandom(chatUser);
+			final Optional<Dictionary> random = repository.getRandom(chatUser);
 			assertThat(random).isPresent();
 			assertThat(random.get().getContent().getWord()).containsAnyOf("summer", "winter");
 		}
@@ -76,48 +77,5 @@ public class LookupServiceTest {
 		final ChatUser user = new ChatUser(ThreadLocalRandom.current().nextLong(), UUID.randomUUID().toString().substring(0, 4));
 		em.persist(user);
 		return user;
-	}
-
-	@Test
-	void contains_exactly() {
-		List<Dictionary> result = service.word(chatUser, "summer", 4, 0);
-		assertThat(result).size().isEqualTo(4);
-		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
-	}
-
-	@Test
-	void exact_and_startWith() {
-		List<Dictionary> result = service.word(chatUser, "summer", 2, 0);
-		assertThat(result).size().isEqualTo(2);
-		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
-		assertThat(result.get(1).getContent().getWord()).isEqualTo("summer vacation");
-	}
-
-	@Test
-	void exact() {
-		List<Dictionary> result = service.word(chatUser, "summer", 1, 0);
-		assertThat(result).size().isEqualTo(1);
-		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer");
-	}
-
-	@Test
-	void limit_0() {
-		assertThatThrownBy(()->{
-			service.word(chatUser, "summer", 0, 0);
-		}).isExactlyInstanceOf(IllegalArgumentException.class);
-	}
-
-	@Test
-	void limit_over_total_count() {
-		List<Dictionary> result = service.word(chatUser, "summer", 999999, 0);
-		assertThat(result).size().isEqualTo(4);
-		assertThat(result.stream().map(d -> d.getContent().getWord())).contains("summer", "summer vacation", "hot summer", "I like summer.");
-	}
-
-	@Test
-	void offset_summer_second() {
-		List<Dictionary> result = service.word(chatUser, "summer", 1, 1);
-		assertThat(result).size().isEqualTo(1);
-		assertThat(result.get(0).getContent().getWord()).isEqualTo("summer vacation");
 	}
 }

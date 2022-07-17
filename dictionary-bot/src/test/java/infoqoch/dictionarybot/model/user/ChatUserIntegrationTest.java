@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.model.user;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
-import infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepository;
+import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class ChatUserIntegrationTest {
 
     @Autowired
 
-    DictionaryQueryRepository dictionaryQueryRepository;
+    LookupRepository repository;
 
     @Test
     @DisplayName("chatUser의 데이터 공개여부에 따른 사전 조회")
@@ -46,10 +46,10 @@ class ChatUserIntegrationTest {
 
         // when
         System.out.println("=======================시작======================");
-        final List<Dictionary> findByNarcissus = dictionaryQueryRepository.findByContentWord(narcissus, "apple");
+        final List<Dictionary> findByNarcissus = repository.lookup(10, 0,"apple", narcissus, LookupRepository.FindBy.WORD);
         assertThat(findByNarcissus).size().isEqualTo(1); // setLookupPublicData(false) // 자기 자신 것만 찾으므로 사이즈는 1개이다.
 
-        final List<Dictionary> findByOpened = dictionaryQueryRepository.findByContentWord(opened, "apple");
+        final List<Dictionary> findByOpened = repository.lookup(10, 0,"apple", opened, LookupRepository.FindBy.WORD);
         assertThat(findByOpened).size().isEqualTo(2); // 다른 회원의 데이터도 찾으므로 2개를 찾는다.
     }
 
@@ -74,10 +74,10 @@ class ChatUserIntegrationTest {
 
         // when
         System.out.println("=======================시작======================");
-        final List<Dictionary> findByClosed = dictionaryQueryRepository.findByContentWord(closed, "apple");
+        final List<Dictionary> findByClosed = repository.lookup(10, 0,"apple", closed, LookupRepository.FindBy.WORD);
         assertThat(findByClosed).size().isEqualTo(2); // 모든 데이터에 대하여 검색함.
 
-        final List<Dictionary> findByOpened = dictionaryQueryRepository.findByContentWord(opened, "apple");
+        final List<Dictionary> findByOpened = repository.lookup(10, 0,"apple", opened, LookupRepository.FindBy.WORD);
         assertThat(findByOpened).size().isEqualTo(1); // closed.setOpenDataPublic(false); // opened는 closed의 데이터를 검색할 수 없음.
     }
 }

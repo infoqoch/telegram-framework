@@ -20,21 +20,18 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
-import static infoqoch.dictionarybot.model.dictionary.repository.DictionaryQueryRepositoryV2.FindBy.*;
+import static infoqoch.dictionarybot.model.dictionary.repository.LookupRepository.FindBy.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class DictionaryQueryRepositoryV2Test {
+class LookupRepositoryTest {
     @Autowired EntityManager em;
-
-    @Autowired
-    DictionaryQueryRepository repository;
 
     JPAQueryFactory queryFactory;
 
     @Autowired
-    DictionaryQueryRepositoryV2 repositoryV2;
+    LookupRepository repositoryV2;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +75,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(4, 0, "summer", WORD);
+        final List<Dictionary> result = repositoryV2.lookup(4, 0, "summer", chatUser, WORD);
 
         // then
         assertThat(result.stream().map(s -> s.getContent().getWord())).containsExactly("summer", "summer vacation", "I like summer.");
@@ -94,7 +91,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(1, 0, "summer", WORD);
+        final List<Dictionary> result = repositoryV2.lookup(1, 0, "summer", chatUser, WORD);
 
         // then
         assertThat(result.stream().map(s -> s.getContent().getWord())).containsExactly("summer");
@@ -110,7 +107,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD);
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", chatUser, WORD);
 
         // then
         assertThat(result.stream().map(s -> s.getContent().getWord())).containsExactly("summer", "summer vacation", "I like summer.");
@@ -126,7 +123,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(1, 1, "summer", WORD);
+        final List<Dictionary> result = repositoryV2.lookup(1, 1, "summer", chatUser, WORD);
 
         // then
         assertThat(result.stream().map(s -> s.getContent().getWord())).containsExactly("summer vacation");
@@ -142,7 +139,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 10, "summer", WORD);
+        final List<Dictionary> result = repositoryV2.lookup(10, 10, "summer", chatUser, WORD);
 
         // then
         assertThat(result).size().isEqualTo(0);
@@ -162,7 +159,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", chatUser, SENTENCE);
 
         // then
         assertThat(result).size().isEqualTo(0);
@@ -179,7 +176,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", SENTENCE);
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", chatUser, SENTENCE);
 
         // then
         assertThat(result.stream().map(s -> s.getContent().getSentence())).containsExactly("I like summer.");
@@ -196,7 +193,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("summer vacation").build())); // startsWith
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD, DEFINITION, SENTENCE);
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", chatUser, WORD, DEFINITION, SENTENCE);
 
         // then
         assertThat(result.get(0).getContent().getDefinition()).isEqualTo("summer");
@@ -215,7 +212,7 @@ class DictionaryQueryRepositoryV2Test {
         em.persist(new Dictionary(null, chatUser, null,  DictionaryContent.builder().word("I love summer!").build()));
 
         // when
-        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", WORD, DEFINITION, SENTENCE);
+        final List<Dictionary> result = repositoryV2.lookup(10, 0, "summer", chatUser, WORD, DEFINITION, SENTENCE);
 
         // then
         assertThat(result).size().isEqualTo(4);

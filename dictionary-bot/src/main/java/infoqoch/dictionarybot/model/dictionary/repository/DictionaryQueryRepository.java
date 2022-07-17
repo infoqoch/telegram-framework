@@ -5,17 +5,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.QChatUser;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
 
 
-@Repository
+@Deprecated
+// @Repository
 public class DictionaryQueryRepository {
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
@@ -76,26 +74,6 @@ public class DictionaryQueryRepository {
         return findDictionary(dictionary.content.sentence.contains(value));
     }
 
-    public Optional<Dictionary> getRandom() {
-        return getRandom(null);
-    }
-
-    public Optional<Dictionary> getRandom(ChatUser chatUser) {
-        final Long total = queryFactory
-                .select(dictionary.count())
-                .from(dictionary)
-                .where(chatUserEq(chatUser))
-                .fetchOne();
-
-        if(total==null||total==0) return Optional.empty();
-
-        return Optional.ofNullable(queryFactory
-                .selectFrom(dictionary)
-                .where(chatUserEq(chatUser))
-                .limit(1)
-                .offset(ThreadLocalRandom.current().nextLong(0, total))
-                .fetchOne());
-    }
 
     // 공통 메서드
     private List<Dictionary> findDictionary(BooleanExpression expression, BooleanExpression ... expressions) {

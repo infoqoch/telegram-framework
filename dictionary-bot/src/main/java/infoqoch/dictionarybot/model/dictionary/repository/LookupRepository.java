@@ -4,22 +4,25 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.QChatUser;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static infoqoch.dictionarybot.model.dictionary.QDictionary.dictionary;
 
 
 @Repository
-public class DictionaryQueryRepositoryV2 {
+public class LookupRepository {
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public DictionaryQueryRepositoryV2(EntityManager em) {
+    public LookupRepository(EntityManager em) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
@@ -36,10 +39,10 @@ public class DictionaryQueryRepositoryV2 {
         }
     }
 
-    public List<Dictionary> lookup(int limit, int offset, String target, FindBy firstFindBy, FindBy ... findBy) {
+    public List<Dictionary> lookup(int limit, int offset, String target, ChatUser chatUser, FindBy firstFindBy, FindBy...  findBy) {
         final List<FindBy> findByList = gatheringFindBy(firstFindBy, findBy);
         final BooleanExpression[] expressions = lookupConditionOrderByPriority(target, findByList);
-        return unionDictionary(limit, offset, expressions);
+        return unionDictionary(limit, offset, findWithChatUser(chatUser), expressions);
     }
 
     private List<FindBy> gatheringFindBy(FindBy firstFindBy, FindBy[] findBys) {
@@ -84,7 +87,7 @@ public class DictionaryQueryRepositoryV2 {
         return result;
     }
 
-    public List<Dictionary> unionDictionary(long limit, long offset, BooleanExpression...args) {
+    public List<Dictionary> unionDictionary(long limit, long offset, BooleanExpression first, BooleanExpression...args) {
         long rLimit = limit;
         long rOffset = offset;
 
@@ -92,7 +95,7 @@ public class DictionaryQueryRepositoryV2 {
         for(int i=0; i<args.length; i++){
             BooleanExpression[] expressions = generateExpressionGradually(args, i);
 
-            final List<Dictionary> dictionaries = findDictionary(rLimit, rOffset, expressions);
+            final List<Dictionary> dictionaries = findDictionary(rLimit, rOffset, first, expressions);
             result.addAll(dictionaries);
 
             rLimit = rLimit - dictionaries.size();
@@ -118,10 +121,11 @@ public class DictionaryQueryRepositoryV2 {
 
     }
 
-    private List<Dictionary> findDictionary(long limit, long offset, BooleanExpression[] expressions) {
+    private List<Dictionary> findDictionary(long limit, long offset, BooleanExpression first, BooleanExpression[] expressions) {
         return queryFactory
                 .selectFrom(dictionary)
                 .join(dictionary.chatUser, QChatUser.chatUser)
+                .where(first)
                 .where(expressions)
                 .limit(limit)
                 .offset(offset)
@@ -141,6 +145,38 @@ public class DictionaryQueryRepositoryV2 {
                 .join(dictionary.chatUser, QChatUser.chatUser)
                 .where(expressions)
                 .fetchOne();
+    }
+
+
+    private BooleanExpression findWithChatUser(ChatUser chatUser) {
+        if(!chatUser.isLookupAllUsers()) return chatUserEq(chatUser);
+        return chatUserEq(chatUser).or(QChatUser.chatUser.shareMine.eq(true));
+    }
+
+    private BooleanExpression chatUserEq(ChatUser chatUser) {
+        if(chatUser == null) return null;
+        return dictionary.chatUser.eq(chatUser);
+    }
+
+    public Optional<Dictionary> getRandom() {
+        return getRandom(null);
+    }
+
+    public Optional<Dictionary> getRandom(ChatUser chatUser) {
+        final Long total = queryFactory
+                .select(dictionary.count())
+                .from(dictionary)
+                .where(chatUserEq(chatUser))
+                .fetchOne();
+
+        if(total==null||total==0) return Optional.empty();
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(dictionary)
+                .where(chatUserEq(chatUser))
+                .limit(1)
+                .offset(ThreadLocalRandom.current().nextLong(0, total))
+                .fetchOne());
     }
 
 }

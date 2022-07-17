@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.model.dictionary.service.LookupService;
+import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.send.Send;
@@ -21,11 +21,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HourlyDictionaryRunner {
     private final ChatUserRepository chatUserRepository;
-    private final LookupService lookupService;
+    private final LookupRepository repository;
 
     @Scheduled(cron = "0 0 7-22 * * *")
     public void hourlyDictionaryRun() {
-        final Optional<Dictionary> random = lookupService.getRandom();
+        final Optional<Dictionary> random = repository.getRandom();
         if (existsDictionary(random)) return;
         sending(random.get());
     }
@@ -49,7 +49,7 @@ public class HourlyDictionaryRunner {
         if(chatUser.isLookupAllUsers()){
             sendingDictionary(dictionary, chatUser);
         } else {
-            Optional<Dictionary> myDictionary = lookupService.getRandom(chatUser);
+            Optional<Dictionary> myDictionary = repository.getRandom(chatUser);
             if(myDictionary.isPresent()){
                 sendingMyDictionary(chatUser, myDictionary);
             }else{
