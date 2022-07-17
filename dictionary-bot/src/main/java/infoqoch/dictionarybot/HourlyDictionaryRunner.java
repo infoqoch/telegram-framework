@@ -23,7 +23,7 @@ public class HourlyDictionaryRunner {
     private final ChatUserRepository chatUserRepository;
     private final LookupService lookupService;
 
-     @Scheduled(cron = "0 0 7-22 * * *")
+    @Scheduled(cron = "0 0 7-22 * * *")
     public void hourlyDictionaryRun() {
         final Optional<Dictionary> random = lookupService.getRandom();
         if (existsDictionary(random)) return;

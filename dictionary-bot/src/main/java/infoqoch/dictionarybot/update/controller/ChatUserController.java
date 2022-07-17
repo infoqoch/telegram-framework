@@ -70,13 +70,13 @@ public class ChatUserController {
         log.info("UpdateRequestMethodMapper : SHARE_MINE");
         return new MarkdownStringBuilder()
 
-                .bold("==나의 상태==").lineSeparator()
+                .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":"").bold("==").lineSeparator()
                 .plain("모든 회원 검색 여부 : ").plain(booleanToYnValue(chatUser.isLookupAllUsers())).lineSeparator()
                 .italic(" 수정 : ").command(LOOKUP_ALL_USERS.alias(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
                 .plain("사전 공개 여부 : ").plain(booleanToYnValue(chatUser.isShareMine())).lineSeparator()
                 .italic(" 수정 : ").command(SHARE_MINE.alias(), booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
                 .plain("매시 사전 알람 여부 : ").plain(booleanToYnValue(chatUser.isHourlyAlarm())).lineSeparator()
-                .italic(" 수정 : ").command(SHARE_MINE.alias(), booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
+                .italic(" 수정 : ").command(HOURLY_ALARM.alias(), booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
                 .plain("등록한 사전의 갯수 : ").plain(String.valueOf(chatUser.getDictionaries().size()))
                 ;
     }
