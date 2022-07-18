@@ -40,7 +40,8 @@ public class LookupController {
 
     @UpdateRequestMethodMapper({LOOKUP_FULL_SEARCH, UNKNOWN})
     public List<Dictionary> lookupByFullSearch(UpdateRequestMessage updateRequestMessage, ChatUser chatUser) {
-        log.info("UpdateRequestMethodMapper : lookupByDefinition!");
-        return lookupRepository.lookup(10, 0, updateRequestMessage.getValue(), chatUser, LookupRepository.FindBy.DEFINITION);
+        log.info("UpdateRequestMethodMapper : lookupByFullSearch!");
+        return lookupRepository.lookup(10, 0, updateRequestMessage.getValue(), chatUser
+                , LookupRepository.FindBy.WORD, LookupRepository.FindBy.DEFINITION, LookupRepository.FindBy.SENTENCE);
     }
 }

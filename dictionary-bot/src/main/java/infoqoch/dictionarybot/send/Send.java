@@ -85,8 +85,8 @@ public class Send {
             Response<?> sendResponse = sendDispatcher(telegramSend); // telegram-bot의 응답 데이터를 받는다. 이하 이를 분석하고 결과값을 전달한다.
             resolveResponse(sendResponse);
         }catch (Exception e) {
-            log.error("[error : {}], ", "DictionarySendRunner", e);
             error(e);
+            throw e;
         }
     }
 

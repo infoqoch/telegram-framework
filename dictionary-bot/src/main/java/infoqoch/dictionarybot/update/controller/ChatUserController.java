@@ -70,7 +70,7 @@ public class ChatUserController {
         log.info("UpdateRequestMethodMapper : SHARE_MINE");
         return new MarkdownStringBuilder()
 
-                .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":"").bold("==").lineSeparator()
+                .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":" ").bold("==").lineSeparator()
                 .plain("모든 회원 검색 여부 : ").plain(booleanToYnValue(chatUser.isLookupAllUsers())).lineSeparator()
                 .italic(" 수정 : ").command(LOOKUP_ALL_USERS.value(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
                 .plain("사전 공개 여부 : ").plain(booleanToYnValue(chatUser.isShareMine())).lineSeparator()

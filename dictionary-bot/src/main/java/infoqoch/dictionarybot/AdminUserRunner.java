@@ -12,6 +12,7 @@ import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,17 +39,24 @@ public class AdminUserRunner {
     }
 
     @Scheduled(fixedDelay = 1000l)
+    @Transactional
     public void run() {
         final List<Send> serverErrorSent = sendRepository.findByNoGreaterThanAndRequestSendType(LAST_SEND_NO, SendType.SERVER_ERROR);
         if(serverErrorSent.size()==0) return;
+
+        upToDateLastSendNo(serverErrorSent);
 
         final MarkdownStringBuilder message = convertAdminAlert(serverErrorSent);
 
         final List<ChatUser> admins = chatUserRepository.findByRole(ChatUser.Role.ADMIN);
         for (ChatUser admin : admins) {
-
             requestSending(SendRequest.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null));
         }
+    }
+
+    private void upToDateLastSendNo(List<Send> serverErrorSent) {
+        for (Send send : serverErrorSent)
+            if(send.getNo()>LAST_SEND_NO) LAST_SEND_NO = send.getNo();
     }
 
     private MarkdownStringBuilder convertAdminAlert(List<Send> serverErrorSent) {
@@ -62,23 +70,21 @@ public class AdminUserRunner {
                     .append(errorMessage(send.getErrorCode(), send.getErrorMessage()))
                     .append(causedByUpdate(send.getUpdateLog()))
                     .lineSeparator();
-
-
         }
         return result;
     }
 
     private MarkdownStringBuilder errorMessage(String errorCode, String errorMessage) {
         return new MarkdownStringBuilder()
-                .italic("error code : ").italic(errorCode==null?"":errorCode).lineSeparator()
-                .plain("  -> message : ").plain(errorMessage==null?"":errorMessage).lineSeparator();
+                .italic("error code : ").plain(errorCode==null?" ":errorCode).lineSeparator()
+                .plain("  -> message : ").plain(errorMessage==null?" ":errorMessage).lineSeparator();
     }
 
     private MarkdownStringBuilder causedByUpdate(UpdateLog updateLog) {
         if(updateLog==null) return null;
 
         return new MarkdownStringBuilder()
-                .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
+                .italic("caused by update id : ").plain(String.valueOf(updateLog.getUpdateId())).lineSeparator()
                 .plain("  -> command : ").plain(updateLog.getUpdateCommand().toString()).plain(" : ").plain(updateLog.getUpdateValue()==null?"":updateLog.getUpdateValue()).lineSeparator();
 
 

@@ -43,7 +43,7 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
     @Override
     public UpdateResponse resolve(Object target) {
         MarkdownStringBuilder msb = toMarkdown((List<Dictionary>) target);
-        if(msb.size()==0) UpdateResponse.message(new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
+        if(msb.size()==0) return UpdateResponse.message(new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
 
         return UpdateResponse.message(msb);
     }
