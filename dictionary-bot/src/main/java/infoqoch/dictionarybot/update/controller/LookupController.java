@@ -37,4 +37,10 @@ public class LookupController {
         log.info("UpdateRequestMethodMapper : lookupByDefinition!");
         return lookupRepository.lookup(10, 0, updateRequestMessage.getValue(), chatUser, LookupRepository.FindBy.DEFINITION);
     }
+
+    @UpdateRequestMethodMapper({LOOKUP_FULL_SEARCH, UNKNOWN})
+    public List<Dictionary> lookupByFullSearch(UpdateRequestMessage updateRequestMessage, ChatUser chatUser) {
+        log.info("UpdateRequestMethodMapper : lookupByDefinition!");
+        return lookupRepository.lookup(10, 0, updateRequestMessage.getValue(), chatUser, LookupRepository.FindBy.DEFINITION);
+    }
 }

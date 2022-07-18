@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.UNKNOWN;
 
 @Slf4j
 @Component
@@ -24,11 +23,5 @@ public class DictionaryController {
         return new MarkdownStringBuilder()
                 .bold("=== 사용방법 ===").lineSeparator()
                 .plain("원하는 명령어를 입력하세요!");
-    }
-
-    @UpdateRequestMethodMapper(UNKNOWN)
-    public MarkdownStringBuilder unknown() {
-        log.info("UpdateRequestMethodMapper : unknown");
-        return help();
     }
 }

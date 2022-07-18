@@ -81,9 +81,10 @@ public class FakeController {
     public String hourly() {
         return "unknown??";
     }
-    @UpdateRequestMethodMapper(MY_STATUS)
-    public String status() {
-        return "unknown??";
+
+    @UpdateRequestMethodMapper({MY_STATUS, LOOKUP_FULL_SEARCH})
+    public String multipleCommands() {
+        return "multipleCommands called";
     }
 
 }

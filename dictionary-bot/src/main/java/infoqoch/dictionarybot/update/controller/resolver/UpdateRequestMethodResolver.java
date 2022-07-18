@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.controller.resolver;
 import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import lombok.SneakyThrows;
 
@@ -28,7 +29,10 @@ public class UpdateRequestMethodResolver {
     }
 
     public boolean support(UpdateRequest update) {
-        return mapper.value() == update.command();
+        for (UpdateRequestCommand updateRequestCommand : mapper.value()) {
+            if(updateRequestCommand == update.command())  return true;
+        }
+        return false;
     }
 
     public UpdateResponse process(UpdateRequest update) {

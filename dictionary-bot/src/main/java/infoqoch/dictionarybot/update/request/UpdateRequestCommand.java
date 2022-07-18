@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.update.request;
 
 public enum UpdateRequestCommand {
     HELP("help")
-    , LOOKUP_WORD("w", "ㄷ"),  LOOKUP_SENTENCE("s", "ㅁ"), LOOKUP_DEFINITION("d", "ㅈ")
+    , LOOKUP_WORD("w", "ㄷ"),  LOOKUP_SENTENCE("s", "ㅁ"), LOOKUP_DEFINITION("d", "ㅈ"), LOOKUP_FULL_SEARCH("f", "ㅍ")
     ,  UNKNOWN("unknown")
     , EXCEL_PUSH("excel push", "push", "replace")
     , HOURLY_ALARM("hourly")

@@ -88,6 +88,34 @@ public class UpdateDispatcherTest {
         assertThat(update.value()).isEqualTo("wefwe"); // command를 알 수 없으면 value를 요청한 값으로 한다.
         assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("unknown??"));
     }
+
+    @Test
+    void multiple_commands_first(){
+        //given
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/status"));
+
+        // when
+        UpdateResponse response = updateDispatcher.process(update);
+
+        //then
+        assertThat(update.command()).isEqualTo(UpdateRequestCommand.MY_STATUS);
+        assertThat(update.value()).isEmpty();
+        assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("multipleCommands called"));
+    }
+
+    @Test
+    void multiple_commands_second(){
+        //given
+        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/f_multiple_command"));
+
+        // when
+        UpdateResponse response = updateDispatcher.process(update);
+
+        //then
+        assertThat(update.command()).isEqualTo(UpdateRequestCommand.LOOKUP_FULL_SEARCH);
+        assertThat(update.value()).isEqualTo("multiple command");
+        assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("multipleCommands called"));
+    }
 }
 
 

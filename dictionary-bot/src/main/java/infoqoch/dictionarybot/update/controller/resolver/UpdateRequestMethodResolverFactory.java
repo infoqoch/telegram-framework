@@ -16,17 +16,17 @@ public class UpdateRequestMethodResolverFactory {
     public static  List<UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
         List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
 
-        Set<UpdateRequestMethodMapper> updateRequestMappers = new HashSet<>();
+        Set<UpdateRequestCommand> concretedCommand = new HashSet<>();
 
         for (Method method : getMethodsAnnotated(urls)) {
             final UpdateRequestMethodMapper mapper = extractUpdateRequestMapper(method);
 
-            checkDuplicatedMapper(updateRequestMappers, mapper);
+            checkDuplicatedCommand(concretedCommand, mapper.value());
 
             methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, paramResolvers, returnResolvers));
         }
 
-        concretedEveryCommand(updateRequestMappers);
+        isConcretedEveryCommand(concretedCommand);
 
         return methodResolvers;
     }
@@ -39,14 +39,18 @@ public class UpdateRequestMethodResolverFactory {
         return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
     }
 
-    private static void checkDuplicatedMapper(Set<UpdateRequestMethodMapper> checkDuplicatedMapper, UpdateRequestMethodMapper mapper) {
-        if (checkDuplicatedMapper.contains(mapper))
-            throw new IllegalStateException("duplicate declared command detected  : " + mapper.toString());
-        checkDuplicatedMapper.add(mapper);
+    private static void checkDuplicatedCommand(Set<UpdateRequestCommand> concretedCommand, UpdateRequestCommand[] inputCommand) {
+        if (concretedCommand.contains(inputCommand))
+            throw new IllegalStateException("duplicate declared command detected  : " + inputCommand.toString());
+
+        for (UpdateRequestCommand input : inputCommand)
+            concretedCommand.add(input);
+
+
     }
 
-    private static void concretedEveryCommand(Set<UpdateRequestMethodMapper> updateRequestMappers) {
-        if(updateRequestMappers.size() != UpdateRequestCommand.values().length){
+    private static void isConcretedEveryCommand(Set<UpdateRequestCommand> concretedCommand) {
+        if(concretedCommand.size() != UpdateRequestCommand.values().length){
             throw new IllegalArgumentException("every mapper should be concreted. declared with mapper annotation commands: " + printAllCommands());
         }
     }
