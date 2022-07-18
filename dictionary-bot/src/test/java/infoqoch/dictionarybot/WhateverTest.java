@@ -30,8 +30,8 @@ public class WhateverTest {
     void test2(){
         final MarkdownStringBuilder markdownStringBuilder = new MarkdownStringBuilder().bold("=나의 사전 공개 여부=").lineSeparator()
                 .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                .command(SHARE_MINE.alias(), "Y").lineSeparator()
-                .command(SHARE_MINE.alias(), "N").lineSeparator();
+                .command(SHARE_MINE.value(), "Y").lineSeparator()
+                .command(SHARE_MINE.value(), "N").lineSeparator();
         System.out.println("markdownStringBuilder = " + markdownStringBuilder);
     }
 }

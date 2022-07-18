@@ -72,11 +72,11 @@ public class ChatUserController {
 
                 .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":"").bold("==").lineSeparator()
                 .plain("모든 회원 검색 여부 : ").plain(booleanToYnValue(chatUser.isLookupAllUsers())).lineSeparator()
-                .italic(" 수정 : ").command(LOOKUP_ALL_USERS.alias(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
+                .italic(" 수정 : ").command(LOOKUP_ALL_USERS.value(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
                 .plain("사전 공개 여부 : ").plain(booleanToYnValue(chatUser.isShareMine())).lineSeparator()
-                .italic(" 수정 : ").command(SHARE_MINE.alias(), booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
+                .italic(" 수정 : ").command(SHARE_MINE.value(), booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
                 .plain("매시 사전 알람 여부 : ").plain(booleanToYnValue(chatUser.isHourlyAlarm())).lineSeparator()
-                .italic(" 수정 : ").command(HOURLY_ALARM.alias(), booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
+                .italic(" 수정 : ").command(HOURLY_ALARM.value(), booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
                 .plain("등록한 사전의 갯수 : ").plain(String.valueOf(chatUser.getDictionaries().size()))
                 ;
     }
@@ -91,8 +91,8 @@ public class ChatUserController {
         throw new TelegramClientException(
                 new MarkdownStringBuilder().bold("=매시 사전 알람=").lineSeparator()
                         .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                        .command(HOURLY_ALARM.alias(), "Y").lineSeparator()
-                        .command(HOURLY_ALARM.alias(), "N").lineSeparator()
+                        .command(HOURLY_ALARM.value(), "Y").lineSeparator()
+                        .command(HOURLY_ALARM.value(), "N").lineSeparator()
                 , "HOURLY_ALARM에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
     }
@@ -111,8 +111,8 @@ public class ChatUserController {
         throw new TelegramClientException(
                 new MarkdownStringBuilder().bold("=모든 회원의 사전 검색 여부=").lineSeparator()
                         .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                        .command(LOOKUP_ALL_USERS.alias(), "Y").lineSeparator()
-                        .command(LOOKUP_ALL_USERS.alias(), "N").lineSeparator()
+                        .command(LOOKUP_ALL_USERS.value(), "Y").lineSeparator()
+                        .command(LOOKUP_ALL_USERS.value(), "N").lineSeparator()
                 , "LOOKUP_ALL_USERS에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
     }

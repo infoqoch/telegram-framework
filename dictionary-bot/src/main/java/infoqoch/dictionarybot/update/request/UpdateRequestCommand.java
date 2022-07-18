@@ -2,22 +2,28 @@ package infoqoch.dictionarybot.update.request;
 
 public enum UpdateRequestCommand {
     HELP("help")
-    , LOOKUP_WORD("w"),  LOOKUP_SENTENCE("s"), LOOKUP_DEFINITION("d")
+    , LOOKUP_WORD("w", "ㄷ"),  LOOKUP_SENTENCE("s", "ㅁ"), LOOKUP_DEFINITION("d", "ㅈ")
     ,  UNKNOWN("unknown")
-    , EXCEL_PUSH("excel push")
+    , EXCEL_PUSH("excel push", "push", "replace")
     , HOURLY_ALARM("hourly")
     , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users")
     , PROMOTION_ROLE("promotion")
-    , MY_STATUS("status");
+    , MY_STATUS("status", "상태");
 
-    private final String alias;
+    private final String value;
+    private final String[] aliases;
 
-    UpdateRequestCommand(String alias) {
-        this.alias = alias;
+    UpdateRequestCommand(String value, String... aliases) {
+        this.value = value;
+        this.aliases = aliases != null ? aliases : new String[]{};
     }
 
-    public String alias(){
-        return alias;
+    public String value(){
+        return value;
+    }
+
+    private String[] alias(){
+        return aliases;
     }
 
     // 만약 여러 개의 alias가 있을 경우, contain을 통해 추출한 명령어를 얻어야 할 수 있음.
@@ -32,21 +38,25 @@ public enum UpdateRequestCommand {
 
     public static UpdateRequestCommand of(String input) {
         for(UpdateRequestCommand command : UpdateRequestCommand.values()){
-            final String[] aliases = command.alias.split(" ");
 
-            if (isNotMatched(input.split(" "), aliases)) continue;
+            if(isMatch(input, command.value)) return command;
 
-            return command;
+            for (String alias : command.aliases)
+                if (isMatch(input, alias)) return command;
         }
+
         return UNKNOWN;
     }
 
-    private static boolean isNotMatched(String[] inputs, String[] aliases) {
-        if(inputs.length < aliases.length) return true;
+    private static boolean isMatch(String input, String alias) {
+        String[] inputSplit = input.split(" ");
+        String[] aliasSplit = alias.split(" ");
 
-        for(int i = 0; i< aliases.length; i++)
-            if(!aliases[i].equals(inputs[i])) return true;
+        if(inputSplit.length < aliasSplit.length) return false;
 
-        return false;
+        for(int i = 0; i< aliasSplit.length; i++)
+            if(!aliasSplit[i].equals(inputSplit[i])) return false;
+
+        return true;
     }
 }

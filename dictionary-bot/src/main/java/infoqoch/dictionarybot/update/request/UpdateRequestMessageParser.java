@@ -13,8 +13,8 @@ public class UpdateRequestMessageParser {
     }
 
     private static UpdateRequestMessage extractValueWithCommand(String message, UpdateRequestCommand command) {
-        final int firstSpaceIdx = message.indexOf(command.alias());
-        String value = extractValue(message, firstSpaceIdx+ command.alias().length());
+        final int firstSpaceIdx = message.indexOf(command.value());
+        String value = extractValue(message, firstSpaceIdx+ command.value().length());
         return new UpdateRequestMessage(command, value);
     }
 

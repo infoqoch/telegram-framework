@@ -103,7 +103,7 @@ class DictionaryUpdateRunnerIntegrationTest {
     @Test
     void exception_update_dispatcher(){
         // given
-        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/"+SHARE_MINE.alias()+" hihi", 123l));
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/"+SHARE_MINE.value()+" hihi", 123l));
 
         // when
         dictionaryUpdateRunner.run();
