@@ -1,12 +1,15 @@
 spring:
   profiles:
-    active: default, mem, window, dev
+    # active: default, mem, window, dev
+    active: default, maria, window, dev
   datasource:
     driver-class-name: # 입력해야 합니다.
     username: # 입력해야 합니다.
     password: # 입력해야 합니다.
     url: # 입력해야 합니다.
   jpa:
+    open-in-view: true
+    show-sql: true
     hibernate:
       ddl-auto: # 입력해야 합니다.
     properties:
@@ -17,12 +20,12 @@ spring:
         jdbc:
           batch_size: 1000
         default_batch_fetch_size: 100
-        # https://jaehun2841.github.io/2020/11/22/2020-11-22-spring-data-jpa-batch-insert/#%EC%A3%BC%EC%9D%98%ED%95%A0-%EC%A0%90
 
-slogging:
+logging:
   level:
-    root: info
-    infoqoch: debug
+    root: INFO
+    infoqoch:
+      dictionarybot: DEBUG
   pattern:
     rolling-file-name: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
   file:
@@ -30,10 +33,13 @@ slogging:
     max-size: 10MB
 
 logging.level:
-  org.hibernate.SQL: debug
+  org.hibernate.SQL: DEBUG
+  org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 telegram:
   token: # 입력해야 합니다.
+  user:
+    promotion-to-admin:
 
 
 ---
