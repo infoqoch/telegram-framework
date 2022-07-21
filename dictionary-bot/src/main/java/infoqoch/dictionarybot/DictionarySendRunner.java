@@ -11,6 +11,7 @@ import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import static infoqoch.dictionarybot.send.SendType.CLIENT_ERROR;
 import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
 
+@Async
 @Slf4j
 @RequiredArgsConstructor
 public class DictionarySendRunner {
@@ -28,7 +30,7 @@ public class DictionarySendRunner {
     @Scheduled(fixedDelay = 100)
     @Transactional
     public void run() {
-        List<Send> sendRequests = sendRepository.findByStatus(Send.Status.REQUEST);
+        List<Send> sendRequests = sendRepository.findByStatusForScheduler(Send.Status.REQUEST);
 
         for (Send send : sendRequests) {
             try{

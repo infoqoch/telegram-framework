@@ -10,12 +10,14 @@ import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Async
 @Slf4j
 @Component
 public class AdminUserRunner {
