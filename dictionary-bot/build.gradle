@@ -36,7 +36,7 @@ dependencies {
     //querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+//    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 
     // 리플렉션
     implementation 'org.reflections:reflections:0.10.2'

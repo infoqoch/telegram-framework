@@ -14,7 +14,7 @@ public interface SendRepository {
     List<Send> findByStatus(Send.Status status);
 
     @QueryHints({
-            @QueryHint(name = org.hibernate.annotations.QueryHints.COMMENT, value = "for-send-scheduler")
+            @QueryHint(name = org.hibernate.annotations.QueryHints.COMMENT, value = "ignore-logging")
     })
     @Query(" select s from Send s where s.status = :status ")
     List<Send> findByStatusForScheduler(@Param("status") Send.Status status);

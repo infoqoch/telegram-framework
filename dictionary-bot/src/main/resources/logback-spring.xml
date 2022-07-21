@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PREFIX" value="dictionary-bot"></property>
+    <springProfile name="window">
+        <property name="LOG_PATH" value="c:/logs/dictionary-bot"/>
+    </springProfile>
+    <springProfile name="linux">
+        <property name="LOG_PATH" value="./log"/>
+    </springProfile>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="infoqoch.dictionarybot.system.log.IgnoreLogFilter"/>
+        <file>${LOG_PATH}/${LOG_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/${LOG_PREFIX}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="infoqoch.dictionarybot.system.log.IgnoreLogFilter"/>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <logger name="infoqoch.dictionarybot" level="DEBUG" additivity="true"/>
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="true" />
+</configuration>
