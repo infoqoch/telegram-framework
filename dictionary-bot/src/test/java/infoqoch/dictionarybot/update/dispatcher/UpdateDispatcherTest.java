@@ -13,10 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// FakeUpdateDispatcherFactory 에 등록된 가짜 빈에 한정함!
-// param resolver, return resolver 를 특히 검사함.
+// UpdateDispatcher의 생성에 대한 테스트를 진행한다.
+// 특히 ParamResolver와 ReturnResolver를 테스트한다.
+// FakeController 의 설정에 따르므로, 해당 객체와 비교하며 테스트를 진행한다. (중요!)
+// 아래 테스트의 네이밍 규칙은 {param|return}{support type} 이다.
 public class UpdateDispatcherTest {
-
     private UpdateDispatcher updateDispatcher;
 
     @BeforeEach
@@ -27,7 +28,7 @@ public class UpdateDispatcherTest {
     @Test
     void param_UpdateRequestBodyParameterMapper(){
         // given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/help_hello!"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/help_hello!"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -40,7 +41,7 @@ public class UpdateDispatcherTest {
     @Test
     void param_UpdateRequest_return_string(){
         // given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/s_orange"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/s_orange"));
 
         // when
         UpdateResponse response = updateDispatcher.process(update);
@@ -54,7 +55,7 @@ public class UpdateDispatcherTest {
     @Test
     void return_UpdateResponse(){
         // given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/w_apple"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/w_apple"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -67,7 +68,7 @@ public class UpdateDispatcherTest {
     @Test
     void return_UpdateResponse_null_body(){
         // given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/d_hi"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/d_hi"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -79,7 +80,7 @@ public class UpdateDispatcherTest {
     @Test
     void unknown_command(){
         //when
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/wefwe"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/wefwe"));
 
         UpdateResponse response = updateDispatcher.process(update);
 
@@ -92,7 +93,7 @@ public class UpdateDispatcherTest {
     @Test
     void multiple_commands_first(){
         //given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/status"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/status"));
 
         // when
         UpdateResponse response = updateDispatcher.process(update);
@@ -106,7 +107,7 @@ public class UpdateDispatcherTest {
     @Test
     void multiple_commands_second(){
         //given
-        UpdateRequest update = MockUpdate.jsonToUpdateWrapper(MockUpdate.documentJson("/f_multiple_command"));
+        UpdateRequest update = MockUpdate.jsonToUpdateRequest(MockUpdate.documentJson("/f_multiple_command"));
 
         // when
         UpdateResponse response = updateDispatcher.process(update);

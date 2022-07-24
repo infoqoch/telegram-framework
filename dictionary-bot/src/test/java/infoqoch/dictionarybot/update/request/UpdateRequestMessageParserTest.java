@@ -1,10 +1,12 @@
 package infoqoch.dictionarybot.update.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DictionaryRequestTest {
+public class UpdateRequestMessageParserTest {
+    @DisplayName("UpdateRequestMessageParser가 적절한 Command와 value로 변환하는지 확인한다.")
     @Test
     void resolve_command_value() {
         // 기본적인 추출 

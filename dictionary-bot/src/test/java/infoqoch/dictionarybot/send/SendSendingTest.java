@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.send;
 
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
-import infoqoch.dictionarybot.run.FakeTelegramSend;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramSend;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +11,8 @@ import static infoqoch.dictionarybot.send.Send.Status.REQUEST;
 import static infoqoch.dictionarybot.send.Send.Status.SUCCESS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+// 텔레그램에 메시지를 전달할 때, 정상적으로 데이터를 전달하고, 응답받은 데이터를 정상적으로 처리하는지 확인한다.
+// 특히 TelegramSend를 touch 하는지 여부를 검토한다.
 public class SendSendingTest {
     FakeTelegramSend fakeSend;
 
@@ -19,7 +21,7 @@ public class SendSendingTest {
         fakeSend = new FakeTelegramSend();
     }
 
-    @DisplayName("가상의 응답값(SendResponse)의 정상처리 여부")
+    @DisplayName("응답값(SendResponse)의 정상처리 여부")
     @Test
     void message(){
         // given
@@ -39,7 +41,7 @@ public class SendSendingTest {
         assertThat(result.getRequest().getMessage().toString()).isEqualTo(new MarkdownStringBuilder().plain("/help").toString());
     }
 
-    @DisplayName("가상의 응답값(SendResponse)의 정상처리 여부, sendtype = document")
+    @DisplayName("응답값(SendResponse)의 정상처리 여부, SendType = document")
     @Test
     void document(){
         // given
@@ -63,15 +65,15 @@ public class SendSendingTest {
     }
 
     // SendType이 DOCUMENT가 아닐 경우 언제나 MESSAGE로 전달한다.
-    @DisplayName("sendtype이 null")
+    @DisplayName("SendType이 명시되지 않으면, 언제나 MESSAGE 타입으로 텔래그램과 통신한다.")
     @Test
-    void sendtype_null(){
+    void non_sendType(){
         // given
         fakeSend.setMockMessageResponseJson(MockSendResponse.sendMessage("/help", 12345l));
         assert !fakeSend.isDocumentCalled();
         assert !fakeSend.isMessageCalled();
 
-        // sendType == null;
+        // SendType을 명시하지 않는다.
         final SendRequest sendRequest = SendRequest.send(12345l, null, new MarkdownStringBuilder().plain("/help"), null);
         final Send send = Send.of(sendRequest, null);
         assert send.getStatus() == REQUEST;

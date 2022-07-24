@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.List;
 
 import static infoqoch.dictionarybot.mock.data.MockUpdate.excelDocumentJson;
-import static infoqoch.dictionarybot.mock.data.MockUpdate.jsonToUpdateWrapper;
+import static infoqoch.dictionarybot.mock.data.MockUpdate.jsonToUpdateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -60,7 +60,7 @@ class DocumentControllerTest {
 
     private UpdateDocument mockDocumentWithExcel(String caption) {
         final String mockJson = excelDocumentJson(caption);
-        final UpdateRequest updateRequest = jsonToUpdateWrapper(mockJson);
+        final UpdateRequest updateRequest = jsonToUpdateRequest(mockJson);
         final UpdateDocument document = updateRequest.toDocument();
         return document;
     }

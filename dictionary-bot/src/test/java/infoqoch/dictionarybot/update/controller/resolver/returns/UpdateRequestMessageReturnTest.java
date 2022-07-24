@@ -1,10 +1,6 @@
-package infoqoch.dictionarybot.update.resolver.returns;
+package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.update.controller.resolver.returns.DictionaryUpdateRequestReturn;
-import infoqoch.dictionarybot.update.controller.resolver.returns.MSBUpdateRequestReturn;
-import infoqoch.dictionarybot.update.controller.resolver.returns.StringUpdateRequestReturn;
-import infoqoch.dictionarybot.update.controller.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;
@@ -13,6 +9,9 @@ import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictio
 import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO
+// UpdateRequestMessageReturn으로 구현한 타입의 정상 동작여부를 확인한다.
+// 부분적으로 테스트 코드를 작성하였다. 차후 전체 타입에 대한 테스트를 진행한다.
 class UpdateRequestMessageReturnTest {
 
     @Test
@@ -35,7 +34,7 @@ class UpdateRequestMessageReturnTest {
     }
 
     @Test
-    void markdownBuilder(){
+    void markdownStringBuilder(){
         assertMSB(new MarkdownStringBuilder().plain("반갑습니다."), "반갑습니다\\.");
         assertMSB(new MarkdownStringBuilder().plain("반갑습니다.").code("<h3>hi</h3>"), "반갑습니다\\.`\\<h3\\>hi\\<\\/h3\\>`");
     }
@@ -55,14 +54,7 @@ class UpdateRequestMessageReturnTest {
     }
 
     @Test
-    void test(){
-        final Dictionary simpleDictionary = createSimpleDictionary(createSimpleDictionaryContent(), 123l);
-        System.out.println("simpleDictionary = " + simpleDictionary.toString());
-
-    }
-
-    @Test
-    void single_dictionary(){
+    void dictionary(){
         final Dictionary simpleDictionary = createSimpleDictionary(createSimpleDictionaryContent(), 123l);
         assertSingleDictionary(simpleDictionary, "*apple*\\(애포얼\\)", "_사과_, Iphone 7 is the latest model");
     }

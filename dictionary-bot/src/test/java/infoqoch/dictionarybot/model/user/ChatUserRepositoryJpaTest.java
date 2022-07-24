@@ -1,12 +1,14 @@
 package infoqoch.dictionarybot.model.user;
 
+import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -16,9 +18,9 @@ import static infoqoch.dictionarybot.model.user.ChatUser.Role.ADMIN;
 import static infoqoch.dictionarybot.model.user.ChatUser.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-@SpringBootTest
-class ChatUserTest {
+@DataJpaTest
+@Import(QuerydslConfig.class)
+class ChatUserRepositoryJpaTest {
 
     @Autowired
     EntityManager em;
@@ -29,8 +31,9 @@ class ChatUserTest {
     @Autowired
     DictionaryRepository dictionaryRepository;
 
+    @DisplayName("회원이 생성되고 사전이 잘 등록된다")
     @Test
-    void join_chat_dictionary(){
+    void join_chat_dictionary() {
         // given
         final ChatUser chatUser = ChatUser.createUser(123l, "김갑순");
         chatUserRepository.save(chatUser);
@@ -54,8 +57,9 @@ class ChatUserTest {
         assertThat(dictionaries.get(0).getContent().getWord()).isEqualTo("hot summer");
     }
 
+    @DisplayName("회원의 상태값이 잘 변경된다")
     @Test
-    void setup_booleans(){
+    void setup_booleans() {
         // given
         final ChatUser givenUser = ChatUser.createUser(123l, "김갑순");
         em.persist(givenUser);

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.update.resolver.bean;
+package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.controller.resolver.bean.BeanContext;
 import lombok.Setter;

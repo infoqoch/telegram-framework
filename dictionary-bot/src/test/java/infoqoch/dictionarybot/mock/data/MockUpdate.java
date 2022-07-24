@@ -12,7 +12,7 @@ public class MockUpdate {
         return jsonToResponse(chatJson(text, chatId)) ;
     }
 
-    public static UpdateRequest jsonToUpdateWrapper(String json) {
+    public static UpdateRequest jsonToUpdateRequest(String json) {
         return new UpdateRequest(jsonToUpdate(json));
     }
 

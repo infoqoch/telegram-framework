@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.system.excel;
 
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -8,9 +9,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO
+// 읽을 수 있는 엑셀 타입이 한정됨. 몇 가지 패턴과 샘플이 필요.
 public class ExcelParserTest {
-
-
+    @DisplayName("ExcelParser의 동작여부를 확인. dictionary를 엑셀로 저장할 때 사용하는 엑셀 탬플릿을 테스트한다.")
     @Test
     void double_row(){
         File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());

@@ -8,6 +8,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+// TODO
+// Exception의 전파에 대한 테스트를 진행하였음.
+// 현재로서는 필요 없어 보임. 검토 후 삭제여부 결정.
+@Deprecated
 class TelegramExceptionTest {
     @Test
     void instanceOf(){

@@ -1,11 +1,11 @@
-package infoqoch.dictionarybot.model.dictionary.repository;
+package infoqoch.dictionarybot.mock.repository;
 
-import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.system.excel.ExcelReader;
 import infoqoch.dictionarybot.system.excel.ExcelParser;
+import infoqoch.dictionarybot.system.excel.ExcelReader;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;

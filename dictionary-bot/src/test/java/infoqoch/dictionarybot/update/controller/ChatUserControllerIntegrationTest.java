@@ -5,8 +5,8 @@ import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.run.FakeTelegramBot;
-import infoqoch.dictionarybot.run.FakeTelegramUpdate;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.log.repository.UpdateLogJpaRepository;
@@ -26,8 +26,9 @@ import static infoqoch.dictionarybot.model.user.ChatUser.Role.ADMIN;
 import static infoqoch.dictionarybot.model.user.ChatUser.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
-// jpa의 트랜잭션 동작 유무를 확인해야 하기 때문에 불가피하게 통합테스트를 진행
-// fake는 SendRequestEventListener와 FakeTelegramUpdate 임. 나머지는 빈으로 조립.
+// 텔레그램에서 ChatUser와 관련한 메시지를 받는다. ChatUser의 데이터가 정상 수정되는지를 확인한다.
+// 대역을 사용한다. SendRequestEventListener, FakeTelegramUpdate.
+// 그 외는 빈을 사용하여 조립한다.
 @ActiveProfiles({"test", "fake_send_listener"})
 @SpringBootTest
 @Transactional
@@ -48,9 +49,13 @@ class ChatUserControllerIntegrationTest {
     @Autowired
     ChatUserRepository chatUserRepository;
 
+    @Autowired
+    EntityManager em;
+
     @BeforeEach
     void setUp(){
-        fakeSendRequestEventListener.setCalled(false); // 빈을 재생성하지 않고 기본 값인 false로 롤백한다.
+        // 빈을 반복하여 사용하므로, 초기화한다.
+        fakeSendRequestEventListener.setCalled(false);
         dictionaryUpdateRunner = new DictionaryUpdateRunner(generateFakeBot(), updateDispatcher, repository);
     }
 
@@ -120,14 +125,17 @@ class ChatUserControllerIntegrationTest {
         assertThat(afterChatUser.get().getRole()).isEqualTo(USER);
     }
 
-    // UpdateRequestMethod와 관련한 resolver는 빈으로 등록하지 않고 이로 인하여 트랜잭션 흐름이 생길 수 없음.
-    // 결과적으로 controller에서 repository를 호출하여 save 하는 형태로 개발하였음. 정상 동작함을 확인
+    // UpdateRequestParam 빈에서 찾은 객체가 Controller까지 영속성 컨텍스트까지 유지함을 확인한다.
     @Test
-    @DisplayName("share_mine의 수정")
-    void share_mine_change() {
+    @DisplayName("UpdateRequestParam에서 저장(persist)한 ChatUser가 1차캐시에 있으며 더티체킹을 할 수 있다.")
+    void share_mine_change_in_session() {
         // given
+        em.persist(new ChatUser(123l, "kim"));
+        em.flush();
+        em.clear();;
+
         final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
-        assert beforeChatUser.isEmpty();
+        assert beforeChatUser.isPresent();
 
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
 
@@ -140,29 +148,13 @@ class ChatUserControllerIntegrationTest {
         assertThat(afterChatUser.get().isShareMine()).isFalse();
     }
 
-    @Autowired
-    EntityManager em;
-
-    /*
-    *
-    * TODO
-    * no session 문제가 발생하였다. 정확하게는 requestParamResolver에서 chatId를 기준으로 repository에 존재하면 Optional#get을 리턴하고, 그렇지 않으면 JpaRepository#save 객체를 리턴한다.
-    * save를 한 객체는 controller로 넘어가는데, 이때 영속성이 유지가 된다. 그러니까 엔티티그래프를 통해 다른 객체를 호출할 수 있다.
-    * find한 객체는 controller로 넘어가면 영속성이 끝나버리고 no session 에러가 발생한다.
-    * 이 두 개의 차이는 무엇일까?
-    * 일단은 front controller가 발생하는 곳에 @Transactional를 선언하여 해소할 수 있었다. 차후 이러한 문제가 발생하는 이유를 분명하게 이해하기를 바란다.
-    *
-    */
+    // TODO 추가적인 학습이 필요 : save의 경우 Transactional을 선언하지 않아도 영속성 컨텍스트에 유지되는데, findBy는 끊어진다. 결과적으로 Transactional을 선언하며 해소하였음. 이 이유는 차후 학습 필요.
     @Test
-    @DisplayName("chatuser의 1차 캐시의 유지")
-    void share_mine_change_in_session() {
+    @DisplayName("UpdateRequestParam으로 찾은(findBy) ChatUser가 1차캐시에 있으며 더티체킹을 할 수 있다.")
+    void share_mine_change() {
         // given
-        em.persist(new ChatUser(123l, "kim"));
-        em.flush();
-        em.clear();;
-
         final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
-        assert beforeChatUser.isPresent();
+        assert beforeChatUser.isEmpty();
 
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
 

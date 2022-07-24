@@ -1,33 +1,33 @@
 package infoqoch.dictionarybot.model.user;
 
+import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Transactional
-class ChatUserIntegrationTest {
+@DataJpaTest
+@Import(QuerydslConfig.class)
+class ChatUserJpaTest {
 
     @Autowired
     EntityManager em;
 
     @Autowired
-
     LookupRepository repository;
 
     @Test
     @DisplayName("chatUser의 데이터 공개여부에 따른 사전 조회")
-    void lookup_public_data(){
+    void lookup_all_users(){
         // given
         ChatUser narcissus = new ChatUser(123L, "narcissus");
         narcissus.setShareMine(true);
@@ -55,7 +55,7 @@ class ChatUserIntegrationTest {
 
     @Test
     @DisplayName("chatUser의 탐색 데이터 수준에 따른 사전 조회")
-    void open_data_public(){
+    void shareMine(){
         // given
         ChatUser closed = new ChatUser(123L, "closed");
         closed.setShareMine(false);
@@ -80,4 +80,5 @@ class ChatUserIntegrationTest {
         final List<Dictionary> findByOpened = repository.lookup(10, 0,"apple", opened, LookupRepository.FindBy.WORD);
         assertThat(findByOpened).size().isEqualTo(1); // closed.setOpenDataPublic(false); // opened는 closed의 데이터를 검색할 수 없음.
     }
+
 }

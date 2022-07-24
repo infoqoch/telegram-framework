@@ -1,12 +1,13 @@
-package infoqoch.dictionarybot.run;
+package infoqoch.dictionarybot.main;
 
-import infoqoch.dictionarybot.main.HourlyDictionaryRunner;
 import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,8 +32,27 @@ class HourlyDictionaryRunnerIntegrationTest {
     @Autowired
     HourlyDictionaryRunner runner;
 
+    @BeforeEach
+    void setUp(){
+        fakeSendRequestEventListener.clear();
+    }
+
+    @DisplayName("유저와 사전 모두 없어 특별한 동작을 하지 않는다.")
     @Test
-    void get_mine(){
+    void no_result(){
+        // given
+        assert !fakeSendRequestEventListener.isCalled();
+
+        // when
+        runner.hourlyDictionaryRun(); // 회원이 없으므로 보낸 데이터가 없다.
+
+        // then
+        assert !fakeSendRequestEventListener.isCalled();
+    }
+
+    @DisplayName("ChatUser가 혼자이며 자신의 사전을 받는다.")
+    @Test
+    void only_one_user(){
         // given
         ChatUser chatUser = createChatUserAndPushDictionary(true);
 
@@ -49,6 +69,7 @@ class HourlyDictionaryRunnerIntegrationTest {
         );
     }
 
+    @DisplayName("ChatUser가 타인의 사전을 받는다.")
     @Test
     void get_others(){
         // given
@@ -73,6 +94,7 @@ class HourlyDictionaryRunnerIntegrationTest {
         );
     }
 
+    @DisplayName("ChatUser가 오직 나만의 사전만 받는다.")
     @Test
     void get_only_mine(){
         // given
@@ -95,18 +117,6 @@ class HourlyDictionaryRunnerIntegrationTest {
         ).isEqualTo(
                 new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().plain("아직 등록한 사전이 없습니다!").toString()
         );
-    }
-
-    @Test
-    void no_result(){
-        // given
-        assert !fakeSendRequestEventListener.isCalled();
-
-        // when
-        runner.hourlyDictionaryRun(); // 회원이 없으므로 보낸 데이터가 없다.
-
-        // then
-        assert !fakeSendRequestEventListener.isCalled();
     }
 
     private ChatUser createChatUserAndPushDictionary(boolean hourlyAlarm) {

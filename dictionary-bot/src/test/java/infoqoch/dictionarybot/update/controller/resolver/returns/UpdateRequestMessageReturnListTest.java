@@ -1,7 +1,6 @@
-package infoqoch.dictionarybot.update.resolver.returns;
+package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.update.controller.resolver.returns.*;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictio
 import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// UpdateRequestMessageReturn의 리스트가 stream을 통해 적절한 데이터타입리졸버를 리턴함을 확인한다.
 class UpdateRequestMessageReturnListTest {
     List<UpdateRequestReturn> returnResolvers;
 
@@ -27,7 +27,7 @@ class UpdateRequestMessageReturnListTest {
     }
 
     @Test
-    void msb(){
+    void markdownStringBuilder(){
         // give
         final MarkdownStringBuilder target = new MarkdownStringBuilder("hi!!");
 

@@ -5,11 +5,13 @@ import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+@Disabled("비지니스로직에 치명적인 부분은 아니므로 현재 생략한다. 프로젝트가 안정화 된 후 완성한다.")
 public class ChatUserControllerTest {
     ChatUserController chatUserController;
     ChatUserRepository chatUserRepository;
@@ -20,9 +22,7 @@ public class ChatUserControllerTest {
         chatUserController = new ChatUserController(chatUserRepository);
     }
 
-    // TODO
-    // msb 프린트 관련해서는 차후 수정 필요.
-    @Disabled
+    @DisplayName("status의 호출에 대한 응답 메시지가 정상적으로 동작하는지 확인한다.")
     @Test
     void myStatus_print_test(){
         // given

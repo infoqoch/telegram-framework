@@ -3,11 +3,14 @@ package infoqoch.dictionarybot.send.request;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.send.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// SendRequest의 팩터리 메서드의 동작여부를 확인한다.
 public class SendRequestTest {
+    @DisplayName("SendRequest가 메시지를 전달할 때, 형식에 맞춰 정상적으로 변경되는지 확인")
     @Test
     void body_escape(){
         SendRequest request = SendRequest.sendMessage(112354l, new MarkdownStringBuilder().plain("good job!"));
@@ -17,6 +20,7 @@ public class SendRequestTest {
         assertSendRequest(request2, 11235344l, SendType.MESSAGE, "*즐거운 일요일\\!*_행복한 코딩시간^^_`\\<h3\\>진짜야\\!\\<h3\\>`");
     }
 
+    @DisplayName("SendRequest가 메시지를 전달할 때, 데이터타입에 맞춰 자동으로 보정하는지 확인")
     @Test
     void send_type() {
         SendRequest request = SendRequest.sendMessage(112354l, new MarkdownStringBuilder().plain("good job!"));

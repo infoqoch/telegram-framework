@@ -1,6 +1,6 @@
-package infoqoch.dictionarybot.run;
+package infoqoch.dictionarybot.main;
 
-import infoqoch.dictionarybot.main.DictionarySendRunner;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramSend;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
 import infoqoch.dictionarybot.send.Send;
@@ -17,6 +17,7 @@ import java.util.List;
 import static infoqoch.dictionarybot.send.Send.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// DictionarySendRunner가 Telegram의 요청과 응답 데이터를 잘 분석함을 확인한다.
 class DictionarySendRunnerTest {
 
     // compositions

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class DictionaryInsertBatchServiceExcelIntegrationTest {
+class DictionaryInsertBatchServiceIntegrationTest {
 
     @Autowired
     DictionaryInsertBatchService dictionaryInsertBatchService;

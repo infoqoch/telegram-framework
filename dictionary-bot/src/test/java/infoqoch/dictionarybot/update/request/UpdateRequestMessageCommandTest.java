@@ -1,11 +1,13 @@
 package infoqoch.dictionarybot.update.request;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestMessageCommandTest {
+    @DisplayName("UpdateRequestCommand의 메시지 변환 기능의 정상 동작 여부를 확인한다.")
     @Test
     void resolve_command(){
         assertMatchCommand("help", HELP);
@@ -19,6 +21,7 @@ class UpdateRequestMessageCommandTest {
         assertNotMatchCommand("excel_push",  UNKNOWN);
     }
 
+    @DisplayName("UpdateRequestCommand의 alias의 수용 여부를 확인한다.")
     @Test
     void resolve_command_with_alias(){
         assertMatchCommand("ㄷ", LOOKUP_WORD);
@@ -29,16 +32,11 @@ class UpdateRequestMessageCommandTest {
 
 
     private void assertNotMatchCommand(String input, UpdateRequestCommand expectedCommand) {
-        // final Optional<String> contains = UpdateRequestCommand.contains(input);
-        // assertThat(contains).isNotPresent();
         final UpdateRequestCommand command = UpdateRequestCommand.of(input);
         assertThat(command).isEqualTo(expectedCommand);
     }
 
     private void assertMatchCommand(String input, UpdateRequestCommand expectedCommand) {
-//        final Optional<String> contains = UpdateRequestCommand.contains(input);
-//        assertThat(contains).isPresent();
-//        assertThat(contains.get()).isEqualTo(actual);
         final UpdateRequestCommand command = UpdateRequestCommand.of(input);
         assertThat(command).isEqualTo(expectedCommand);
     }

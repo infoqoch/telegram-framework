@@ -1,6 +1,7 @@
-package infoqoch.dictionarybot.run;
+package infoqoch.dictionarybot.main;
 
-import infoqoch.dictionarybot.main.DictionaryUpdateRunner;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
+import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.mock.repository.MemoryUpdateLogRepository;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
@@ -10,6 +11,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -43,7 +45,8 @@ class DictionaryUpdateRunnerTest {
         repository = new MemoryUpdateLogRepository();
         runner = new DictionaryUpdateRunner(bot, updateDispatcher, repository);
     }
-    
+
+    @DisplayName("데이터를 정상적으로 읽고 정상적으로 DB에 저장한다.")
     @Test
     void message_send() {
         // given
@@ -62,6 +65,7 @@ class DictionaryUpdateRunnerTest {
         assertThat(logs.get(0).getSendType()).isEqualTo(MESSAGE);
     }
 
+    @DisplayName("알 수 없는 명령을 보냈으나 정상적으로 처리한다.")
     @Test
     void message_unknown_command() {
         // given
@@ -80,8 +84,10 @@ class DictionaryUpdateRunnerTest {
     }
 
     // TODO
-    // 현재 조건에서 아래에서 예외가 발생하더라도 처리할 방법이 특별하게 없음.
-    // 다만, 차후 모니터링을 위한 기능이 필요. 아마 이 부분은 스프링 컨테이너로 넘어가는 예외 처리하는 것이 나을 수도 있을텐데, 확인 필요.
+    // 현재 조건에서 아래에서 예외가 발생하더라도 처리할 방법이 없음. 러너 밖으로 예외를 던짐.
+    // 예외가 발생한다면 텔레그램이 제공하는 json을 해석할 수 없을 때로 예상됨. 하지만 텔래그램 서버에는 동일한 데이터가 계속 존재하므로, 에러가 무한정 발생할 것으로 보임. updateId를 받고 무시할 수 없는 상황이므로.
+    // 이에 대한 대응 방안 필요.
+    @DisplayName("텔래그램으로부터 데이터를 받았으나 정상 처리하지 못함. 예외가 러너 밖으로 던져짐")
     @Test
     void throw_update_exception() {
         // given
@@ -93,8 +99,7 @@ class DictionaryUpdateRunnerTest {
         }).isInstanceOf(RuntimeException.class);
     }
 
-    // update를 분석할 때 예외가 발생한다.
-    // FakeController#help의 값이 exception이면 예외를 던지도록 한다.
+    @DisplayName("핸들러 내부의 처리과정에서 예외가 발생한다. ")
     @Test
     void throw_resolve_update(){
         // given
@@ -113,8 +118,8 @@ class DictionaryUpdateRunnerTest {
     }
 
 
-    // update_log를 repository에 등록할 때 실패한다.
-    // spy 처리가 까다로워서 단순하게 처리하였다. runner 시 예외가 터지지 않고, repository에 등록된 데이터가 없다.
+
+    @DisplayName("분석한 텔래그램의 데이터를 영속화 하는 과정에서 예외가 발생한다.")
     @Test
     void throw_update_log_save() {
         // setUp
