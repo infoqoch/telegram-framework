@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.integration.telegram;
+package infoqoch.dictionarybot.telegram;
 
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;

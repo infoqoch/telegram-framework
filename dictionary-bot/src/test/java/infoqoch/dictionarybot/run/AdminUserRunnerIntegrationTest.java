@@ -1,6 +1,7 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.run;
 
-import infoqoch.dictionarybot.integration.dictionarybot.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.main.AdminUserRunner;
+import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
@@ -17,12 +18,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static infoqoch.dictionarybot.send.SendType.*;
-import static infoqoch.dictionarybot.send.SendType.MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles({"test", "fake_send_listener"})
@@ -32,7 +31,8 @@ class AdminUserRunnerIntegrationTest {
     @Autowired EntityManager em;
 
     // FAKE
-    @Autowired FakeSendRequestEventListener fakeSendRequestEventListener;
+    @Autowired
+    FakeSendRequestEventListener fakeSendRequestEventListener;
 
     // 타겟 객체
     @Autowired

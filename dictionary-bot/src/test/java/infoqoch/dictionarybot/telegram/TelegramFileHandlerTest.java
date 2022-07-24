@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.integration.telegram;
+package infoqoch.dictionarybot.telegram;
 
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.UpdateRequest;

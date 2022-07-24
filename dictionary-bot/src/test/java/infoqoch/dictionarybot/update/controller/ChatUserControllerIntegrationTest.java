@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.update.controller;
 
-import infoqoch.dictionarybot.DictionaryUpdateRunner;
-import infoqoch.dictionarybot.integration.dictionarybot.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.main.DictionaryUpdateRunner;
+import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;

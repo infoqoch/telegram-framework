@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.integration.dictionarybot;
 
-import infoqoch.dictionarybot.DictionaryUpdateRunner;
+import infoqoch.dictionarybot.main.DictionaryUpdateRunner;
+import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.run.FakeTelegramBot;
@@ -47,7 +48,8 @@ class DictionaryUpdateRunnerIntegrationTest {
     // fake
     FakeTelegramUpdate telegramUpdate;
     UpdateDispatcher updateDispatcher;
-    @Autowired FakeSendRequestEventListener fakeSendRequestEventListener;
+    @Autowired
+    FakeSendRequestEventListener fakeSendRequestEventListener;
 
     // 타겟 객체
     DictionaryUpdateRunner dictionaryUpdateRunner;

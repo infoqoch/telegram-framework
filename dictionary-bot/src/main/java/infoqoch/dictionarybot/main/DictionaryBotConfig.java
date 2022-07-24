@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;

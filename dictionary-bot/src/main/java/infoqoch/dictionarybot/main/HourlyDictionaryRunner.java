@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;

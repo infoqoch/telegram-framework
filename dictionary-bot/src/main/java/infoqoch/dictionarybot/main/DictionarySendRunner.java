@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;

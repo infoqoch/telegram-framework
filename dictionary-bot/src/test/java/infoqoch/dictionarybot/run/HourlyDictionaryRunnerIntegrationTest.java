@@ -1,6 +1,7 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.run;
 
-import infoqoch.dictionarybot.integration.dictionarybot.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.main.HourlyDictionaryRunner;
+import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.user.ChatUser;

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot;
+package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;

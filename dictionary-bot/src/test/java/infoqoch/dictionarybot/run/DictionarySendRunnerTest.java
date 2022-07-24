@@ -1,11 +1,11 @@
 package infoqoch.dictionarybot.run;
 
-import infoqoch.dictionarybot.DictionarySendRunner;
+import infoqoch.dictionarybot.main.DictionarySendRunner;
 import infoqoch.dictionarybot.mock.data.MockSendResponse;
 import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
 import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.send.SendRequest;
+import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
