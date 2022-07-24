@@ -42,7 +42,6 @@ class AdminUserRunnerIntegrationTest {
     void setUp(){
         // 각 테스트는 하나의 컨텍스트를 돌려 쓴다. 트랜잭션은 아마 db에 대한 롤백은 진행하는 것 같다. 그 외의 빈에 대해서는 초기화를 해야 한다.
         fakeSendRequestEventListener.clear();
-
     }
 
     @Test
@@ -119,14 +118,14 @@ class AdminUserRunnerIntegrationTest {
     void has_update_log() {
         // given
         final UpdateLog updateLog = UpdateLog.builder().updateId(1235l).updateCommand(UpdateRequestCommand.LOOKUP_DEFINITION).updateValue("abc").build();
-        em.persist(updateLog);
+        em.persist(updateLog); // fk가 존재해야함. 사실상 의미없는 데이터.
 
         Send send = Send.of(
                 SendRequest.send(123l, SERVER_ERROR, new MarkdownStringBuilder("hi"), null)
                 , updateLog);
         Events.raise(send);
 
-        ChatUser adminUser = createAdminUser();
+        createAdminUser();
 
         // when
         runner.run();
@@ -134,6 +133,10 @@ class AdminUserRunnerIntegrationTest {
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
         final List<Send> sentList = fakeSendRequestEventListener.getSentList();
+        for (Send occurred : sentList) {
+            System.out.println("occurred = " + occurred);
+
+        }
         assertThat(sentList).size().isEqualTo(2); // ADMIN_ALERT이 추가된다.
 
         final List<Send> adminAlert = sentList.stream().filter(s -> s.getRequest().getSendType().equals(ADMIN_ALERT)).collect(Collectors.toList());
@@ -157,6 +160,7 @@ class AdminUserRunnerIntegrationTest {
         em.clear();
         final ChatUser findUser = em.find(ChatUser.class, chatUser.getNo());
         assert findUser.getRole() == ChatUser.Role.ADMIN;
+        assert ((Long) em.createQuery("select count(c.chatId) from ChatUser c").getSingleResult()) == 1l;
         return findUser;
     }
 }

@@ -29,4 +29,6 @@ public interface DictionaryRepository {
     List<Dictionary> findByContentDefinition(String definition);
 
     List<Dictionary> findAll();
+
+    List<Dictionary> findByNoIn(List<Long> ids);
 }

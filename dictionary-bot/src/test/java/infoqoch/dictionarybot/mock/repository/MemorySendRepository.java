@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.mock.repository;
 
 import infoqoch.dictionarybot.send.Send;
+import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import lombok.SneakyThrows;
 
@@ -27,6 +28,11 @@ public class MemorySendRepository implements SendRepository {
         return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<Send> findByNo(Long no) {
+        return Optional.empty();
+    }
+
 
     @SneakyThrows
     private void setNoWithReflect(Send send, Long no) {
@@ -35,11 +41,20 @@ public class MemorySendRepository implements SendRepository {
         noField.set(send, no);
     }
 
-    private Long maxNo() {
+    @Override
+    public Long maxNo() {
         final OptionalLong max = repository.keySet().stream().mapToLong(l -> l).max();
 
         if(max.isPresent())
             return max.getAsLong() + 1l;
         return 1l;
+    }
+
+    // TODO
+    // not yet implemented
+    @Override
+    public List<Send> findByNoGreaterThanAndRequestSendType(Long no, SendType status) {
+        new UnsupportedOperationException("not support operation");
+        return null;
     }
 }

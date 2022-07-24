@@ -30,6 +30,7 @@ class DictionarySendRunnerTest {
     @BeforeEach
     void setUp(){
         repository = new MemorySendRepository();
+        sendRunnerService = new SendRunnerService(repository);
         telegramSend = new FakeTelegramSend();
         runner = new DictionarySendRunner(telegramSend,sendRunnerService);
     }

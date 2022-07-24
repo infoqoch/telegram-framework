@@ -86,7 +86,7 @@ public class AdminUserRunner {
         if(updateLog==null) return null;
 
         return new MarkdownStringBuilder()
-                .italic("caused by update id : ").plain(String.valueOf(updateLog.getUpdateId())).lineSeparator()
+                .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
                 .plain("  -> command : ").plain(updateLog.getUpdateCommand().toString()).plain(" : ").plain(updateLog.getUpdateValue()==null?"":updateLog.getUpdateValue()).lineSeparator();
     }
 

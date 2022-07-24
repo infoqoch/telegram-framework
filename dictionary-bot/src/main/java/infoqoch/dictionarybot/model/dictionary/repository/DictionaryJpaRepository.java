@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DictionaryJpaRepository extends JpaRepository<Dictionary, Long>, DictionaryRepository {
-    List<Dictionary> findByNoIn(List<Long> ids);
+
 }
 

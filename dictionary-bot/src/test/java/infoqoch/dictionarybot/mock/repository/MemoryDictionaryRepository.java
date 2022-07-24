@@ -42,6 +42,11 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
          return repository.values().stream().collect(Collectors.toList());
     }
 
+    @Override
+    public List<Dictionary> findByNoIn(List<Long> ids) {
+        return repository.values().stream().filter(d -> ids.contains(d.getNo())).collect(Collectors.toList());
+    }
+
     private Long maxNo() {
         final OptionalLong max = repository.keySet().stream().mapToLong(l -> l).max();
 
