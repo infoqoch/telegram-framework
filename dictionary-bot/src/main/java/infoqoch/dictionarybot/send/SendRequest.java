@@ -63,7 +63,7 @@ public class SendRequest {
         @Override
         public MarkdownStringBuilder convertToEntityAttribute(String s) {
             try {
-                return new MarkdownStringBuilder().notEscapedTest(s);
+                return new MarkdownStringBuilder().notEscapedText(s);
             } catch (NotEscapedMSBException e) {
                 throw new IllegalArgumentException(e);
             }

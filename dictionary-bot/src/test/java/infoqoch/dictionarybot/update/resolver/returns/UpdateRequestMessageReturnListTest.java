@@ -83,7 +83,7 @@ class UpdateRequestMessageReturnListTest {
         //then
         assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(DictionariesUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage().text()).contains(d1.toMarkdown().text());
-        assertThat(resolver.get().resolve(target).getMessage().text()).contains(d2.toMarkdown().text());
+        assertThat(resolver.get().resolve(target).getMessage().toString()).contains(d1.toMarkdown().toString());
+        assertThat(resolver.get().resolve(target).getMessage().toString()).contains(d2.toMarkdown().toString());
     }
 }

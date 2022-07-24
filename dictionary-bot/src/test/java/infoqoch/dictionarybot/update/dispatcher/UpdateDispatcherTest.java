@@ -73,7 +73,7 @@ public class UpdateDispatcherTest {
 
         // then
         assertThat(response.getSendType()).isEqualTo(SendType.MESSAGE);
-        assertThat(response.getMessage().text()).contains("*apple*");
+        assertThat(response.getMessage().toString()).contains("*apple*");
     }
 
     @Test
