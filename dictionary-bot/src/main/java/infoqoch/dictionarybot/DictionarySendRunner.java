@@ -3,7 +3,7 @@ package infoqoch.dictionarybot;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.send.SendType;
-import infoqoch.dictionarybot.send.repository.SendRepository;
+import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.exception.TelegramException;
@@ -25,12 +25,12 @@ import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
 @RequiredArgsConstructor
 public class DictionarySendRunner {
     private final TelegramSend telegramSend;
-    private final SendRepository sendRepository;
+    private final SendRunnerService sendRunnerService;
 
     @Scheduled(fixedDelay = 100)
     @Transactional
     public void run() {
-        List<Send> sendRequests = sendRepository.findByStatusForScheduler(Send.Status.REQUEST);
+        List<Send> sendRequests = sendRunnerService.findByStatusForScheduler(Send.Status.REQUEST);
 
         for (Send send : sendRequests) {
             try{

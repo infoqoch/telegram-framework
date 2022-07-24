@@ -6,6 +6,7 @@ import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.send.SendRequest;
+import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +25,13 @@ class DictionarySendRunnerTest {
     // test target instance
     DictionarySendRunner runner;
     SendRepository repository;
+    SendRunnerService sendRunnerService;
 
     @BeforeEach
     void setUp(){
         repository = new MemorySendRepository();
         telegramSend = new FakeTelegramSend();
-        runner = new DictionarySendRunner(telegramSend,repository);
+        runner = new DictionarySendRunner(telegramSend,sendRunnerService);
     }
     
     @Test

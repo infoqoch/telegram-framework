@@ -8,7 +8,7 @@ public class IgnoreLogFilter extends Filter<ILoggingEvent> {
 
     @Override
     public FilterReply decide(ILoggingEvent event) {
-        if (event.getMessage().contains("ignore-logging")) {
+        if (event.getMessage().contains("ForScheduler") || event.getMessage().length() == 0) {
             return FilterReply.DENY;
         } else {
             return FilterReply.ACCEPT;

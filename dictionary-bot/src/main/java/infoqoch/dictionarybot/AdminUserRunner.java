@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.send.SendType;
-import infoqoch.dictionarybot.send.repository.SendJpaRepository;
+import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.update.log.UpdateLog;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -22,17 +22,17 @@ import java.util.List;
 @Component
 public class AdminUserRunner {
     private final ChatUserRepository chatUserRepository;
-    private final SendJpaRepository sendRepository;
+    private final SendRunnerService sendRunnerService;
     private long LAST_SEND_NO;
 
-    public AdminUserRunner(ChatUserRepository chatUserRepository, SendJpaRepository sendRepository) {
+    public AdminUserRunner(ChatUserRepository chatUserRepository, SendRunnerService sendRunnerService) {
         this.chatUserRepository = chatUserRepository;
-        this.sendRepository = sendRepository;
+        this.sendRunnerService = sendRunnerService;
         setupLastSendNo();
     }
 
     private void setupLastSendNo() {
-        final Long maxNo = sendRepository.maxNo();
+        final Long maxNo = sendRunnerService.maxNo();
         if(maxNo==null){
             LAST_SEND_NO = 0l;
         }else {
@@ -43,7 +43,7 @@ public class AdminUserRunner {
     @Scheduled(fixedDelay = 1000l)
     @Transactional
     public void run() {
-        final List<Send> serverErrorSent = sendRepository.findByNoGreaterThanAndRequestSendType(LAST_SEND_NO, SendType.SERVER_ERROR);
+        final List<Send> serverErrorSent = sendRunnerService.findByNoGreaterThanAndRequestSendTypeForScheduler(LAST_SEND_NO, SendType.SERVER_ERROR);
         if(serverErrorSent.size()==0) return;
 
         upToDateLastSendNo(serverErrorSent);
@@ -88,8 +88,6 @@ public class AdminUserRunner {
         return new MarkdownStringBuilder()
                 .italic("caused by update id : ").plain(String.valueOf(updateLog.getUpdateId())).lineSeparator()
                 .plain("  -> command : ").plain(updateLog.getUpdateCommand().toString()).plain(" : ").plain(updateLog.getUpdateValue()==null?"":updateLog.getUpdateValue()).lineSeparator();
-
-
     }
 
     private void requestSending(SendRequest sendRequest) {

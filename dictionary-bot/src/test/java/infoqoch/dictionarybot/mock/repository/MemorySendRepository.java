@@ -27,10 +27,6 @@ public class MemorySendRepository implements SendRepository {
         return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<Send> findByNo(Long no) {
-        return Optional.ofNullable(repository.get(no));
-    }
 
     @SneakyThrows
     private void setNoWithReflect(Send send, Long no) {

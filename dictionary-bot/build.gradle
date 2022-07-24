@@ -33,10 +33,9 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-    //querydsl
+    // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-//    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 
     // 리플렉션
     implementation 'org.reflections:reflections:0.10.2'
@@ -51,9 +50,7 @@ dependencies {
     // poi
     implementation 'org.apache.poi:poi:5.2.2'
     implementation 'org.apache.poi:poi-ooxml:5.2.2'
-    // poi SAXNotRecognizedException 등 parser 관련 해소
-    implementation 'xerces:xercesImpl:2.12.2'
-
+    implementation 'xerces:xercesImpl:2.12.2' // poi SAXNotRecognizedException 등 parser 관련 해소
 
     // db
     runtimeOnly 'com.h2database:h2'
@@ -69,6 +66,9 @@ dependencies {
         exclude group: 'com.oracle.ojdbc', module: 'ons'
     }
 
+    // 로깅
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+    implementation 'org.codehaus.janino:janino'
 }
 test {
     useJUnitPlatform()
