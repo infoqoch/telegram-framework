@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
-import infoqoch.dictionarybot.main.DictionaryUpdateRunner;
+import infoqoch.dictionarybot.main.UpdateRunner;
 import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.model.user.ChatUser;
@@ -44,7 +44,7 @@ class ChatUserControllerIntegrationTest {
     @Autowired FakeSendRequestEventListener fakeSendRequestEventListener;
 
     // 타겟 객체
-    DictionaryUpdateRunner dictionaryUpdateRunner;
+    UpdateRunner updateRunner;
 
     @Autowired
     ChatUserRepository chatUserRepository;
@@ -56,7 +56,7 @@ class ChatUserControllerIntegrationTest {
     void setUp(){
         // 빈을 반복하여 사용하므로, 초기화한다.
         fakeSendRequestEventListener.setCalled(false);
-        dictionaryUpdateRunner = new DictionaryUpdateRunner(generateFakeBot(), updateDispatcher, repository);
+        updateRunner = new UpdateRunner(generateFakeBot(), updateDispatcher, repository);
     }
 
     private TelegramBot generateFakeBot() {
@@ -77,7 +77,7 @@ class ChatUserControllerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+telegramProperties.user().promotionToAdmin(), 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
@@ -99,7 +99,7 @@ class ChatUserControllerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+ expectCode, 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
@@ -117,7 +117,7 @@ class ChatUserControllerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_wrong_code!!", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
@@ -140,7 +140,7 @@ class ChatUserControllerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);
@@ -159,7 +159,7 @@ class ChatUserControllerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/share_mine_N", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final Optional<ChatUser> afterChatUser = chatUserRepository.findByChatId(123l);

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-class DictionaryUpdateRunnerTest {
+class UpdateRunnerTest {
 
     // compositions
     TelegramBot bot;
@@ -34,7 +34,7 @@ class DictionaryUpdateRunnerTest {
     MemoryUpdateLogRepository repository;
 
     // test target instance
-    DictionaryUpdateRunner runner;
+    UpdateRunner runner;
 
     @BeforeEach
     void setUp(){
@@ -43,7 +43,7 @@ class DictionaryUpdateRunnerTest {
 
         updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
         repository = new MemoryUpdateLogRepository();
-        runner = new DictionaryUpdateRunner(bot, updateDispatcher, repository);
+        runner = new UpdateRunner(bot, updateDispatcher, repository);
     }
 
     @DisplayName("데이터를 정상적으로 읽고 정상적으로 DB에 저장한다.")
@@ -146,6 +146,6 @@ class DictionaryUpdateRunnerTest {
         bot = new FakeTelegramBot(telegramUpdate, null);
 
         updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
-        runner = new DictionaryUpdateRunner(bot, updateDispatcher, repository);
+        runner = new UpdateRunner(bot, updateDispatcher, repository);
     }
 }

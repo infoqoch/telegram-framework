@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update.response;
 
 import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.Getter;
 import lombok.ToString;
@@ -28,6 +29,13 @@ public class UpdateResponse {
 
     public static UpdateResponse send(SendType sendType, MarkdownStringBuilder message){
         return new UpdateResponse(sendType, message,null);
+    }
+
+    public static UpdateResponse error(TelegramException e, MarkdownStringBuilder defaultMessage){
+        if (e.response().isPresent())
+            return UpdateResponse.send(e.resolveErrorType(), e.response().get());
+
+        return UpdateResponse.send(e.resolveErrorType(), defaultMessage);
     }
 
     public MarkdownStringBuilder getMessage() {

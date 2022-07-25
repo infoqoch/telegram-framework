@@ -22,7 +22,7 @@ public class DictionaryBotConfig {
     }
 
     @Bean
-    DictionarySendRunner dictionarySendRunner(){
-        return new DictionarySendRunner(telegramBot().send(), sendRunnerService);
+    SendRunner dictionarySendRunner(){
+        return new SendRunner(telegramBot().send(), sendRunnerService);
     }
 }

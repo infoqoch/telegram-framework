@@ -2,6 +2,8 @@ package infoqoch.dictionarybot.update.exception;
 
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
+import java.util.Optional;
+
 public class TelegramClientException extends RuntimeException implements TelegramException{
     private final MarkdownStringBuilder response;
 
@@ -32,7 +34,7 @@ public class TelegramClientException extends RuntimeException implements Telegra
     }
 
     @Override
-    public MarkdownStringBuilder response(){
-        return response;
+    public Optional<MarkdownStringBuilder> response(){
+        return Optional.ofNullable(response);
     }
 }

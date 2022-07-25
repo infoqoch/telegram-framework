@@ -19,7 +19,7 @@ import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
 @Async
 @Slf4j
 @RequiredArgsConstructor
-public class DictionarySendRunner {
+public class SendRunner {
     private final TelegramSend telegramSend;
     private final SendRunnerService sendRunnerService;
 

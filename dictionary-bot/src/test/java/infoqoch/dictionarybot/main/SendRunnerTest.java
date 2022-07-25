@@ -18,13 +18,13 @@ import static infoqoch.dictionarybot.send.Send.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // DictionarySendRunner가 Telegram의 요청과 응답 데이터를 잘 분석함을 확인한다.
-class DictionarySendRunnerTest {
+class SendRunnerTest {
 
     // compositions
     FakeTelegramSend telegramSend;
 
     // test target instance
-    DictionarySendRunner runner;
+    SendRunner runner;
     SendRepository repository;
     SendRunnerService sendRunnerService;
 
@@ -33,7 +33,7 @@ class DictionarySendRunnerTest {
         repository = new MemorySendRepository();
         sendRunnerService = new SendRunnerService(repository);
         telegramSend = new FakeTelegramSend();
-        runner = new DictionarySendRunner(telegramSend,sendRunnerService);
+        runner = new SendRunner(telegramSend,sendRunnerService);
     }
     
     @Test

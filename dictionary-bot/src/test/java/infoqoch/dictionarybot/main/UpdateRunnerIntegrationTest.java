@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles({"test", "fake_send_listener"})
 @SpringBootTest
 @Transactional
-class DictionaryUpdateRunnerIntegrationTest {
+class UpdateRunnerIntegrationTest {
 
     @Autowired
     UpdateLogJpaRepository repository;
@@ -53,13 +53,13 @@ class DictionaryUpdateRunnerIntegrationTest {
     FakeSendRequestEventListener fakeSendRequestEventListener;
 
     // 타겟 객체
-    DictionaryUpdateRunner dictionaryUpdateRunner;
+    UpdateRunner updateRunner;
 
     @BeforeEach
     void setUp(){
         fakeSendRequestEventListener.setCalled(false); // 빈을 재생성하지 않고 기본 값인 false로 롤백한다.
         updateDispatcher = FakeUpdateDispatcherFactory.defaultInstance();
-        dictionaryUpdateRunner = new DictionaryUpdateRunner(generateFakeBot(), updateDispatcher, repository);
+        updateRunner = new UpdateRunner(generateFakeBot(), updateDispatcher, repository);
     }
 
     private TelegramBot generateFakeBot() {
@@ -74,7 +74,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/w hihi", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final List<UpdateLog> logs = repository.findAll();
@@ -98,7 +98,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         telegramUpdate.setThrowException(true);
 
         // then
-        assertThatThrownBy(()-> dictionaryUpdateRunner.run()).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(()-> updateRunner.run()).isInstanceOf(RuntimeException.class);
     }
 
     // SHARE_MINE 을 호출할 경우 Method에 Param을 처리하는 과정에서 예외가 발생한다. RuntimeException이 발생하며 이는 ServerError로 대응한다.
@@ -109,7 +109,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/"+SHARE_MINE.value()+" hihi", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final List<UpdateLog> logs = repository.findAll();
@@ -133,7 +133,7 @@ class DictionaryUpdateRunnerIntegrationTest {
         telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/help exception!!", 123l));
 
         // when
-        dictionaryUpdateRunner.run();
+        updateRunner.run();
 
         // then
         final List<UpdateLog> logs = repository.findAll();
