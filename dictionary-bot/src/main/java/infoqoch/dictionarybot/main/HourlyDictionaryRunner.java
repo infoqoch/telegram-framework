@@ -27,9 +27,17 @@ public class HourlyDictionaryRunner {
 
     @Scheduled(cron = "0 0 7-22 * * *")
     public void hourlyDictionaryRun() {
-        final Optional<Dictionary> random = repository.getRandom();
-        if (existsDictionary(random)) return;
-        sending(random.get());
+        final Optional<Dictionary> publicDictionary = findPublicRandomDictionary();
+
+        if (existsDictionary(publicDictionary)) return;
+
+        List<ChatUser> chatUsers = hourlyDictionarySubscribers();
+
+        sending(chatUsers, publicDictionary.get());
+    }
+
+    private Optional<Dictionary> findPublicRandomDictionary() {
+        return repository.getRandom();
     }
 
     private boolean existsDictionary(Optional<Dictionary> random) {
@@ -40,36 +48,39 @@ public class HourlyDictionaryRunner {
         return false;
     }
 
-    private void sending(Dictionary dictionary) {
-        List<ChatUser> chatUsers = chatUserRepository.findByHourlyAlarm(true);
-        for (ChatUser chatUser : chatUsers) {
-            sendingEachChatUser(chatUser, dictionary);
-        }
+    private List<ChatUser> hourlyDictionarySubscribers() {
+        return chatUserRepository.findByHourlyAlarm(true);
     }
 
-    private void sendingEachChatUser(ChatUser chatUser, Dictionary dictionary) {
-        if(chatUser.isLookupAllUsers()){
-            sendingDictionary(dictionary, chatUser);
-        } else {
-            Optional<Dictionary> myDictionary = repository.getRandom(chatUser);
-            if(myDictionary.isPresent()){
-                sendingMyDictionary(chatUser, myDictionary);
+    private void sending(List<ChatUser> chatUsers, Dictionary dictionary) {
+        for (ChatUser chatUser : chatUsers) {
+            if(chatUser.isLookupAllUsers()){
+                sendingDictionary(chatUser, dictionary);
             }else{
-                sendingNoResult(chatUser);
+                sendingPrivateDictionary(chatUser);
             }
         }
     }
 
-    private void sendingDictionary(Dictionary dictionary, ChatUser chatUser) {
-        final Send send = Send.of(SendRequest.sendMessage(chatUser.getChatId(), msgHeader().append(dictionary.toMarkdown())));
-        Events.raise(send);
+    private void sendingDictionary(ChatUser chatUser, Dictionary dictionary) {
+        Events.raise(Send.of(SendRequest.sendMessage(
+                chatUser.getChatId(), msgHeader().append(dictionary.toMarkdown()))));
     }
 
-    private void sendingMyDictionary(ChatUser chatUser, Optional<Dictionary> myDictionary) {
-        Events.raise(Send.of(SendRequest.sendMessage(
-                chatUser.getChatId()
-                , msgHeader().append(myDictionary.get().toMarkdown())
-        )));
+    private MarkdownStringBuilder msgHeader() {
+        return new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator();
+    }
+
+    private void sendingPrivateDictionary(ChatUser chatUser) {
+        findPrivateRandomDictionary(chatUser).ifPresentOrElse(
+                privateDictionary -> sendingDictionary(chatUser, privateDictionary)
+                , () -> sendingNoResult(chatUser)
+        );
+    }
+
+
+    private Optional<Dictionary> findPrivateRandomDictionary(ChatUser chatUser) {
+        return repository.getRandom(chatUser);
     }
 
     private void sendingNoResult(ChatUser chatUser) {
@@ -77,9 +88,5 @@ public class HourlyDictionaryRunner {
                 chatUser.getChatId()
                 , msgHeader().plain("아직 등록한 사전이 없습니다!")
         )));
-    }
-
-    private MarkdownStringBuilder msgHeader() {
-        return new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator();
     }
 }

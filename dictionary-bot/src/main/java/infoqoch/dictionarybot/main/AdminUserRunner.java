@@ -31,15 +31,6 @@ public class AdminUserRunner {
         setupLastSendNo();
     }
 
-    private void setupLastSendNo() {
-        final Long maxNo = sendRunnerService.maxNo();
-        if(maxNo==null){
-            LAST_SEND_NO = 0l;
-        }else {
-            LAST_SEND_NO = maxNo;
-        }
-    }
-
     @Scheduled(fixedDelay = 1000l)
     @Transactional
     public void run() {
@@ -53,6 +44,15 @@ public class AdminUserRunner {
         final List<ChatUser> admins = chatUserRepository.findByRole(ChatUser.Role.ADMIN);
         for (ChatUser admin : admins) {
             requestSending(SendRequest.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null));
+        }
+    }
+
+    private void setupLastSendNo() {
+        final Long maxNo = sendRunnerService.maxNo();
+        if(maxNo==null){
+            LAST_SEND_NO = 0l;
+        }else {
+            LAST_SEND_NO = maxNo;
         }
     }
 
