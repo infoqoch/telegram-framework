@@ -41,7 +41,7 @@ public class ExcelParser {
 
             if(!content.valid()){
                 if(++emptySize> MAX_EMPTY_CONTENT_SIZE){
-                    log.info("비어있는 열이 10개가 넘어 더 이상 탐색하지 않습니다.");
+                    log.error("비어있는 열이 10개가 넘어 더 이상 현재 시트는 더는 탐색하지 않습니다.");
                     break;
                 }
                 continue;
