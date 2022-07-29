@@ -3,8 +3,8 @@ package infoqoch.dictionarybot.update.request;
 public enum UpdateRequestCommand {
     HELP("help")
     , LOOKUP_WORD("w", "ㄷ"),  LOOKUP_SENTENCE("s", "ㅁ"), LOOKUP_DEFINITION("d", "ㅈ"), LOOKUP_FULL_SEARCH("f", "ㅍ")
-    ,  UNKNOWN("unknown")
-    , EXCEL_PUSH("excel push", "push", "replace")
+    , UNKNOWN("unknown")
+    , EXCEL_HELP("excel help", "help excel") , EXCEL_PUSH("excel push", "push", "replace")
     , HOURLY_ALARM("hourly")
     , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users")
     , PROMOTION_ROLE("promotion")

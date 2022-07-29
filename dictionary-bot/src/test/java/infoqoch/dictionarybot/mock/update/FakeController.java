@@ -44,7 +44,7 @@ public class FakeController {
         return UpdateResponse.message(new MarkdownStringBuilder(sb.toString()));
     }
 
-    @UpdateRequestMethodMapper(HELP)
+    @UpdateRequestMethodMapper({HELP, EXCEL_HELP})
     public UpdateResponse help(UpdateRequestMessage request) {
         if(request.getValue().contains("exception"))
             throw new TelegramClientException(new MarkdownStringBuilder("잘못된 값을 입력하였습니다! 확인 바랍니다."), "사용자가 잘못된 데이터를 입력하였습니다.");

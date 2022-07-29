@@ -12,7 +12,9 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties("telegram")
 public class TelegramProperties {
     private final String token;
+    private final String sampleExcelPush;
     private final User user;
+
 
     @Getter @Accessors(fluent = true)
     @RequiredArgsConstructor
