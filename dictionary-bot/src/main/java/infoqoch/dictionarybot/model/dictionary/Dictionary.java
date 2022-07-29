@@ -9,16 +9,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@TableGenerator(
-        name = "dictionary_seq_generator",
-        table = "dictionary_sequences",
-        allocationSize = 1000)
+@SequenceGenerator(
+        name="dictionary_sequences",
+        sequenceName="dictionary_sequences",
+        initialValue=1,
+        allocationSize=1000
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Dictionary {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dictionary_sequences")
+
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE
+            , generator = "dictionary_sequences"
+    )
     private Long no;
 
     @Embedded
