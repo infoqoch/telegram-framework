@@ -51,6 +51,6 @@ public class DictionaryInsertBatchService {
     }
 
     private List<List<DictionaryContent>> sampleExcelToContents(File file) {
-        return ExcelParser.doubleRows(new ExcelReader(file, 4));
+        return ExcelParser.doubleRows(new ExcelReader(file, 4), 2);
     }
 }

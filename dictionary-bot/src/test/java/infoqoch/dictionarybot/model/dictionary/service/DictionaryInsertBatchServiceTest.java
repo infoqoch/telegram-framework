@@ -25,7 +25,7 @@ class DictionaryInsertBatchServiceTest {
     void save(){
         // gievn
         final ChatUser chatUser = new ChatUser(123l, "kim");
-        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        File file = new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile());
         DictionarySource source = new DictionarySource("wefijw", DictionarySource.Type.EXCEL, chatUser);
         given(dictionarySourceRepository.save(any())).willReturn(source);
 

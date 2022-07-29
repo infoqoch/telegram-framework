@@ -154,9 +154,9 @@ public class MemoryDictionaryRepositoryTest {
     }
 
     private List<List<DictionaryContent>> sampleExcelToContents() {
-        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        File file = new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile());
         final ExcelReader excelReader = new ExcelReader(file, 4);
-        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader);
+        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader, 2);
         return sheetsData;
     }
 

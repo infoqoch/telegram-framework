@@ -53,4 +53,14 @@ public class DictionaryContent implements Cloneable {
         if(getPronunciation() ==null) return null;
         return new MarkdownStringBuilder().plain("(").plain(getPronunciation()).plain(")");
     }
+
+
+    public boolean valid() {
+        if (isEmpty(word) && isEmpty(definition) && isEmpty(sentence)) return false;
+        return true;
+    }
+
+    private boolean isEmpty(String target) {
+        return target == null || target.trim().length() == 0;
+    }
 }

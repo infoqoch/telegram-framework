@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
-import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
@@ -22,7 +21,6 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_P
 @RequiredArgsConstructor
 @Transactional
 public class DocumentController {
-    private final DictionaryRepository dictionaryRepository;
     private final DictionaryInsertBatchService dictionaryInsertBatchService;
     private final TelegramFileHandler telegramFileHandler;
 

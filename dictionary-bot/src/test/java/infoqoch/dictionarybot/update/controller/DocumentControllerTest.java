@@ -37,13 +37,13 @@ class DocumentControllerTest {
         dictionarySourceRepository = mock(DictionarySourceRepository.class);
         dictionaryInsertBatchService = new DictionaryInsertBatchService(dictionaryRepository, dictionarySourceRepository);
         mockHandler = mock(TelegramFileHandler.class);
-        dictionaryController = new DocumentController(dictionaryRepository, dictionaryInsertBatchService, mockHandler);
+        dictionaryController = new DocumentController(dictionaryInsertBatchService, mockHandler);
     }
 
     @Test
     void excel_push() {
         // given
-        when(mockHandler.extractExcelFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile()));
+        when(mockHandler.extractExcelFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile()));
 
         final ChatUser chatUser = new ChatUser(123l, "kim");
 

@@ -15,10 +15,10 @@ public class ExcelParserTest {
     @DisplayName("ExcelParser의 동작여부를 확인. dictionary를 엑셀로 저장할 때 사용하는 엑셀 탬플릿을 테스트한다.")
     @Test
     void double_row(){
-        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        File file = new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile());
         final ExcelReader excelReader = new ExcelReader(file, 4);
 
-        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader);
+        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader, 2);
 
         assertThat(sheetsData.get(0)).size().isEqualTo(9);
         assertThat(sheetsData.get(1)).size().isEqualTo(19);
@@ -30,6 +30,18 @@ public class ExcelParserTest {
         assertThat(sheetsData.get(0).get(0).getPronunciation()).isEqualTo(null);
         assertThat(sheetsData.get(0).get(0).getQuotation()).isEqualTo("SO book7");
         assertThat(sheetsData.get(0).get(0).getSentence()).isEqualTo(null);
-
     }
+
+
+    @DisplayName("무한 loop로 끝나지 않는 엑셀을 다룬다.")
+    @Test
+    void double_row_infinitive(){
+        File file = new File(getClass().getClassLoader().getResource("exceltest/infinitive_excel.xlsx").getFile());
+        final ExcelReader excelReader = new ExcelReader(file, 4);
+        List<List<DictionaryContent>> sheetsData = ExcelParser.doubleRows(excelReader, 2);
+
+        assertThat(sheetsData.get(0)).size().isEqualTo(2);
+    }
+
+
 }

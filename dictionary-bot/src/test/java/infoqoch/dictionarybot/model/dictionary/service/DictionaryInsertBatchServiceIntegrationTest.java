@@ -33,7 +33,7 @@ class DictionaryInsertBatchServiceIntegrationTest {
     @Test
     void insert_excel_dictionaries_with_jpa(){
         // given
-        File file = new File(getClass().getClassLoader().getResource("exceltest/sample.xlsx").getFile());
+        File file = new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile());
 
         ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
         em.persist(chatUser);
