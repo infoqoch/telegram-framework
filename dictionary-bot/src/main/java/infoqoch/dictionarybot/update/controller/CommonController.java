@@ -26,8 +26,9 @@ public class CommonController {
         final MarkdownStringBuilder msb = new MarkdownStringBuilder()
                 .bold("=== 💾 사전 등록 방법 (엑셀 📑) ===").lineSeparator()
                 .plain("1. 전달드린 엑셀 형식에 맞춰 사전을 등록합니다. ").lineSeparator()
-                .plain("2. 완성한 엑셀을 사전챗에 보냅니다. 설명에는 반드시 다음의 명령어를 입력해야 합니다. ").command("/excel", "push").lineSeparator()
-                .plain("다른 형태의 등록 방식은 차후 추가할 예정입니다.");
+                .plain("2. 완성한 엑셀을 사전챗에 보냅니다. 설명에는 반드시 다음의 명령어를 입력해야 합니다. ").command("excel", "push").lineSeparator()
+                .lineSeparator()
+                .italic("다른 형태의 등록 방식은 차후 추가할 예정입니다.");
 
         return UpdateResponse.document(msb, telegramProperties.sampleExcelPush());
     }
