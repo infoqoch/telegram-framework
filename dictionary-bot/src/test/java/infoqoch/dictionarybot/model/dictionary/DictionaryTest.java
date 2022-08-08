@@ -10,10 +10,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DictionaryTest {
     @DisplayName("Dictionary의 markdown이 잘 추출되는지 확인한다")
     @Test
-    void toMarkDown(){
+    void toMarkDown() {
         final Dictionary simpleDictionary = MockDictionary.createSimpleDictionary(MockDictionary.createSimpleDictionaryContent(), 123l);
-        MarkdownStringBuilder msb = simpleDictionary.toMarkdown();
+        MarkdownStringBuilder msb =  new DictionaryContentMarkdownPrinter(simpleDictionary).toMarkdown();
         assertThat(msb.toString()).contains("*apple*\\(애포얼\\)", "_사과_, Iphone 7 is the latest model");
     }
-
 }

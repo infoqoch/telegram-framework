@@ -1,7 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary;
 
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,9 +54,5 @@ public class Dictionary {
         if(chatUser==null) throw new IllegalArgumentException("ChatUser is not nullable");
         this.chatUser = chatUser;
         chatUser.addDictionary(this);
-    }
-
-    public MarkdownStringBuilder toMarkdown() {
-        return new MarkdownStringBuilder().append(content.toMarkdown());
     }
 }

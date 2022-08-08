@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
@@ -64,7 +65,7 @@ public class HourlyDictionaryRunner {
 
     private void sendingDictionary(ChatUser chatUser, Dictionary dictionary) {
         Events.raise(Send.of(SendRequest.sendMessage(
-                chatUser.getChatId(), msgHeader().append(dictionary.toMarkdown()))));
+                chatUser.getChatId(), msgHeader().append(new DictionaryContentMarkdownPrinter(dictionary).toMarkdown()))));
     }
 
     private MarkdownStringBuilder msgHeader() {

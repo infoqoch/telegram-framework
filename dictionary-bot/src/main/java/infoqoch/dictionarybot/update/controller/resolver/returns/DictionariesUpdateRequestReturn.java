@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
@@ -51,7 +52,7 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
     private MarkdownStringBuilder toMarkdown(List<Dictionary> dictionaries) {
         MarkdownStringBuilder msb = new MarkdownStringBuilder();
         for (Dictionary dictionary : dictionaries) {
-            msb.append(dictionary.toMarkdown()).lineSeparator();
+            msb.append(new DictionaryContentMarkdownPrinter(dictionary).toMarkdown()).lineSeparator();
         }
         return msb;
     }

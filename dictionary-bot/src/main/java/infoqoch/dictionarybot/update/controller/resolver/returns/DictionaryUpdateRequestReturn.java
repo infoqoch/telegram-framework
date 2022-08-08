@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 
 import java.lang.reflect.Method;
@@ -19,6 +20,6 @@ public class DictionaryUpdateRequestReturn implements UpdateRequestReturn {
     @Override
     public UpdateResponse resolve(Object target) {
         final Dictionary dictionary = (Dictionary) target;
-        return UpdateResponse.message(dictionary.toMarkdown());
+        return UpdateResponse.message(new DictionaryContentMarkdownPrinter(dictionary).toMarkdown());
     }
 }

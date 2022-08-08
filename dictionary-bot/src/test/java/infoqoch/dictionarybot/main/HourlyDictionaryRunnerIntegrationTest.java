@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.main;
 import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
+import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -65,7 +66,7 @@ class HourlyDictionaryRunnerIntegrationTest {
         assertThat(
                 sent.getRequest().getMessage().toString()
         ).isEqualTo(
-                new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(chatUser.getDictionaries().get(0).toMarkdown()).toString()
+                new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(new DictionaryContentMarkdownPrinter(chatUser.getDictionaries().get(0)).toMarkdown()).toString()
         );
     }
 
@@ -90,8 +91,9 @@ class HourlyDictionaryRunnerIntegrationTest {
         assertThat(
                 sent.getRequest().getMessage().toString()
         ).isEqualTo(
-                new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(someone.getDictionaries().get(0).toMarkdown()).toString()
+                new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(new DictionaryContentMarkdownPrinter(someone.getDictionaries().get(0)).toMarkdown()).toString()
         );
+
     }
 
     @DisplayName("ChatUser가 오직 나만의 사전만 받는다.")
