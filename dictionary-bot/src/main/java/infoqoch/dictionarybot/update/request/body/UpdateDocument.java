@@ -20,4 +20,8 @@ public class UpdateDocument {
     private From from;
     private Document document;
     private Chat chat;
+
+    public boolean hasDocument() {
+        return getDocument() != null;
+    }
 }

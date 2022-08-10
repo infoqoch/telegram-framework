@@ -28,7 +28,8 @@ public class TelegramFileHandler {
     }
 
     private void validExcelFile(UpdateDocument document) {
-        if(!document.getDocument().getMimeType().contains("sheet")) throw new IllegalArgumentException("excel 파일만 가능합니다!");
+        if(!document.getDocument().getMimeType().contains("sheet"))
+            throw new IllegalArgumentException("excel 파일만 가능합니다!");
     }
 
     private File getFileByUrl(String filePath) {

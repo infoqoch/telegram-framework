@@ -5,7 +5,9 @@ import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchServ
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,9 @@ public class DocumentController {
     @UpdateRequestMethodMapper(EXCEL_PUSH)
     public String excelPush(UpdateDocument document, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : excel_push");
+
+        if(!document.hasDocument())
+            throw new TelegramClientException(new MarkdownStringBuilder().bold("파일을 첨부해야 합니다!").lineSeparator().command("excel", "help"), "document가 누락되었습니다.");
 
         final File file = telegramFileHandler.extractExcelFile(document);
 
