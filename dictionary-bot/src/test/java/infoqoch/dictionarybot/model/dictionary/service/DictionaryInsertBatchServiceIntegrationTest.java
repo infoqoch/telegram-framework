@@ -51,4 +51,38 @@ class DictionaryInsertBatchServiceIntegrationTest {
         assertThat(result.get(0).getChatUser().getChatId()).isEqualTo(chatUser.getChatId());
         assertThat(result.get(0).getSource().getFileId()).isEqualTo("aberiuwefwef");
     }
+
+    @Test
+    void delete_child_cascade(){
+        // given
+        File file = new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile());
+        ChatUser chatUser = new ChatUser(ThreadLocalRandom.current().nextLong(), "kim");
+        em.persist(chatUser);
+        
+        // source 첫 번째
+        final DictionarySource source1 = new DictionarySource("aberiuwefwef", DictionarySource.Type.EXCEL, chatUser);
+        dictionaryInsertBatchService.saveExcel(file, source1, chatUser);
+        
+        // source 두 번째
+        final DictionarySource source2 = new DictionarySource("aberiuwefwef", DictionarySource.Type.EXCEL, chatUser);
+        dictionaryInsertBatchService.saveExcel(file, source2, chatUser);
+        em.flush();
+        em.clear();
+
+        // check if exist
+        final List<Dictionary> findDictionary = repository.findByChatUser(chatUser);
+        assert findDictionary.size() == (47*2);
+        em.flush();
+        em.clear();
+
+        // when
+        // source 첫 번째에 대해서만 삭제한다.
+        dictionaryInsertBatchService.deleteSourcesExclude(source2, chatUser);
+        em.flush();
+        em.clear();
+
+        final List<Dictionary> targetDictionary = repository.findByChatUser(chatUser);
+        assertThat(targetDictionary).size().isEqualTo(47);
+        assertThat(targetDictionary.get(0).getSource().getNo()).isEqualTo(source2.getNo());
+    }
 }

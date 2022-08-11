@@ -9,8 +9,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
+@Getter()
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -26,6 +27,12 @@ public class DictionarySource {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ChatUser chatUser;
+
+    // 하나의 엑셀에서 수 만개의 dictionary가 생성될 수 있음. 그러므로 getter를 열지 아니함.
+    // source의 관리를 위한 용도임.
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL)
+    private List<Dictionary> addresses;
 
     @CreatedDate
     private LocalDateTime createdDate;

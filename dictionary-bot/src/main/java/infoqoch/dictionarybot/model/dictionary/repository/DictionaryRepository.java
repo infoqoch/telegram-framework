@@ -1,6 +1,8 @@
 package infoqoch.dictionarybot.model.dictionary.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionarySource;
+import infoqoch.dictionarybot.model.user.ChatUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +33,8 @@ public interface DictionaryRepository {
     List<Dictionary> findAll();
 
     List<Dictionary> findByNoIn(List<Long> ids);
+
+    List<Dictionary> findBySource(DictionarySource source);
+
+    List<Dictionary> findByChatUser(ChatUser chatUser);
 }

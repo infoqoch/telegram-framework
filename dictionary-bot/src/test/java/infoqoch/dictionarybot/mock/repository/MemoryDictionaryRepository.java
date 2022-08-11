@@ -1,7 +1,9 @@
 package infoqoch.dictionarybot.mock.repository;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
+import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
+import infoqoch.dictionarybot.model.user.ChatUser;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,6 +47,16 @@ public class MemoryDictionaryRepository implements DictionaryRepository {
     @Override
     public List<Dictionary> findByNoIn(List<Long> ids) {
         return repository.values().stream().filter(d -> ids.contains(d.getNo())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Dictionary> findBySource(DictionarySource source) {
+        return null;
+    }
+
+    @Override
+    public List<Dictionary> findByChatUser(ChatUser chatUser) {
+        return null;
     }
 
     private Long maxNo() {

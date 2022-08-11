@@ -27,7 +27,6 @@ public class DictionaryInsertBatchService {
         final DictionarySource savedSource = dictionarySourceRepository.save(source);
         List<Dictionary> dictionaries = contentsToDictionaries(sampleExcelToContents(file), savedSource, chatUser);
 
-
         for (Dictionary dictionary : dictionaries) {
             dictionaryRepository.save(dictionary);
         }
@@ -52,5 +51,10 @@ public class DictionaryInsertBatchService {
 
     private List<List<DictionaryContent>> sampleExcelToContents(File file) {
         return ExcelParser.doubleRows(new ExcelReader(file, 4), 2);
+    }
+
+    public void deleteSourcesExclude(DictionarySource exclude, ChatUser chatUser) {
+        final List<DictionarySource> sources = dictionarySourceRepository.findByChatUser(chatUser);
+        sources.stream().filter(s -> !s.getNo().equals(exclude.getNo())).forEach(s -> dictionarySourceRepository.delete(s));
     }
 }

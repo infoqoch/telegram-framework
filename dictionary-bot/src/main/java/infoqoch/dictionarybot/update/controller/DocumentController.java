@@ -39,6 +39,8 @@ public class DocumentController {
 
         final int saved = dictionaryInsertBatchService.saveExcel(file, source, chatUser).size();
 
+        dictionaryInsertBatchService.deleteSourcesExclude(source, chatUser);
+
         return saved + "의 사전이 등록되었습니다!";
     }
 }
