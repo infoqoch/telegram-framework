@@ -26,7 +26,6 @@ public class SendRunner {
     @Scheduled(fixedDelay = 100000)
     @Transactional
     public void run() {
-        log.debug("!!!hi!");
         List<Send> sendRequests = sendRunnerService.findByStatusForScheduler(Send.Status.REQUEST);
 
         for (Send send : sendRequests) {

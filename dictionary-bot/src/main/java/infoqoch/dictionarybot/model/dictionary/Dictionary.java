@@ -8,22 +8,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@SequenceGenerator(
-        name="dictionary_sequences",
-        sequenceName="dictionary_sequences",
-        initialValue=1,
-        allocationSize=1000
-)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Dictionary {
 
     @Id
-
+    @SequenceGenerator(
+            name="dictionary_sequence_generator",
+            sequenceName="dictionary_sequence",
+            initialValue=1
+            // , allocationSize=1000 TODO 동작하지 아니함. 차후 확인 필요.
+    )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE
-            , generator = "dictionary_sequences"
+            , generator = "dictionary_sequence_generator"
     )
     private Long no;
 

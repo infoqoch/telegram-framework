@@ -10,10 +10,12 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class DictionaryContent implements Cloneable {
+    @Column(columnDefinition = "varchar(1000)")
     private String word;
     private String pronunciation;
     private String partOfSpeech;
     private String quotation;
+    @Column(columnDefinition = "varchar(1000)")
     private String definition;
     @Column(columnDefinition = "varchar(10000)")
     private String sentence;
