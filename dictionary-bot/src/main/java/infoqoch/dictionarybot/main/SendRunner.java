@@ -23,9 +23,10 @@ public class SendRunner {
     private final TelegramSend telegramSend;
     private final SendRunnerService sendRunnerService;
 
-    @Scheduled(fixedDelay = 100)
+    @Scheduled(fixedDelay = 100000)
     @Transactional
     public void run() {
+        log.debug("!!!hi!");
         List<Send> sendRequests = sendRunnerService.findByStatusForScheduler(Send.Status.REQUEST);
 
         for (Send send : sendRequests) {

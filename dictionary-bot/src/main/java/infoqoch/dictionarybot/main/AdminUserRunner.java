@@ -31,7 +31,7 @@ public class AdminUserRunner {
         setupLastSendNo();
     }
 
-    @Scheduled(fixedDelay = 1000l)
+    @Scheduled(fixedDelay = 100000)
     @Transactional
     public void run() {
         final List<Send> serverErrorSent = sendRunnerService.findByNoGreaterThanAndRequestSendTypeForScheduler(LAST_SEND_NO, SendType.SERVER_ERROR);
