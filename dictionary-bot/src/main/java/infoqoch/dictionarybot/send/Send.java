@@ -101,15 +101,20 @@ public class Send {
             success(response);
         }else{
             responseError(response);
+            // TODO. 이 부분을 예외로 던져야 하는가?
+            // 서버에서 처리할 수 없는 에러(chat not found : 응답할 수 없는 채팅방)과 처리할 수 있는 예외(markdown 문법 에러 : 서버에러로 응답해야함)로 분리할 수 있음.
+            // 전자의 경우 예외를 던지고 다시 메시지를 보내는 과정에서 에러가 발생할 수 있다는 가능성을 우회할 수 없음. 결과적으로 Telegram의 에러 응답에 대한 정리를 필요로 할 수 있음. 하지만 이에 대한 스펙이 정확하게 정리된 것으로 보이지는 않음.
+            // 일단 할 일로 남겨 둔다. 이후 정리한다.
+            // throw new IllegalStateException("텔래그램에서 400 이상으로 응답하였습니다. code : "+errorCode+", message :"+errorMessage);
         }
     }
 
     private void responseError(Response response) {
-        log.error("[response_error] [{}] {}", errorCode, errorMessage);
-
         this.status = RESPONSE_ERROR;
         this.errorCode = response.getErrorCode();
         this.errorMessage = response.getDescription();
+
+        log.error("[response_error] [{}] {}", errorCode, errorMessage);
     }
 
     private void success(Response response) {

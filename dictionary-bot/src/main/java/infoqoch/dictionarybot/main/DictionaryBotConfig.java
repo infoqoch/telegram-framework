@@ -20,9 +20,4 @@ public class DictionaryBotConfig {
     TelegramBot telegramBot(){
         return DefaultTelegramBotFactory.init(telegramProperties.token());
     }
-
-    @Bean
-    SendRunner dictionarySendRunner(){
-        return new SendRunner(telegramBot().send(), sendRunnerService);
-    }
 }
