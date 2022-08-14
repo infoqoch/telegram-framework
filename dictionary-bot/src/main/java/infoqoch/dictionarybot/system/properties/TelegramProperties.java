@@ -14,12 +14,19 @@ public class TelegramProperties {
     private final String token;
     private final String sampleExcelPush;
     private final User user;
-
+    private final Directory directory;
 
     @Getter @Accessors(fluent = true)
     @RequiredArgsConstructor
     public static class User {
         private final String promotionToAdmin;
+    }
+
+
+    @Getter @Accessors(fluent = true)
+    @RequiredArgsConstructor
+    public static class Directory {
+        private final String excel;
     }
 
     public String token() {
@@ -29,3 +36,4 @@ public class TelegramProperties {
     }
 
 }
+
