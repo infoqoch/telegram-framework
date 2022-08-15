@@ -33,9 +33,13 @@ public class TelegramFileHandler {
 
     private String createFileName(UpdateDocument document) {
         final Long chatId = document.getChat().getId();
-        final String fileName = document.getDocument().getFileName();
         final long now = System.currentTimeMillis();
-        return chatId + "_"+fileName+"_"+now+".xlsx";
+        return chatId + "_"+ fileNameExcludeExtension(document.getDocument().getFileName()) +"_"+now+".xlsx";
+    }
+
+    private String fileNameExcludeExtension(String fileName) {
+        final int idx = fileName.lastIndexOf(".xlsx");
+        return fileName.substring(0, idx);
     }
 
     private void validExcelFile(UpdateDocument document) {
