@@ -33,6 +33,11 @@ public class MemorySendRepository implements SendRepository {
         return Optional.empty();
     }
 
+    @Override
+    public List<Send> findAll() {
+        return repository.values().stream().toList();
+    }
+
 
     @SneakyThrows
     private void setNoWithReflect(Send send, Long no) {

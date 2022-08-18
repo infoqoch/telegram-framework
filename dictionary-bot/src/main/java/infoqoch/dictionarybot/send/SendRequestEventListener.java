@@ -15,13 +15,13 @@ import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
 @Profile("scheduler")
 @Slf4j
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class SendRequestEventListener {
     private final SendRepository repository;
     private final TelegramBot telegramBot;
 
     @EventListener(Send.class)
-    @Transactional
     public void handle(Send send) {
         repository.save(send);
         try {

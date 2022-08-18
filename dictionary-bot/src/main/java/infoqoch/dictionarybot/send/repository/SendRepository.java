@@ -18,4 +18,6 @@ public interface SendRepository {
     List<Send> findByStatus(Send.Status status);
 
     Optional<Send> findByNo(Long no);
+
+    List<Send> findAll();
 }

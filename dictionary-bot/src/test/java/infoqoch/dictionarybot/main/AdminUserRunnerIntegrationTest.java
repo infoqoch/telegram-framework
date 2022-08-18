@@ -5,13 +5,18 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.system.event.Events;
+import infoqoch.dictionarybot.system.event.EventsConfigurationSupporter;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // AdminUserRunner를 테스트한다.
 // AdminUserRunner는 SendRunner 중 SERVER_ERROR을 타입으로 하는 값에 대하여 반응한다. 해당 데이터가 존재할 때 Admin에 얼럿을 보낸다.
 // 그러므로 대체로 이벤트 리스너에 대한 테스트가 주가 된다.
+@Slf4j
 @ActiveProfiles({"test", "fake_send_listener"})
 @SpringBootTest
 @Transactional
@@ -39,11 +45,23 @@ class AdminUserRunnerIntegrationTest {
     @Autowired
     AdminUserRunner runner;
 
+    @Autowired
+    BeanFactory beanFactory;
+
+    @Autowired
+    SendRepository sendRepository;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
     @BeforeEach
     void setUp(){
-        // 각 테스트는 하나의 컨텍스트를 돌려 쓴다. 트랜잭션은 db에 대한 롤백만을 진행하는 것으로 보인다. 나머지 빈에 대해서는 자체적으로 초기화 한다.
+        EventsConfigurationSupporter.replaceApplicationContext(applicationContext);
+
+        createAdminUser();
         fakeSendRequestEventListener.clear();
     }
+
 
     @DisplayName("Send 데이터가 없음")
     @Test
@@ -59,8 +77,8 @@ class AdminUserRunnerIntegrationTest {
     @Test
     void no_error(){
         // given
-        createAdminUser();
         raiseSendEvent(DOCUMENT, CLIENT_ERROR, MESSAGE, DOCUMENT, CLIENT_ERROR, CLIENT_ERROR, MESSAGE); // 7개
+        em.flush();
 
         // when
         runner.run();
@@ -81,8 +99,8 @@ class AdminUserRunnerIntegrationTest {
     @Test
     void server_error(){
         // given
-        createAdminUser();
         raiseSendEvent(DOCUMENT, SERVER_ERROR); // 2개
+        em.flush();
 
         // when
         runner.run();
@@ -108,15 +126,6 @@ class AdminUserRunnerIntegrationTest {
         System.out.println("message = " + message);
     }
 
-    private void raiseSendEvent(SendType...types) {
-        for (SendType type : types) {
-            Send send = Send.of(
-                    SendRequest.send(123l, type, new MarkdownStringBuilder("hi"), null)
-                    , null);
-            Events.raise(send);
-        }
-    }
-
     private ChatUser createAdminUser() {
         final ChatUser chatUser = new ChatUser(123l, "kim");
         chatUser.changeRole(ChatUser.Role.ADMIN);
@@ -127,5 +136,14 @@ class AdminUserRunnerIntegrationTest {
         assert findUser.getRole() == ChatUser.Role.ADMIN;
         assert ((Long) em.createQuery("select count(c.chatId) from ChatUser c").getSingleResult()) == 1l;
         return findUser;
+    }
+
+    private void raiseSendEvent(SendType...types) {
+        for (SendType type : types) {
+            Send send = Send.of(
+                    SendRequest.send(123l, type, new MarkdownStringBuilder("hi"), null)
+                    , null);
+            Events.raise(send);
+        }
     }
 }
