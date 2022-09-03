@@ -14,6 +14,8 @@ public class UpdateDispatcher {
     private final List<UpdateRequestMethodResolver> methodResolvers;
 
     public UpdateResponse process(UpdateRequest update) {
-        return methodResolvers.stream().filter(r -> r.support(update)).findAny().get().process(update);
+        return methodResolvers.stream()
+                .filter(r -> r.support(update)).findAny().orElseThrow(()->new IllegalStateException("fatal error!! can not resolve this update : " + update.toString()))
+                .process(update);
     }
 }
