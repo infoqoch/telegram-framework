@@ -11,6 +11,7 @@ import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -119,6 +120,8 @@ class UpdateRunnerTest {
 
 
 
+    // TODO
+    @Disabled("영속화 부분 검토 필요")
     @DisplayName("분석한 텔래그램의 데이터를 영속화 하는 과정에서 예외가 발생한다.")
     @Test
     void throw_update_log_save() {

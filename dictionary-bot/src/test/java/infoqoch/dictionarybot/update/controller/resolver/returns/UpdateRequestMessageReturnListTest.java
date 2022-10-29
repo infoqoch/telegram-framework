@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.controller.resolver.returns;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ class UpdateRequestMessageReturnListTest {
         final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
 
         //then
-        assertThat(resolver).isPresent();
+        Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(MSBUpdateRequestReturn.class);
         assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target);
     }
@@ -50,7 +51,7 @@ class UpdateRequestMessageReturnListTest {
         final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
 
         //then
-        assertThat(resolver).isPresent();
+        Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(StringUpdateRequestReturn.class);
         assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
     }
@@ -64,7 +65,7 @@ class UpdateRequestMessageReturnListTest {
         final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
 
         //then
-        assertThat(resolver).isPresent();
+        Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(DictionaryUpdateRequestReturn.class);
         assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new DictionaryContentMarkdownPrinter(target).toMarkdown());
     }
@@ -82,7 +83,7 @@ class UpdateRequestMessageReturnListTest {
         final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
 
         //then
-        assertThat(resolver).isPresent();
+        Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(DictionariesUpdateRequestReturn.class);
         assertThat(resolver.get().resolve(target).getMessage().toString()).contains(new DictionaryContentMarkdownPrinter(d1).toMarkdown().toString());
         assertThat(resolver.get().resolve(target).getMessage().toString()).contains(new DictionaryContentMarkdownPrinter(d2).toMarkdown().toString());
