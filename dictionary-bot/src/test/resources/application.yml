@@ -2,7 +2,7 @@ spring:
   profiles:
     active: test_oracle_jpa
     group:
-      "test": "mem,window,dev"
-      "test_mem_jpa": "mem,window,dev"
-      "test_oracle_jpa": "oracle,window,dev"
-      "test_maria_jpa": "maria,window,dev"
+      "test": "mem,window,bot-dev"
+      "test_mem_jpa": "mem,window,bot-dev"
+      "test_oracle_jpa": "oracle,window,bot-dev"
+      "test_maria_jpa": "maria,window,bot-dev"

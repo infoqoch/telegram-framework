@@ -29,7 +29,7 @@ public class FakeTelegramSend implements TelegramSend {
 
         this.sendMessageRequest = sendMessageRequest;
         isMessageCalled = true;
-        messageResult = new DefaultJsonBind().toObject(mockMessageResponseJson, SendMessageResponse.class);
+        messageResult = DefaultJsonBind.getInstance().toObject(mockMessageResponseJson, SendMessageResponse.class);
         return messageResult;
     }
 
@@ -39,7 +39,7 @@ public class FakeTelegramSend implements TelegramSend {
 
         this.sendDocumentRequest = sendDocumentRequest;
         isDocumentCalled = true;
-        documentResult = new DefaultJsonBind().toObject(mockDocumentResponseJson, SendDocumentResponse.class);
+        documentResult = DefaultJsonBind.getInstance().toObject(mockDocumentResponseJson, SendDocumentResponse.class);
         return documentResult;
 
     }

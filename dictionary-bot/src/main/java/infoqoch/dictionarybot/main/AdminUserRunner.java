@@ -76,9 +76,9 @@ public class AdminUserRunner {
         return result;
     }
 
-    private MarkdownStringBuilder errorMessage(String errorCode, String errorMessage) {
+    private MarkdownStringBuilder errorMessage(int errorCode, String errorMessage) {
         return new MarkdownStringBuilder()
-                .italic("error code : ").plain(errorCode==null?" ":errorCode).lineSeparator()
+                .italic("error code : ").plain(errorCode==0?" ":String.valueOf(errorCode)).lineSeparator()
                 .plain("  -> message : ").plain(errorMessage==null?" ":errorMessage).lineSeparator();
     }
 

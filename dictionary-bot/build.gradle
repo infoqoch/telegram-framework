@@ -25,7 +25,7 @@ repositories {
 }
 dependencies {
     // telegram bot
-    implementation 'infoqoch:telegram-bot:0.1'
+    implementation 'infoqoch:telegram-bot:0.2'
 
     // spring
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -38,7 +38,7 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     // 리플렉션
-    implementation 'org.reflections:reflections:0.9.12'
+    implementation 'org.reflections:reflections:0.10.2'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'

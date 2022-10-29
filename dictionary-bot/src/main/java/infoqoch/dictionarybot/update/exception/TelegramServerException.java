@@ -2,11 +2,8 @@ package infoqoch.dictionarybot.update.exception;
 
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
-// TODO
-// 필드가 반드시 MarkdownStringBuilder 어야 할까? 그냥 message가 더 낫지 않을까. 고민.
 public class TelegramServerException extends RuntimeException implements TelegramException {
     private final MarkdownStringBuilder response;
 

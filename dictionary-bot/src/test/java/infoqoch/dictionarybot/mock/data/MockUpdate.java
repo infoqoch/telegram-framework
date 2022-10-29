@@ -25,7 +25,7 @@ public class MockUpdate {
     }
 
     private static Response<List<Update>> jsonToResponse(String json) {
-        return new DefaultJsonBind().toList(json, Update.class);
+        return DefaultJsonBind.getInstance().toList(json, Update.class);
     }
 
     public static String chatJson(String text, long chatId) {

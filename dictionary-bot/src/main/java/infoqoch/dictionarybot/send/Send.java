@@ -35,7 +35,7 @@ public class Send {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private String errorCode;
+    private int errorCode;
     private String errorMessage;
 
     public enum Status{

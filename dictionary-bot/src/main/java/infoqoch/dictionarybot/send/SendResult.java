@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SendResult {
     private final Status status;
-    private final String errorCode;
+    private final int errorCode;
     private final String errorMessage;
     private final SendRequest request;
 }
