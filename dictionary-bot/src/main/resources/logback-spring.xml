@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="LOG_PREFIX" value="dictionary-bot"></property>
-    <springProfile name="window">
+    <springProfile name="os-window">
         <property name="LOG_PATH" value="c:/logs/dictionary-bot"/>
     </springProfile>
-    <springProfile name="linux">
+    <springProfile name="os-linux">
         <property name="LOG_PATH" value="./log"/>
     </springProfile>
 
