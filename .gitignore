@@ -1,0 +1,21 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+WhateverTest.java
+.jpb\
+readme_todo.md
+./dictionary-bot/readme_todo.md
+./.jpbapplication-linux.yml
+DictionaryQueryRepositoryWithChatUserTest.java
+
+# Project exclude paths
+/dictionary-bot/.gradle/
+/dictionary-bot/build/
+/dictionary-bot/out/
+/dictionary-bot/out/production/classes/
+/dictionary-bot/out/test/classes/
