@@ -25,7 +25,7 @@ repositories {
 }
 dependencies {
     // telegram bot
-    implementation 'infoqoch:telegram-bot:0.2.1'
+    implementation 'infoqoch:telegram-bot:0.2.2'
 
     // spring
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -85,8 +85,16 @@ sourceSets {
 configurations {
     querydsl.extendsFrom compileClasspath
 }
+
+build {
+    clean;
+    compileQuerydsl;
+    build;
+}
+
+
 compileQuerydsl {
-    clean
+    clean;
     options.annotationProcessorPath = configurations.querydsl
 }
 

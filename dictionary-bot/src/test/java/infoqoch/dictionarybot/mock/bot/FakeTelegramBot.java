@@ -39,6 +39,6 @@ public class FakeTelegramBot implements TelegramBot {
 
     @Override
     public TelegramUrls url() {
-        return TelegramBotProperties.defaultProperties("token").getUrl();
+        return TelegramBotProperties.defaultProperties("token").url();
     }
 }

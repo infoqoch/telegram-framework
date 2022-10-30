@@ -48,7 +48,7 @@ public class TelegramFileHandler {
     }
 
     private File getFileByUrl(String fileName, String filePath) {
-        try(InputStream inputStream = new URL(telegramBot.url().getFile()+"/"+filePath).openStream();){
+        try(InputStream inputStream = new URL(telegramBot.url().file()+"/"+filePath).openStream();){
             File directory = new File(telegramProperties.directory().excel());
             if(!directory.exists()) directory.mkdirs();
             File file = new File(directory, fileName);
