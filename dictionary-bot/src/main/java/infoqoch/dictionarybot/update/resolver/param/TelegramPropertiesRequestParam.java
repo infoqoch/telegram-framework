@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update.resolver.param;
 
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.update.util.TelegramProperties;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 
 import java.lang.reflect.Parameter;

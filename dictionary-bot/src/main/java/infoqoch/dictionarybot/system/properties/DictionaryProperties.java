@@ -9,9 +9,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter @Accessors(fluent = true)
 @RequiredArgsConstructor
 @ConstructorBinding
-@ConfigurationProperties("telegram")
-public class TelegramProperties {
-    private final String token;
+@ConfigurationProperties("dictionary")
+public class DictionaryProperties {
     private final String sampleExcelPush;
     private final User user;
     private final Directory directory;
@@ -28,12 +27,5 @@ public class TelegramProperties {
     public static class Directory {
         private final String excel;
     }
-
-    public String token() {
-        if(token==null||token.length()==0)
-            throw new IllegalArgumentException("telegram.token cannot be null");
-        return token;
-    }
-
 }
 

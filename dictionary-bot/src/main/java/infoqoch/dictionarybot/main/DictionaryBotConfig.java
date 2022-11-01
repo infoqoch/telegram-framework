@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.main;
 
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.update.util.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;

@@ -8,7 +8,8 @@ import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionarySourceRepository;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
+import infoqoch.dictionarybot.update.util.TelegramProperties;
 import infoqoch.dictionarybot.update.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
@@ -37,12 +38,12 @@ class DocumentControllerTest {
     DictionarySourceRepository mockDictionarySourceRepository;
     TelegramFileHandler mockFileHandler;
     TelegramProperties telegramProperties;
-    TelegramProperties.Directory directory;
+    DictionaryProperties dictionaryProperties;
 
     @BeforeEach
     void setUp(){
-        directory = new TelegramProperties.Directory("c://data//");
-        telegramProperties = new TelegramProperties(null, null, null, directory);
+        dictionaryProperties = new DictionaryProperties(null, null, new DictionaryProperties.Directory("c://data//"));
+        telegramProperties = new TelegramProperties(null);
         memoryDictionaryRepository = new MemoryDictionaryRepository();
         mockDictionarySourceRepository = mock(DictionarySourceRepository.class);
         dictionaryInsertBatchService = new DictionaryInsertBatchService(memoryDictionaryRepository, mockDictionarySourceRepository);
@@ -65,7 +66,7 @@ class DocumentControllerTest {
     @DisplayName("telegram 에서 document로 보낼 때, 그것의 데이터 타입(mimetype)을 전달한다. 이를 기반으로 정상여부를 판단한다. mime이 excel이나 실제로 excel이 아닌 경우는 상정하지 않는다.")
     void not_excel_mime_type() {
         // given
-        dictionaryController = new DocumentController(dictionaryInsertBatchService, new TelegramFileHandler(null, telegramProperties));
+        dictionaryController = new DocumentController(dictionaryInsertBatchService, new TelegramFileHandler(null, dictionaryProperties));
 
         Document document = mock(Document.class);
         when(document.getMimeType()).thenReturn("image/jpg");

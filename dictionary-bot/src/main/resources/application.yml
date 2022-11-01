@@ -37,6 +37,8 @@ logging.level:
 
 telegram:
   token: # 입력해야 합니다.
+
+dictionary:
   user:
     promotion-to-admin: # 입력해야 합니다.
 

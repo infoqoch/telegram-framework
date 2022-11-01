@@ -2,10 +2,10 @@ package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChatUserController {
     private final ChatUserRepository chatUserRepository;
-
+    private final DictionaryProperties dictionaryProperties;
     private final String LOOKUP_ALL_USERS = "lookup all users";
     private final String SHARE_MINE = "share mine";
     private final String HOURLY_ALARM = "hourly";
@@ -52,9 +52,9 @@ public class ChatUserController {
     }
 
     @UpdateRequestMethodMapper(PROMOTION)
-    public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestCommandAndValue message, TelegramProperties telegramProperties) {
+    public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestCommandAndValue message) {
         log.info("UpdateRequestMethodMapper : PROMOTION_ROLE");
-        if(matchesPromotionCode(message, telegramProperties)){
+        if(matchesPromotionCode(message)){
             chatUser.changeRole(ChatUser.Role.ADMIN);
             return new MarkdownStringBuilder()
                     .bold("정상적으로 변경되었습니다!").lineSeparator()
@@ -63,8 +63,8 @@ public class ChatUserController {
         return new MarkdownStringBuilder("코드가 일치하지 않습니다.");
     }
 
-    private boolean matchesPromotionCode(UpdateRequestCommandAndValue message, TelegramProperties telegramProperties) {
-        return telegramProperties.user().promotionToAdmin().equals(message.getValue().trim().replaceAll("_", " "));
+    private boolean matchesPromotionCode(UpdateRequestCommandAndValue message) {
+        return dictionaryProperties.user().promotionToAdmin().equals(message.getValue().trim().replaceAll("_", " "));
     }
 
     @UpdateRequestMethodMapper({"status", "상태"})

@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.update.util.TelegramProperties;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
@@ -14,6 +14,7 @@ import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.resolver.returns.UpdateResponseUpdateRequestReturn;
 import lombok.RequiredArgsConstructor;
 import org.reflections.util.ClasspathHelper;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@EnableConfigurationProperties({TelegramProperties.class})
 @Configuration
 @RequiredArgsConstructor
 public class UpdateDispatcherConfig {

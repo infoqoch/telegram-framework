@@ -3,6 +3,7 @@ package infoqoch.dictionarybot.update.controller;
 import infoqoch.dictionarybot.controller.ChatUserController;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -16,11 +17,13 @@ import static org.mockito.Mockito.mock;
 public class ChatUserControllerTest {
     ChatUserController chatUserController;
     ChatUserRepository chatUserRepository;
+    DictionaryProperties dictionaryProperties;
 
     @BeforeEach
     void setUp(){
         chatUserRepository = mock(ChatUserRepository.class);
-        chatUserController = new ChatUserController(chatUserRepository);
+        dictionaryProperties = new DictionaryProperties(null, null, null);
+        chatUserController = new ChatUserController(chatUserRepository, dictionaryProperties);
     }
 
     @DisplayName("status의 호출에 대한 응답 메시지가 정상적으로 동작하는지 확인한다.")

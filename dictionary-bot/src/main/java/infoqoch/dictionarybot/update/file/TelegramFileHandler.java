@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update.file;
 
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.dictionarybot.update.exception.TelegramServerException;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -23,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 @RequiredArgsConstructor
 public class TelegramFileHandler {
     private final TelegramBot telegramBot;
-    private final TelegramProperties telegramProperties;
+    private final DictionaryProperties dictionaryProperties;
 
     public File extractExcelFile(UpdateDocument document) {
         validExcelFile(document);
@@ -49,7 +49,7 @@ public class TelegramFileHandler {
 
     private File getFileByUrl(String fileName, String filePath) {
         try(InputStream inputStream = new URL(telegramBot.url().file()+"/"+filePath).openStream();){
-            File directory = new File(telegramProperties.directory().excel());
+            File directory = new File(dictionaryProperties.directory().excel());
             if(!directory.exists()) directory.mkdirs();
             File file = new File(directory, fileName);
             Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);

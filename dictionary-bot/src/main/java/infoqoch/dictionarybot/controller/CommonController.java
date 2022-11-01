@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.controller;
 
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommonController {
-    private final TelegramProperties telegramProperties;
+    private final DictionaryProperties dictionaryProperties;
 
     @UpdateRequestMethodMapper({"excel help", "help excel"})
     public UpdateResponse excel_help(UpdateRequestCommandAndValue message) {
@@ -27,7 +27,7 @@ public class CommonController {
                 .lineSeparator()
                 .italic("다른 형태의 등록 방식은 차후 추가할 예정입니다.");
 
-        return UpdateResponse.document(msb, telegramProperties.sampleExcelPush());
+        return UpdateResponse.document(msb, dictionaryProperties.sampleExcelPush());
     }
 
     @UpdateRequestMethodMapper({"help", "start"})

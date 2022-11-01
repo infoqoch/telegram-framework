@@ -7,7 +7,8 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
 import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
-import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.system.properties.DictionaryProperties;
+import infoqoch.dictionarybot.update.util.TelegramProperties;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.log.repository.UpdateLogJpaRepository;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -36,6 +37,7 @@ class ChatUserControllerIntegrationTest {
     @Autowired UpdateLogJpaRepository repository;
     @Autowired UpdateDispatcher updateDispatcher;
     @Autowired TelegramProperties telegramProperties;
+    @Autowired DictionaryProperties dictionaryProperties;
 
     // fake. 가상의 update를 보냄.
     FakeTelegramUpdate telegramUpdate;
@@ -68,13 +70,13 @@ class ChatUserControllerIntegrationTest {
     @DisplayName("어드민으로 프로모션 성공")
     void success_promotion(){
         // given
-        assert telegramProperties.user().promotionToAdmin()!=null;
-        System.out.println("telegramProperties.user().promotionToAdmin() = " + telegramProperties.user().promotionToAdmin());
+        assert dictionaryProperties.user().promotionToAdmin()!=null;
+        System.out.println("telegramProperties.user().promotionToAdmin() = " + dictionaryProperties.user().promotionToAdmin());
 
         final Optional<ChatUser> beforeChatUser = chatUserRepository.findByChatId(123l);
         assert beforeChatUser.isEmpty();
 
-        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+telegramProperties.user().promotionToAdmin(), 123l));
+        telegramUpdate.setMock(MockUpdate.responseWithSingleChat("/promotion_"+dictionaryProperties.user().promotionToAdmin(), 123l));
 
         // when
         updateRunner.run();
@@ -89,7 +91,7 @@ class ChatUserControllerIntegrationTest {
     @DisplayName("어드민으로 프로모션 성공, 언더스코어")
     void success_promotion_underscore(){
         // given
-        final String expectCode = telegramProperties.user().promotionToAdmin().replaceAll(" ", "_");
+        final String expectCode = dictionaryProperties.user().promotionToAdmin().replaceAll(" ", "_");
         assert expectCode !=null;
         System.out.println("telegramProperties.user().promotionToAdmin() = " + expectCode);
 
