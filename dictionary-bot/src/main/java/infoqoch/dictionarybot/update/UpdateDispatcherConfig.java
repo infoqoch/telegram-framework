@@ -1,18 +1,23 @@
 package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
+import infoqoch.dictionarybot.update.resolver.custom.CustomUpdateRequestParam;
+import infoqoch.dictionarybot.update.resolver.custom.CustomUpdateRequestReturn;
 import infoqoch.dictionarybot.update.resolver.param.*;
-import infoqoch.dictionarybot.update.resolver.returns.*;
+import infoqoch.dictionarybot.update.resolver.returns.MSBUpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.StringUpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateResponseUpdateRequestReturn;
 import lombok.RequiredArgsConstructor;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import java.net.URL;
 import java.util.*;
@@ -21,30 +26,41 @@ import java.util.stream.Collectors;
 @Configuration
 @RequiredArgsConstructor
 public class UpdateDispatcherConfig {
-    private final ChatUserRepository chatUserRepository;
+
     private final TelegramProperties telegramProperties;
 
+    private final CustomUpdateRequestParam customUpdateRequestParam;
+    private final CustomUpdateRequestReturn customUpdateRequestReturn;
+
     @Bean
+    @Order(Integer.MAX_VALUE-101)
     public List<UpdateRequestReturn> returnResolvers(){
         List<UpdateRequestReturn> returnResolvers = new ArrayList<>();
-        returnResolvers.add(new DictionaryUpdateRequestReturn());
-        returnResolvers.add(new DictionariesUpdateRequestReturn());
         returnResolvers.add(new MSBUpdateRequestReturn());
         returnResolvers.add(new StringUpdateRequestReturn());
-        returnResolvers.add(new DictionariesUpdateRequestReturn());
         returnResolvers.add(new UpdateResponseUpdateRequestReturn());
+        customUpdateRequestReturn.addUpdateRequestReturn().stream().forEach(
+                r -> returnResolvers.add(r)
+        );
+
         return returnResolvers;
     }
 
     @Bean
+    @Order(Integer.MAX_VALUE-100)
     public List<UpdateRequestParam> paramResolvers(){
         List<UpdateRequestParam> paramResolvers = new ArrayList<>();
         paramResolvers.add(new UpdateRequestUpdateRequestParam());
         paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
-        paramResolvers.add(new UpdateChatUserRequestParam(chatUserRepository));
+
         paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties));
+
+        customUpdateRequestParam.addUpdateRequestParam().stream().forEach(
+                r -> paramResolvers.add(r)
+        );
+
         return paramResolvers;
     }
 

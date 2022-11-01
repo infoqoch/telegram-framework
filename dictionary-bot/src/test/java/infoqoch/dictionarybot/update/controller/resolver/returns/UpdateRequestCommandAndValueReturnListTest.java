@@ -1,5 +1,7 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
+import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
+import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.update.resolver.returns.*;

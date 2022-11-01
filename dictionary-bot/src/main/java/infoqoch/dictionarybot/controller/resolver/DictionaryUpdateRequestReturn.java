@@ -1,7 +1,8 @@
-package infoqoch.dictionarybot.update.resolver.returns;
+package infoqoch.dictionarybot.controller.resolver;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 
 import java.lang.reflect.Method;

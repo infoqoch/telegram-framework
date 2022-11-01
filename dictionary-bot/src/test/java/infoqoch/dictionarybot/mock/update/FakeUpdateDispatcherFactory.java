@@ -1,5 +1,8 @@
 package infoqoch.dictionarybot.mock.update;
 
+import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
+import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
+import infoqoch.dictionarybot.controller.resolver.UpdateChatUserRequestParam;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.resolver.param.*;
