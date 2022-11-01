@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
+import infoqoch.dictionarybot.controller.ChatUserController;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;

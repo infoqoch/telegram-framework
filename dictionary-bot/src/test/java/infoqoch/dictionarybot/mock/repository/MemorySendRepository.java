@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.mock.repository;
 
 import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import lombok.SneakyThrows;
 

@@ -1,12 +1,12 @@
 package infoqoch.dictionarybot.update.exception;
 
-import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.util.Optional;
 
-import static infoqoch.dictionarybot.send.SendType.CLIENT_ERROR;
-import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
+import static infoqoch.dictionarybot.update.response.SendType.CLIENT_ERROR;
+import static infoqoch.dictionarybot.update.response.SendType.SERVER_ERROR;
 
 public interface TelegramException {
     Optional<MarkdownStringBuilder> response();

@@ -1,6 +1,7 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.update.log.UpdateLog;
+import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.SendDocumentRequest;

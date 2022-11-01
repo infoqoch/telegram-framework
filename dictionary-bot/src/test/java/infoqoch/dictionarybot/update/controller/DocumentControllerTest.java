@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.update.controller;
 
+import infoqoch.dictionarybot.controller.DocumentController;
 import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
@@ -8,7 +9,7 @@ import infoqoch.dictionarybot.model.dictionary.repository.DictionarySourceReposi
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
-import infoqoch.dictionarybot.update.controller.file.TelegramFileHandler;
+import infoqoch.dictionarybot.update.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;

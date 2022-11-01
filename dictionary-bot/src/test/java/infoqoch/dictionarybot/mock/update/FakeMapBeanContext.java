@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.mock.update;
 
-import infoqoch.dictionarybot.update.controller.resolver.bean.BeanContext;
+import infoqoch.dictionarybot.update.resolver.bean.BeanContext;
 import lombok.Setter;
 import org.springframework.beans.BeansException;
 

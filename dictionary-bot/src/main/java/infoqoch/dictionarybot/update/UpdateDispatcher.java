@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.update;
 
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
-import static infoqoch.dictionarybot.send.SendType.SERVER_ERROR;
+import static infoqoch.dictionarybot.update.response.SendType.SERVER_ERROR;
 
 @Slf4j
 @RequiredArgsConstructor

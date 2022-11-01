@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.mock.update;
 
-import infoqoch.dictionarybot.update.controller.resolver.param.UpdateRequestParam;
+import infoqoch.dictionarybot.update.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 
 import java.lang.reflect.Parameter;

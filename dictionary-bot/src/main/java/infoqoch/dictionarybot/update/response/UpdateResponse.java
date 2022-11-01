@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.update.response;
 
-import infoqoch.dictionarybot.send.SendType;
 import infoqoch.dictionarybot.update.exception.TelegramException;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.Getter;

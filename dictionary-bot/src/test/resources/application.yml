@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test-maria
+    active: test
     group:
       "test": "db-mem,os-window,bot-dev" # default
       "test-oracle": "db-oracle,os-window,bot-dev"

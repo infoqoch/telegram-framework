@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.send;
 
+import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import infoqoch.telegrambot.util.NotEscapedMSBException;
 import lombok.AccessLevel;

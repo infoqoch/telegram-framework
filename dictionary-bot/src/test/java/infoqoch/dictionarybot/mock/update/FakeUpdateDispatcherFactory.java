@@ -1,9 +1,9 @@
 package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
-import infoqoch.dictionarybot.update.controller.resolver.param.*;
-import infoqoch.dictionarybot.update.controller.resolver.returns.*;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
+import infoqoch.dictionarybot.update.resolver.param.*;
+import infoqoch.dictionarybot.update.resolver.returns.*;
 
 import java.net.URL;
 import java.util.ArrayList;

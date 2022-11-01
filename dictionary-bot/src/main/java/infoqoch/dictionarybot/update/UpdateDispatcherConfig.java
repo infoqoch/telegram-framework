@@ -2,11 +2,11 @@ package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolver;
-import infoqoch.dictionarybot.update.controller.resolver.UpdateRequestMethodResolverFactory;
-import infoqoch.dictionarybot.update.controller.resolver.bean.SpringBeanContext;
-import infoqoch.dictionarybot.update.controller.resolver.param.*;
-import infoqoch.dictionarybot.update.controller.resolver.returns.*;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
+import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
+import infoqoch.dictionarybot.update.resolver.param.*;
+import infoqoch.dictionarybot.update.resolver.returns.*;
 import lombok.RequiredArgsConstructor;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;

@@ -5,7 +5,7 @@ import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
-import infoqoch.dictionarybot.send.SendType;
+import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;

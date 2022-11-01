@@ -9,7 +9,7 @@ import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
 import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.log.repository.UpdateLogJpaRepository;
+import infoqoch.dictionarybot.log.repository.UpdateLogJpaRepository;
 import infoqoch.telegrambot.bot.TelegramBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

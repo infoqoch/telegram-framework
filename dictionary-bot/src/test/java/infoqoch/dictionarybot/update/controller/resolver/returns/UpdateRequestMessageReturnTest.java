@@ -1,5 +1,9 @@
 package infoqoch.dictionarybot.update.controller.resolver.returns;
 
+import infoqoch.dictionarybot.update.resolver.returns.DictionaryUpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.MSBUpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.StringUpdateRequestReturn;
+import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
