@@ -1,17 +1,14 @@
 package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_HELP;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
 
 @Slf4j
 @Component
@@ -20,8 +17,8 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.HELP;
 public class CommonController {
     private final TelegramProperties telegramProperties;
 
-    @UpdateRequestMethodMapper(EXCEL_HELP)
-    public UpdateResponse excel_help(UpdateRequestMessage message) {
+    @UpdateRequestMethodMapper({"excel help", "help excel"})
+    public UpdateResponse excel_help(UpdateRequestCommandAndValue message) {
 
         final MarkdownStringBuilder msb = new MarkdownStringBuilder()
                 .bold("=== 💾 사전 등록 방법 (엑셀 📑) ===").lineSeparator()
@@ -33,8 +30,8 @@ public class CommonController {
         return UpdateResponse.document(msb, telegramProperties.sampleExcelPush());
     }
 
-    @UpdateRequestMethodMapper(HELP)
-    public MarkdownStringBuilder help(UpdateRequestMessage message) {
+    @UpdateRequestMethodMapper({"help", "start"})
+    public MarkdownStringBuilder help(UpdateRequestCommandAndValue message) {
         log.info("UpdateRequestMethodMapper : help!");
 
         throwEx(message);
@@ -82,7 +79,7 @@ public class CommonController {
                 ;
     }
 
-    private void throwEx(UpdateRequestMessage message) {
+    private void throwEx(UpdateRequestCommandAndValue message) {
         if(message.getValue().equalsIgnoreCase("throw new IllegalArgumentException"))
             throw new IllegalArgumentException("테스트 용 인자 오류 발생");
         if(message.getValue().equalsIgnoreCase("throw new IllegalStateException"))

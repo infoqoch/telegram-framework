@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpdateRequestMessageBodyTest {
+public class UpdateRequestCommandAndValueBodyTest {
     @DisplayName("document로 전달한 telegram의 raw json을 Update와 UpdateDocument로 정상 변환됨을 확인한다.")
     @Test
     void wrapper_to_chat_request() {

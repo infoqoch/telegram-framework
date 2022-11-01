@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // TODO
 // UpdateRequestMessageReturn으로 구현한 타입의 정상 동작여부를 확인한다.
 // 부분적으로 테스트 코드를 작성하였다. 차후 전체 타입에 대한 테스트를 진행한다.
-class UpdateRequestMessageReturnTest {
+class UpdateRequestCommandAndValueReturnTest {
 
     @Test
     void string(){

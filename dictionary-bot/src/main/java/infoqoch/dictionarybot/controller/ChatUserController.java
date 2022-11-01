@@ -5,13 +5,11 @@ import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
-import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 
 @Slf4j
 @Component
@@ -19,8 +17,13 @@ import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.*;
 public class ChatUserController {
     private final ChatUserRepository chatUserRepository;
 
+    private final String LOOKUP_ALL_USERS = "lookup all users";
+    private final String SHARE_MINE = "share mine";
+    private final String HOURLY_ALARM = "hourly";
+    private final String PROMOTION = "promotion";
+
     @UpdateRequestMethodMapper(LOOKUP_ALL_USERS)
-    public MarkdownStringBuilder lookupAllUsers(ChatUser chatUser, UpdateRequestMessage message) {
+    public MarkdownStringBuilder lookupAllUsers(ChatUser chatUser, UpdateRequestCommandAndValue message) {
         log.info("UpdateRequestMethodMapper : LOOKUP_ALL_USERS");
         chatUser.setLookupAllUsers(lookupAllUsers(message));
         return new MarkdownStringBuilder()
@@ -30,7 +33,7 @@ public class ChatUserController {
     }
 
     @UpdateRequestMethodMapper(SHARE_MINE)
-    public MarkdownStringBuilder shareMine(ChatUser chatUser, UpdateRequestMessage message) {
+    public MarkdownStringBuilder shareMine(ChatUser chatUser, UpdateRequestCommandAndValue message) {
         log.info("UpdateRequestMethodMapper : SHARE_MINE");
         chatUser.setShareMine(shareMine(message));
         return new MarkdownStringBuilder()
@@ -40,7 +43,7 @@ public class ChatUserController {
     }
 
     @UpdateRequestMethodMapper(HOURLY_ALARM)
-    public MarkdownStringBuilder hourlyAlarm(ChatUser chatUser, UpdateRequestMessage message) {
+    public MarkdownStringBuilder hourlyAlarm(ChatUser chatUser, UpdateRequestCommandAndValue message) {
         log.info("UpdateRequestMethodMapper : HOURLY_ALARM");
         chatUser.setHourlyAlarm(hourlyAlarm(message.getValue()));
         return new MarkdownStringBuilder()
@@ -48,8 +51,8 @@ public class ChatUserController {
                 .plain("매시 알림 여부 : ").plain(message.getValue());
     }
 
-    @UpdateRequestMethodMapper(PROMOTION_ROLE)
-    public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestMessage message, TelegramProperties telegramProperties) {
+    @UpdateRequestMethodMapper(PROMOTION)
+    public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestCommandAndValue message, TelegramProperties telegramProperties) {
         log.info("UpdateRequestMethodMapper : PROMOTION_ROLE");
         if(matchesPromotionCode(message, telegramProperties)){
             chatUser.changeRole(ChatUser.Role.ADMIN);
@@ -60,11 +63,11 @@ public class ChatUserController {
         return new MarkdownStringBuilder("코드가 일치하지 않습니다.");
     }
 
-    private boolean matchesPromotionCode(UpdateRequestMessage message, TelegramProperties telegramProperties) {
+    private boolean matchesPromotionCode(UpdateRequestCommandAndValue message, TelegramProperties telegramProperties) {
         return telegramProperties.user().promotionToAdmin().equals(message.getValue().trim().replaceAll("_", " "));
     }
 
-    @UpdateRequestMethodMapper(MY_STATUS)
+    @UpdateRequestMethodMapper({"status", "상태"})
     public MarkdownStringBuilder myStatus(ChatUser chatUser) {
         System.out.println("chatUser = " + chatUser);
         log.info("UpdateRequestMethodMapper : SHARE_MINE");
@@ -72,11 +75,11 @@ public class ChatUserController {
 
                 .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":" ").bold("==").lineSeparator()
                 .plain("모든 회원 검색 여부 : ").plain(booleanToYnValue(chatUser.isLookupAllUsers())).lineSeparator()
-                .italic(" 수정 : ").command(LOOKUP_ALL_USERS.value(), booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
+                .italic(" 수정 : ").command(LOOKUP_ALL_USERS, booleanToYnValue(!chatUser.isLookupAllUsers())).lineSeparator()
                 .plain("사전 공개 여부 : ").plain(booleanToYnValue(chatUser.isShareMine())).lineSeparator()
-                .italic(" 수정 : ").command(SHARE_MINE.value(), booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
+                .italic(" 수정 : ").command(SHARE_MINE, booleanToYnValue(!chatUser.isShareMine())).lineSeparator()
                 .plain("매시 사전 알람 여부 : ").plain(booleanToYnValue(chatUser.isHourlyAlarm())).lineSeparator()
-                .italic(" 수정 : ").command(HOURLY_ALARM.value(), booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
+                .italic(" 수정 : ").command(HOURLY_ALARM, booleanToYnValue(!chatUser.isHourlyAlarm())).lineSeparator()
                 .plain("등록한 사전의 갯수 : ").plain(String.valueOf(chatUser.getDictionaries().size()))
                 ;
     }
@@ -91,17 +94,17 @@ public class ChatUserController {
         throw new TelegramClientException(
                 new MarkdownStringBuilder().bold("=매시 사전 알람=").lineSeparator()
                         .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                        .command(HOURLY_ALARM.value(), "Y").lineSeparator()
-                        .command(HOURLY_ALARM.value(), "N").lineSeparator()
+                        .command(HOURLY_ALARM, "Y").lineSeparator()
+                        .command(HOURLY_ALARM, "N").lineSeparator()
                 , "HOURLY_ALARM에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
     }
 
-    private boolean shareMine(UpdateRequestMessage message) {
+    private boolean shareMine(UpdateRequestCommandAndValue message) {
         return hourlyAlarm(message.getValue());
     }
 
-    private boolean lookupAllUsers(UpdateRequestMessage message) {
+    private boolean lookupAllUsers(UpdateRequestCommandAndValue message) {
         if(ynToBoolean(message.getValue(), "Y")){
             return true;
         }else if(ynToBoolean(message.getValue(), "N")){
@@ -111,8 +114,8 @@ public class ChatUserController {
         throw new TelegramClientException(
                 new MarkdownStringBuilder().bold("=모든 회원의 사전 검색 여부=").lineSeparator()
                         .plain("Y 혹은 N으로 응답합니다.").lineSeparator()
-                        .command(LOOKUP_ALL_USERS.value(), "Y").lineSeparator()
-                        .command(LOOKUP_ALL_USERS.value(), "N").lineSeparator()
+                        .command(LOOKUP_ALL_USERS, "Y").lineSeparator()
+                        .command(LOOKUP_ALL_USERS, "N").lineSeparator()
                 , "LOOKUP_ALL_USERS에 대한 응답값을 Y 혹은 N으로 입력하지 않았습니다."
         );
     }

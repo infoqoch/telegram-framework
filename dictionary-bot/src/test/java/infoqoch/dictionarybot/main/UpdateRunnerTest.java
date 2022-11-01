@@ -60,9 +60,9 @@ class UpdateRunnerTest {
         final List<UpdateLog> logs = repository.findAll();
 
         assertThat(logs).size().isEqualTo(1);
-        assertThat(logs.get(0).getUpdateCommand()).isEqualTo(UpdateRequestCommand.LOOKUP_WORD);
+        // assertThat(logs.get(0).getUpdateCommand()).isEqualTo(UpdateRequestCommand.LOOKUP_WORD);
         assertThat(logs.get(0).getUpdateValue()).isEqualTo("hi");
-        assertThat(logs.get(0).getSendMessage()).isEqualTo("LOOKUP\\_WORD : hi : 2102");
+        assertThat(logs.get(0).getSendMessage()).isEqualTo("w : hi : 2102");
         assertThat(logs.get(0).getSendType()).isEqualTo(MESSAGE);
     }
 
@@ -79,7 +79,7 @@ class UpdateRunnerTest {
         final List<UpdateLog> logs = repository.findAll();
 
         assertThat(logs).size().isEqualTo(1);
-        assertThat(logs.get(0).getUpdateCommand()).isEqualTo(UpdateRequestCommand.UNKNOWN);
+        assertThat(logs.get(0).getUpdateCommand()).isEqualTo(UpdateRequestCommand.of("*"));
         assertThat(logs.get(0).getUpdateValue()).isEqualTo("f89j45");
         assertThat(logs.get(0).getSendMessage()).isEqualTo("unknown??");
     }

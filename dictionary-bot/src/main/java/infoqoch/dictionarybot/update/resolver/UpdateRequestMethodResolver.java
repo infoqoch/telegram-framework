@@ -1,9 +1,8 @@
 package infoqoch.dictionarybot.update.resolver;
 
+import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.resolver.param.UpdateRequestParam;
 import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import lombok.SneakyThrows;
 
@@ -20,19 +19,17 @@ public class UpdateRequestMethodResolver {
     private final UpdateRequestParam[] parameters;
     private final UpdateRequestReturn returnResolver;
 
+    @Override
+    public String toString() {
+        return "UpdateRequestMethodResolver{"+method.getName()+"}";
+    }
+
     public UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
         this.bean = bean;
         this.method = method;
         this.mapper = mapper;
         this.parameters = wrappingParameter(paramResolvers);
         this.returnResolver = findReturnResolver(returnResolvers);
-    }
-
-    public boolean support(UpdateRequest update) {
-        for (UpdateRequestCommand updateRequestCommand : mapper.value()) {
-            if(updateRequestCommand == update.command())  return true;
-        }
-        return false;
     }
 
     public UpdateResponse process(UpdateRequest update) {

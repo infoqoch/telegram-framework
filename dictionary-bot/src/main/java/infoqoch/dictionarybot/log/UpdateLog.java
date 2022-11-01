@@ -3,13 +3,15 @@ package infoqoch.dictionarybot.log;
 import infoqoch.dictionarybot.update.response.SendType;
 import infoqoch.dictionarybot.update.request.UpdateRequest;
 import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateRequestMessage;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
 import infoqoch.dictionarybot.update.request.body.UpdateDataType;
 import infoqoch.dictionarybot.update.response.UpdateResponse;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
@@ -21,7 +23,7 @@ public class UpdateLog {
     private Long updateId;
     private Long chatId;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = UpdateRequestCommandConvert.class)
     private UpdateRequestCommand updateCommand;
     private String updateValue;
 
@@ -39,7 +41,8 @@ public class UpdateLog {
     private String sendMessage;
 
     public static UpdateLog of(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        final UpdateRequestMessage updateRequestMessage = updateRequest.updateRequestMessage();
+        final UpdateRequestCommandAndValue updateRequestCommandAndValue = updateRequest.updateRequestCommandAndValue();
+        log.info("updateRequestCommandAndValue on UpdateLog#of : {}", updateRequestCommandAndValue);
 
         String fileId = null;
         String fileName = null;
@@ -53,8 +56,8 @@ public class UpdateLog {
                 .updateId(updateRequest.updateId())
                 .chatId(updateRequest.chatId())
 
-                .updateCommand(updateRequestMessage.getCommand())
-                .updateValue(updateRequestMessage.getValue())
+                .updateCommand(updateRequestCommandAndValue.getCommand())
+                .updateValue(updateRequestCommandAndValue.getValue())
                 .updateDataType(updateRequest.updateDataType())
 
                 .updateFileId(fileId)

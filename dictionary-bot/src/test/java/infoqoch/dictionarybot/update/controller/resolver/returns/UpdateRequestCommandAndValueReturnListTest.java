@@ -17,7 +17,7 @@ import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictio
 import static org.assertj.core.api.Assertions.assertThat;
 
 // UpdateRequestMessageReturn의 리스트가 stream을 통해 적절한 데이터타입리졸버를 리턴함을 확인한다.
-class UpdateRequestMessageReturnListTest {
+class UpdateRequestCommandAndValueReturnListTest {
     List<UpdateRequestReturn> returnResolvers;
 
     @BeforeEach

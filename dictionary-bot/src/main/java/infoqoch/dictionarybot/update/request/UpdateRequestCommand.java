@@ -1,51 +1,32 @@
 package infoqoch.dictionarybot.update.request;
 
-public enum UpdateRequestCommand {
-    HELP("help", "start")
-    , LOOKUP_WORD("w", "ㄷ"),  LOOKUP_SENTENCE("s", "ㅁ"), LOOKUP_DEFINITION("d", "ㅈ"), LOOKUP_FULL_SEARCH("f", "ㅍ")
-    , UNKNOWN("unknown")
-    , EXCEL_HELP("excel help", "help excel") , EXCEL_PUSH("excel push", "push", "replace")
-    , HOURLY_ALARM("hourly")
-    , SHARE_MINE("share mine"), LOOKUP_ALL_USERS("lookup all users")
-    , PROMOTION_ROLE("promotion")
-    , MY_STATUS("status", "상태");
+import lombok.EqualsAndHashCode;
 
-    private final String value;
-    private final String[] aliases;
+@EqualsAndHashCode
+public class UpdateRequestCommand {
+//    HELP()
+//    , LOOKUP_WORD(),  LOOKUP_SENTENCE(), LOOKUP_DEFINITION(), LOOKUP_FULL_SEARCH()
+//    , UNKNOWN()
+//    , EXCEL_HELP() , EXCEL_PUSH()
+//    , HOURLY_ALARM()
+//    , SHARE_MINE(), LOOKUP_ALL_USERS()
+//    , PROMOTION_ROLE()
+//    , MY_STATUS();
 
-    UpdateRequestCommand(String value, String... aliases) {
-        this.value = value;
-        this.aliases = aliases != null ? aliases : new String[]{};
+    private final String COMMAND;
+    private final String COMMAND_WITH_SPACE;
+
+    private UpdateRequestCommand(String command) {
+        this.COMMAND = command;
+        this.COMMAND_WITH_SPACE = COMMAND + " ";
     }
 
-    public String value(){
-        return value;
+    public String get(){
+        return COMMAND;
     }
 
-    private String[] alias(){
-        return aliases;
-    }
-
-    // 만약 여러 개의 alias가 있을 경우, contain을 통해 추출한 명령어를 얻어야 할 수 있음.
-//    public static Optional<String> contains(String input){
-//        for(UpdateRequestCommand command : UpdateRequestCommand.values()){
-//            if(command.alias.contains(input)){
-//                return Optional.of(command.alias());
-//            }
-//        }
-//        return Optional.empty();
-//    }
-
-    public static UpdateRequestCommand of(String input) {
-        for(UpdateRequestCommand command : UpdateRequestCommand.values()){
-
-            if(isMatch(input, command.value)) return command;
-
-            for (String alias : command.aliases)
-                if (isMatch(input, alias)) return command;
-        }
-
-        return UNKNOWN;
+    public static UpdateRequestCommand of(String commandStr) {
+        return new UpdateRequestCommand(flatting(commandStr));
     }
 
     private static boolean isMatch(String input, String alias) {
@@ -59,4 +40,28 @@ public enum UpdateRequestCommand {
 
         return true;
     }
+
+    public boolean startsWith(String input) {
+        final String flatInput = flatting(input);
+        if(flatInput.equals(COMMAND)) return true;
+        return flatInput.startsWith(COMMAND_WITH_SPACE);
+    }
+
+    @Override
+    public String toString() {
+        return "UpdateRequestCommand(" + COMMAND +")";
+    }
+
+    public String extractValue(String input) {
+        final String flatInput = flatting(input);
+        System.out.println("flatInput = " + flatInput);
+        final int length = COMMAND.equals("*")?0:COMMAND.length();
+        return flatting(flatInput.substring(length));
+    }
+
+    private static String flatting(String commandStr) {
+        return UpdateRequestCommandSplit.flattingInput(commandStr);
+    }
+
+
 }

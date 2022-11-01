@@ -5,11 +5,14 @@ import infoqoch.dictionarybot.update.request.body.UpdateChat;
 import infoqoch.dictionarybot.update.request.body.UpdateDataType;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Update;
+import lombok.extern.slf4j.Slf4j;
 
 import static infoqoch.dictionarybot.update.request.body.UpdateDataType.*;
 
+@Slf4j
 public class UpdateRequest {
     private final Update update;
+    private UpdateRequestCommandAndValue updateRequestCommandAndValue;
 
     public UpdateRequest(Update update) {
         this.update = update;
@@ -31,19 +34,8 @@ public class UpdateRequest {
         throw new TelegramServerException("unknown update type (1)");
     }
 
-    public UpdateRequestCommand command(){
-        return updateRequestMessage().getCommand();
-    }
-
-    public String value(){
-        return updateRequestMessage().getValue();
-    }
-
-    public UpdateRequestMessage updateRequestMessage() {
-        if(updateDataType() == CHAT) return UpdateRequestMessageParser.resolve(update.getMessage().getText());
-        if(updateDataType() == DOCUMENT) return UpdateRequestMessageParser.resolve(update.getMessage().getCaption());
-        if(updateDataType() == PHOTO) return UpdateRequestMessageParser.resolve(update.getMessage().getCaption());
-        throw new TelegramServerException("unknown update type (2)");
+    public UpdateRequestCommandAndValue updateRequestCommandAndValue() {
+        return updateRequestCommandAndValue;
     }
 
     public UpdateChat toChat() {
@@ -89,8 +81,26 @@ public class UpdateRequest {
     public String toString() {
         return "UpdateRequest{" +
                 "chatId=" + chatId() +
-                ", updateRequestMessage=" + updateRequestMessage() +
+                /*", text =" + extractInputText() +*/
                 ", body=" + findBodyByDataType() +
                 '}';
+    }
+
+    private String extractInputText() {
+        if(updateDataType() == CHAT) return update.getMessage().getText();
+        if(updateDataType() == DOCUMENT) return update.getMessage().getCaption();
+        if(updateDataType() == PHOTO) return update.getMessage().getCaption();
+        throw new TelegramServerException("unknown update type (3)");
+    }
+
+
+    public String input() {
+        return extractInputText();
+    }
+
+    public void setupWithCommand(UpdateRequestCommand command) {
+        String value = command.extractValue(extractInputText());
+        updateRequestCommandAndValue = new UpdateRequestCommandAndValue(command, value);
+        log.info("this updateRequestCommandAndValue : {}", updateRequestCommandAndValue);
     }
 }

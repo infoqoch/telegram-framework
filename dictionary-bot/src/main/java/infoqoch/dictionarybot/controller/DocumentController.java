@@ -3,10 +3,10 @@ package infoqoch.dictionarybot.controller;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.update.file.TelegramFileHandler;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.dictionarybot.update.exception.TelegramClientException;
+import infoqoch.dictionarybot.update.file.TelegramFileHandler;
 import infoqoch.dictionarybot.update.request.body.UpdateDocument;
+import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 
 import static infoqoch.dictionarybot.model.dictionary.DictionarySource.Type.EXCEL;
-import static infoqoch.dictionarybot.update.request.UpdateRequestCommand.EXCEL_PUSH;
 
 @Slf4j
 @Component
@@ -26,7 +25,7 @@ public class DocumentController {
     private final DictionaryInsertBatchService dictionaryInsertBatchService;
     private final TelegramFileHandler telegramFileHandler;
 
-    @UpdateRequestMethodMapper(EXCEL_PUSH)
+    @UpdateRequestMethodMapper({"excel push", "push", "replace"})
     public String excelPush(UpdateDocument document, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : excel_push");
 

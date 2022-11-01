@@ -85,8 +85,8 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         //then
-        assertThat(update.command()).isEqualTo(UpdateRequestCommand.UNKNOWN);
-        assertThat(update.value()).isEqualTo("wefwe"); // command를 알 수 없으면 value를 요청한 값으로 한다.
+        assertThat(update.updateRequestCommandAndValue().getCommand()).isEqualTo(UpdateRequestCommand.of("*"));
+        assertThat(update.updateRequestCommandAndValue().getValue()).isEqualTo("wefwe"); // command를 알 수 없으면 value를 요청한 값으로 한다.
         assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("unknown??"));
     }
 
@@ -99,8 +99,8 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         //then
-        assertThat(update.command()).isEqualTo(UpdateRequestCommand.MY_STATUS);
-        assertThat(update.value()).isEmpty();
+        assertThat(update.updateRequestCommandAndValue().getCommand()).isEqualTo(UpdateRequestCommand.of("status"));
+        assertThat(update.updateRequestCommandAndValue().getValue()).isEmpty();
         assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("multipleCommands called"));
     }
 
@@ -113,8 +113,8 @@ public class UpdateDispatcherTest {
         UpdateResponse response = updateDispatcher.process(update);
 
         //then
-        assertThat(update.command()).isEqualTo(UpdateRequestCommand.LOOKUP_FULL_SEARCH);
-        assertThat(update.value()).isEqualTo("multiple command");
+        assertThat(update.updateRequestCommandAndValue().getCommand()).isEqualTo(UpdateRequestCommand.of("f"));
+        assertThat(update.updateRequestCommandAndValue().getValue()).isEqualTo("multiple command");
         assertThat(response.getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder("multipleCommands called"));
     }
 }

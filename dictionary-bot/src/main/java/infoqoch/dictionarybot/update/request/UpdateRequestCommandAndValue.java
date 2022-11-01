@@ -5,11 +5,11 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class UpdateRequestMessage {
+public class UpdateRequestCommandAndValue {
     private final UpdateRequestCommand command;
     private final String value;
 
-    public UpdateRequestMessage(UpdateRequestCommand command, String value) {
+    public UpdateRequestCommandAndValue(UpdateRequestCommand command, String value) {
         this.command = command;
         this.value = value;
     }

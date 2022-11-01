@@ -2,6 +2,7 @@ package infoqoch.dictionarybot.update;
 
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.TelegramProperties;
+import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.dictionarybot.update.resolver.bean.SpringBeanContext;
@@ -14,10 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -54,7 +52,8 @@ public class UpdateDispatcherConfig {
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
         final SpringBeanContext springContext = new SpringBeanContext(context);
         final Collection<URL> urls = getUrlsExcludeTest();
-        final List<UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(springContext, urls, paramResolvers(), returnResolvers());
+        final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers
+                = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(springContext, urls, paramResolvers(), returnResolvers());
         return new UpdateDispatcher(methodResolvers);
     }
 

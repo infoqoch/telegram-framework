@@ -11,24 +11,42 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UpdateRequestMethodResolverFactory {
-    public static  List<UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
-        List<UpdateRequestMethodResolver> methodResolvers = new ArrayList<>();
-
-        Set<UpdateRequestCommand> concretedCommand = new HashSet<>();
+    public static  Map<UpdateRequestCommand, UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+        Map<UpdateRequestCommand, UpdateRequestMethodResolver> concretedCommand = new ConcurrentHashMap<>();
 
         for (Method method : getMethodsAnnotated(urls)) {
             final UpdateRequestMethodMapper mapper = extractUpdateRequestMapper(method);
+            final UpdateRequestMethodResolver resolver = new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, paramResolvers, returnResolvers);
 
-            checkDuplicatedCommand(concretedCommand, mapper.value());
+            for (String commandStr : mapper.value()) {
+                final UpdateRequestCommand command = UpdateRequestCommand.of(commandStr);
 
-            methodResolvers.add(new UpdateRequestMethodResolver(context.getBean(method.getDeclaringClass()), method, mapper, paramResolvers, returnResolvers));
+                if(concretedCommand.containsKey(command))
+                    throw new IllegalStateException("duplicate declared command detected  : " + commandStr.toString());
+
+                concretedCommand.put(command, resolver);
+            }
         }
 
-        isConcretedEveryCommand(concretedCommand);
+        print(concretedCommand);
 
-        return methodResolvers;
+        if(concretedCommand.get(UpdateRequestCommand.of("*"))==null)
+            throw new IllegalStateException("* should be implements!");
+
+        return concretedCommand;
+    }
+
+    private static void print(Map<UpdateRequestCommand, UpdateRequestMethodResolver> concretedCommand) {
+        final Set<UpdateRequestCommand> commands = concretedCommand.keySet();
+        for (UpdateRequestCommand command : commands) {
+            System.out.println(command);
+            final UpdateRequestMethodResolver resolver = concretedCommand.get(command);
+            System.out.println(resolver.toString());
+        }
+
     }
 
     private static Set<Method> getMethodsAnnotated(Collection<URL> urls) {
@@ -39,27 +57,4 @@ public class UpdateRequestMethodResolverFactory {
         return (UpdateRequestMethodMapper) Arrays.stream(method.getDeclaredAnnotations()).filter(a -> a.annotationType() == UpdateRequestMethodMapper.class).findAny().get();
     }
 
-    private static void checkDuplicatedCommand(Set<UpdateRequestCommand> concretedCommand, UpdateRequestCommand[] inputCommand) {
-        if (concretedCommand.contains(inputCommand))
-            throw new IllegalStateException("duplicate declared command detected  : " + inputCommand.toString());
-
-        for (UpdateRequestCommand input : inputCommand)
-            concretedCommand.add(input);
-
-
-    }
-
-    private static void isConcretedEveryCommand(Set<UpdateRequestCommand> concretedCommand) {
-        if(concretedCommand.size() != UpdateRequestCommand.values().length){
-            throw new IllegalArgumentException("every mapper should be concreted. declared with mapper annotation commands: " + printAllCommands());
-        }
-    }
-
-    private static String printAllCommands() {
-        StringBuilder sb = new StringBuilder();
-        for(UpdateRequestCommand command : UpdateRequestCommand.values() ){
-            sb.append(command).append(" ");
-        }
-        return sb.toString();
-    }
 }
