@@ -9,7 +9,6 @@ import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.FilePathRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class TelegramFileHandler {
     private final TelegramBot telegramBot;

@@ -4,15 +4,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class UpdateRequestCommand {
-//    HELP()
-//    , LOOKUP_WORD(),  LOOKUP_SENTENCE(), LOOKUP_DEFINITION(), LOOKUP_FULL_SEARCH()
-//    , UNKNOWN()
-//    , EXCEL_HELP() , EXCEL_PUSH()
-//    , HOURLY_ALARM()
-//    , SHARE_MINE(), LOOKUP_ALL_USERS()
-//    , PROMOTION_ROLE()
-//    , MY_STATUS();
-
     private final String COMMAND;
     private final String COMMAND_WITH_SPACE;
 

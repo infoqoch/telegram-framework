@@ -1,11 +1,13 @@
 package infoqoch.telegram.framework.update;
 
+import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.custom.EmptyCustomUpdateRequestParamAndReturn;
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
 import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
@@ -20,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import java.net.URL;
@@ -29,9 +32,26 @@ import java.util.stream.Collectors;
 @Configuration
 @ComponentScan
 @RequiredArgsConstructor
-public class UpdateDispatcherConfig {
+public class UpdateConfig {
     private final CustomUpdateRequestParam customUpdateRequestParam;
     private final CustomUpdateRequestReturn customUpdateRequestReturn;
+
+    @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    public CustomUpdateRequestReturn emptyCustomUpdateRequestReturn(){
+        return new EmptyCustomUpdateRequestParamAndReturn();
+    }
+
+    @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    public CustomUpdateRequestParam emptyCustomUpdateRequestParam(){
+        return new EmptyCustomUpdateRequestParamAndReturn();
+    }
+
+    @Bean
+    public TelegramFileHandler telegramFileHandler(){
+        return new TelegramFileHandler(telegramBot(), telegramProperties());
+    }
 
     @Bean
     public TelegramProperties telegramProperties(){

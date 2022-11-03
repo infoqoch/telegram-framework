@@ -6,9 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestCommandTest {
     @Test
-    void test(){
+    void extract_command(){
         final UpdateRequestCommand command = UpdateRequestCommand.of("hi");
         assertThat(command.extractValue("/hi goodday")).isEqualTo("goodday");
     }
-
 }

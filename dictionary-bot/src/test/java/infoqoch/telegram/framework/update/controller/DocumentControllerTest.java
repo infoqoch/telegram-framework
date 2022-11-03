@@ -43,7 +43,7 @@ class DocumentControllerTest {
     @BeforeEach
     void setUp(){
         dictionaryProperties = new DictionaryProperties(null, null);
-        telegramProperties = new TelegramProperties(null, "c://data//");
+        telegramProperties = TelegramProperties.generate();
         memoryDictionaryRepository = new MemoryDictionaryRepository();
         mockDictionarySourceRepository = mock(DictionarySourceRepository.class);
         dictionaryInsertBatchService = new DictionaryInsertBatchService(memoryDictionaryRepository, mockDictionarySourceRepository);

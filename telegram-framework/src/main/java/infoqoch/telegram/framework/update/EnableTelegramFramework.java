@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(UpdateDispatcherConfig.class)
+@Import(UpdateConfig.class)
 public @interface EnableTelegramFramework {
 }
