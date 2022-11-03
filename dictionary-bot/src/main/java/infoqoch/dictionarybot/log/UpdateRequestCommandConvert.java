@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.log;
 
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 
 import javax.persistence.AttributeConverter;
 

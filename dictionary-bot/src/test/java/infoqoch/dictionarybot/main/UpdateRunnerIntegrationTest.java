@@ -8,7 +8,7 @@ import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
 import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.telegram.framework.update.UpdateDispatcher;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static infoqoch.dictionarybot.send.Send.Status.REQUEST;
-import static infoqoch.dictionarybot.update.response.SendType.CLIENT_ERROR;
-import static infoqoch.dictionarybot.update.response.SendType.SERVER_ERROR;
+import static infoqoch.telegram.framework.update.response.SendType.CLIENT_ERROR;
+import static infoqoch.telegram.framework.update.response.SendType.SERVER_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

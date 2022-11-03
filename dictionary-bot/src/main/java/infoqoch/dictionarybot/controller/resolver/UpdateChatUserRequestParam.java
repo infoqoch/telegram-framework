@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.controller.resolver;
 
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.resolver.param.UpdateRequestParam;
+import infoqoch.telegram.framework.update.request.UpdateRequest;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
 
 import java.lang.reflect.Parameter;
 import java.util.Optional;

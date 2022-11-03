@@ -2,11 +2,11 @@ package infoqoch.dictionarybot.mock.update;
 
 import infoqoch.dictionarybot.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.exception.TelegramClientException;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
-import infoqoch.dictionarybot.update.request.body.UpdateChat;
-import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.exception.TelegramClientException;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
+import infoqoch.telegram.framework.update.request.body.UpdateChat;
+import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.util.ArrayList;

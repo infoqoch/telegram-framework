@@ -3,10 +3,10 @@ package infoqoch.dictionarybot.controller;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.update.exception.TelegramClientException;
-import infoqoch.dictionarybot.update.file.TelegramFileHandler;
-import infoqoch.dictionarybot.update.request.body.UpdateDocument;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.exception.TelegramClientException;
+import infoqoch.telegram.framework.update.file.TelegramFileHandler;
+import infoqoch.telegram.framework.update.request.body.UpdateDocument;
+import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodMapper;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ import static infoqoch.dictionarybot.model.dictionary.DictionarySource.Type.EXCE
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class DocumentController {
     private final DictionaryInsertBatchService dictionaryInsertBatchService;
     private final TelegramFileHandler telegramFileHandler;

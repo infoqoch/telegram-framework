@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.send.repository;
 import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +13,8 @@ import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
 
-import static infoqoch.dictionarybot.update.response.SendType.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static infoqoch.telegram.framework.update.response.SendType.*;
 @DataJpaTest
 @Import(QuerydslConfig.class)
 class SendJpaRepositoryTest {

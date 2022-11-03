@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.telegram.framework.update.UpdateDispatcher;
 import org.junit.jupiter.api.Test;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.boot.test.context.SpringBootTest;

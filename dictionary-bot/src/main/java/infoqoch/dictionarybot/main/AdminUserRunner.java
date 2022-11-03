@@ -4,7 +4,7 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.update.response.SendType;
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.log.UpdateLog;

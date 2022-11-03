@@ -3,8 +3,8 @@ package infoqoch.dictionarybot.controller;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
+import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LookupController {
+
     private final LookupRepository lookupRepository;
+
     @UpdateRequestMethodMapper({"w", "ㄷ"})
     public List<Dictionary> lookupByWord(UpdateRequestCommandAndValue updateRequestCommandAndValue, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : lookupByWord!");

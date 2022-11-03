@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.system.excel;
 
-import infoqoch.dictionarybot.update.exception.TelegramServerException;
+import infoqoch.telegram.framework.update.exception.TelegramServerException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

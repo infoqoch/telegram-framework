@@ -5,9 +5,9 @@ import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.mock.repository.MemoryUpdateLogRepository;
 import infoqoch.dictionarybot.mock.update.FakeUpdateDispatcherFactory;
-import infoqoch.dictionarybot.update.UpdateDispatcher;
+import infoqoch.telegram.framework.update.UpdateDispatcher;
 import infoqoch.dictionarybot.log.UpdateLog;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static infoqoch.dictionarybot.update.response.SendType.CLIENT_ERROR;
-import static infoqoch.dictionarybot.update.response.SendType.MESSAGE;
+import static infoqoch.telegram.framework.update.response.SendType.CLIENT_ERROR;
+import static infoqoch.telegram.framework.update.response.SendType.MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

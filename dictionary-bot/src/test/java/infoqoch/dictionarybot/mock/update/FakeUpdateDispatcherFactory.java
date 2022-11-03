@@ -3,10 +3,13 @@ package infoqoch.dictionarybot.mock.update;
 import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
 import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
 import infoqoch.dictionarybot.controller.resolver.UpdateChatUserRequestParam;
-import infoqoch.dictionarybot.update.UpdateDispatcher;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodResolverFactory;
-import infoqoch.dictionarybot.update.resolver.param.*;
-import infoqoch.dictionarybot.update.resolver.returns.*;
+import infoqoch.telegram.framework.update.UpdateDispatcher;
+import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolverFactory;
+import infoqoch.telegram.framework.update.resolver.param.*;
+import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateResponseUpdateRequestReturn;
 
 import java.net.URL;
 import java.util.ArrayList;

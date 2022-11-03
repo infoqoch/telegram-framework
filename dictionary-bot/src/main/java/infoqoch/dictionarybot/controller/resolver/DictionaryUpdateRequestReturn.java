@@ -2,8 +2,8 @@ package infoqoch.dictionarybot.controller.resolver;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
-import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
-import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.telegram.framework.update.response.UpdateResponse;
 
 import java.lang.reflect.Method;
 

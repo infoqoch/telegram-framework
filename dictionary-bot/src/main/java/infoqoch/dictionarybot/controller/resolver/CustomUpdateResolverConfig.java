@@ -1,10 +1,10 @@
 package infoqoch.dictionarybot.controller.resolver;
 
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.update.resolver.custom.CustomUpdateRequestParam;
-import infoqoch.dictionarybot.update.resolver.custom.CustomUpdateRequestReturn;
-import infoqoch.dictionarybot.update.resolver.param.UpdateRequestParam;
-import infoqoch.dictionarybot.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParam;
+import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

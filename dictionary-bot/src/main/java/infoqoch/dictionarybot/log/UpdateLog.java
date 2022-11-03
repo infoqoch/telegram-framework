@@ -1,11 +1,11 @@
 package infoqoch.dictionarybot.log;
 
-import infoqoch.dictionarybot.update.response.SendType;
-import infoqoch.dictionarybot.update.request.UpdateRequest;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommand;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
-import infoqoch.dictionarybot.update.request.body.UpdateDataType;
-import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.request.UpdateRequest;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
+import infoqoch.telegram.framework.update.request.body.UpdateDataType;
+import infoqoch.telegram.framework.update.response.UpdateResponse;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 

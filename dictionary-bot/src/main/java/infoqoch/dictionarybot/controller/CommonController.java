@@ -1,9 +1,9 @@
 package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
-import infoqoch.dictionarybot.update.request.UpdateRequestCommandAndValue;
-import infoqoch.dictionarybot.update.resolver.UpdateRequestMethodMapper;
-import infoqoch.dictionarybot.update.response.UpdateResponse;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
+import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
