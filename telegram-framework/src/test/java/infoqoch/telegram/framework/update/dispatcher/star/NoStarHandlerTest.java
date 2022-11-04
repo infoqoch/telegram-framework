@@ -1,20 +1,21 @@
-package infoqoch.telegram.framework.update.dispatcher.empty;
+package infoqoch.telegram.framework.update.dispatcher.star;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class EmptyHandlerTest {
+public class NoStarHandlerTest {
 
     private UpdateDispatcher updateDispatcher;
 
     @Test
-    void empty(){
+    void no_star(){
         assertThatThrownBy(
                 ()-> new AnnotationConfigApplicationContext(InitConfig.class)
         )
@@ -26,6 +27,9 @@ public class EmptyHandlerTest {
     @EnableTelegramFramework
     @Configuration
     static class InitConfig {
-        // no handler bean
+        @Bean
+        NoStarSampleHandler sampleHandler(){
+            return new NoStarSampleHandler();
+        }
     }
 }
