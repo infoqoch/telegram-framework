@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.resolver;
+package infoqoch.telegram.framework.update;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

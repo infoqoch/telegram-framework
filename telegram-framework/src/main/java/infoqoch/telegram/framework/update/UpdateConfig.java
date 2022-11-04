@@ -2,8 +2,6 @@ package infoqoch.telegram.framework.update;
 
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
-import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolver;
-import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolverFactory;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturn;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -30,11 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Configuration
-@ComponentScan
 @RequiredArgsConstructor
 public class UpdateConfig {
-    private final CustomUpdateRequestParam customUpdateRequestParam;
-    private final CustomUpdateRequestReturn customUpdateRequestReturn;
 
     @Bean
     @Order(Ordered.LOWEST_PRECEDENCE)
@@ -65,7 +59,7 @@ public class UpdateConfig {
         returnResolvers.add(new MSBUpdateRequestReturn());
         returnResolvers.add(new StringUpdateRequestReturn());
         returnResolvers.add(new UpdateResponseUpdateRequestReturn());
-        customUpdateRequestReturn.addUpdateRequestReturn().stream().forEach(
+        emptyCustomUpdateRequestReturn().addUpdateRequestReturn().stream().forEach(
                 r -> returnResolvers.add(r)
         );
 
@@ -88,7 +82,7 @@ public class UpdateConfig {
 
         paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties()));
 
-        customUpdateRequestParam.addUpdateRequestParam().stream().forEach(
+        emptyCustomUpdateRequestParam().addUpdateRequestParam().stream().forEach(
                 r -> paramResolvers.add(r)
         );
 
@@ -109,16 +103,12 @@ public class UpdateConfig {
     // 실제 스프링 컨테이너를 로딩할 때는, 테스트를 사용하지 않으므로 이러한 코드가 필요 없다. 테스트를 할 때는 두 개의 클래스로더가 동작하기 때문에 불가피하게 아래와 같이 "/test-classes"에 있는 파일을 읽지 않도록 한다.
     // 운영이 테스트를 위한 코드에 종속되는 것은 좋지 않아서 최대한 해소하려 하였으나 어쩔 수 없이 아래와 같이 코드를 작성하였음.
     // 이에 대한 개선책이 반드시 필요함.
-
-    // TODO
-    // 아래 url 선택 방식은 수정 필요함.
-    // 애당초 아래의 어너테이션이 없을 경우 프레임워크는 동작할 수 없음.
     private Set<URL> getUrlsExcludeTest(ApplicationContext context) {
         final Object listener = context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny().get();
         final Set<URL> collect = ClasspathHelper.forPackage(listener.getClass().getPackageName()).stream()
-                .filter(url -> !url.toString().contains("/test-classes")) // maven
-                .filter(url -> !url.toString().contains("/test/classes")) // gradle
-                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
+//                .filter(url -> !url.toString().contains("/test-classes")) // maven
+//                .filter(url -> !url.toString().contains("/test/classes")) // gradle
+//                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
                 .collect(Collectors.toSet());
         for (URL url : collect) {
             System.out.println("url = " + url);

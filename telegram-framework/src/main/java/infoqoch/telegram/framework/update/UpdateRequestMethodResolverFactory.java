@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.resolver;
+package infoqoch.telegram.framework.update;
 
 import infoqoch.telegram.framework.update.resolver.bean.BeanContext;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
@@ -15,8 +15,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-public class UpdateRequestMethodResolverFactory {
-    public static  Map<UpdateRequestCommand, UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+class UpdateRequestMethodResolverFactory {
+    static  Map<UpdateRequestCommand, UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
         Map<UpdateRequestCommand, UpdateRequestMethodResolver> concretedCommand = new ConcurrentHashMap<>();
 
         for (Method method : getMethodsAnnotated(urls)) {

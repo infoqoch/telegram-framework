@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.resolver;
+package infoqoch.telegram.framework.update;
 
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
@@ -12,7 +12,7 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Optional;
 
-public class UpdateRequestMethodResolver {
+class UpdateRequestMethodResolver {
     private final Object bean;
     private final Method method;
     private final UpdateRequestMethodMapper mapper;
@@ -24,7 +24,7 @@ public class UpdateRequestMethodResolver {
         return "UpdateRequestMethodResolver{"+method.getName()+"}";
     }
 
-    public UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+    UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
         this.bean = bean;
         this.method = method;
         this.mapper = mapper;
@@ -32,7 +32,7 @@ public class UpdateRequestMethodResolver {
         this.returnResolver = findReturnResolver(returnResolvers);
     }
 
-    public UpdateResponse process(UpdateRequest update) {
+    UpdateResponse process(UpdateRequest update) {
         Object[] args = resolveParameters(update);
         return resolveReturn(args);
     }

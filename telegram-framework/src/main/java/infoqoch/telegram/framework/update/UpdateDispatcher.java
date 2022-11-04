@@ -3,7 +3,6 @@ package infoqoch.telegram.framework.update;
 import infoqoch.telegram.framework.update.exception.TelegramException;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
-import infoqoch.telegram.framework.update.resolver.UpdateRequestMethodResolver;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;

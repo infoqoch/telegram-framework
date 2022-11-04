@@ -7,7 +7,6 @@ import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
 import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
 import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
-import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,34 +30,6 @@ class UpdateRequestCommandAndValueReturnListTest {
         returnResolvers.add(new MSBUpdateRequestReturn());
         returnResolvers.add(new StringUpdateRequestReturn());
         returnResolvers.add(new DictionariesUpdateRequestReturn());
-    }
-
-    @Test
-    void markdownStringBuilder(){
-        // give
-        final MarkdownStringBuilder target = new MarkdownStringBuilder("hi!!");
-
-        // when
-        final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
-
-        //then
-        Assertions.assertThat(resolver).isPresent();
-        assertThat(resolver.get()).isInstanceOf(MSBUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target);
-    }
-
-    @Test
-    void string(){
-        // give
-        final String target = "good day!";
-
-        // when
-        final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();
-
-        //then
-        Assertions.assertThat(resolver).isPresent();
-        assertThat(resolver.get()).isInstanceOf(StringUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
     }
 
     @Test

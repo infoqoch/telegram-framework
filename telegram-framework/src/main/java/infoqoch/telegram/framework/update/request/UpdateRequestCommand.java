@@ -17,6 +17,7 @@ public class UpdateRequestCommand {
     }
 
     public static UpdateRequestCommand of(String commandStr) {
+        if(commandStr==null || commandStr.isBlank()) throw new IllegalArgumentException("command should not be blank");
         return new UpdateRequestCommand(flatting(commandStr));
     }
 
