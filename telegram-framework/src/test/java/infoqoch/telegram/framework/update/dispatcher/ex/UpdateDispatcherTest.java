@@ -2,9 +2,11 @@ package infoqoch.telegram.framework.update.dispatcher.ex;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
+import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -42,6 +44,19 @@ class UpdateDispatcherTest {
         assertThat(updateResponse.getMessage().toString()).isEqualTo("서버에 문제가 발생하였습니다\\. 죄송합니다\\. \\(2\\)");
     }
 
+    @Test
+    void wrong_request_input_telegramEx(){
+        // given
+        final String notSpecificCommand = "wmiofewjmf";
+        final UpdateRequest request = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson(notSpecificCommand));
+
+        // when
+        final UpdateResponse updateResponse = updateDispatcher.process(request);
+
+        // then
+        assertThat(updateResponse.getSendType()).isEqualTo(SendType.CLIENT_ERROR);
+        assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("정확한 명령어를 입력해야 합니다.").toString());
+    }
 
     @EnableTelegramFramework
     @Configuration
