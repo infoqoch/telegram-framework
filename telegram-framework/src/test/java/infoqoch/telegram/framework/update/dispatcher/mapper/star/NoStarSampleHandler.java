@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.dispatcher.star;
+package infoqoch.telegram.framework.update.dispatcher.mapper.star;
 
 import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
 

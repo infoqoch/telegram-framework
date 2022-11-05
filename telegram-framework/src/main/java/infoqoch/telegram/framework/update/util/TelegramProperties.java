@@ -9,6 +9,7 @@ import java.util.Properties;
 
 @ToString
 public class TelegramProperties {
+    private static final String PROPERTIES_FILE = "telegram-framework.properties";
     private final String token;
     private final String fileUploadPath;
 
@@ -35,7 +36,7 @@ public class TelegramProperties {
 
     private static String findProperty(String key) {
         try{
-            final URL resource = TelegramProperties.class.getClassLoader().getResource("telegram-framework.properties");
+            final URL resource = TelegramProperties.class.getClassLoader().getResource(PROPERTIES_FILE);
             File path = new File(resource.toURI());
             try(FileReader file = new FileReader(path)) {
                 Properties p = new Properties();
@@ -43,7 +44,7 @@ public class TelegramProperties {
                 return p.getProperty(key);
             }
         }catch (Exception e){
-            throw new IllegalArgumentException("check properties (test/resources/application.properties)", e);
+            throw new IllegalArgumentException("check properties ("+PROPERTIES_FILE+")", e);
         }
     }
 }

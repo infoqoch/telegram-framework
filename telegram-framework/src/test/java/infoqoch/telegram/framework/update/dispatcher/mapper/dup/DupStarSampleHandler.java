@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.dispatcher.dup;
+package infoqoch.telegram.framework.update.dispatcher.mapper.dup;
 
 import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
 

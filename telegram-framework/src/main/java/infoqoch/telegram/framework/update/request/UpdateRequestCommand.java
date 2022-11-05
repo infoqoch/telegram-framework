@@ -21,18 +21,18 @@ public class UpdateRequestCommand {
         return new UpdateRequestCommand(flatting(commandStr));
     }
 
-    private static boolean isMatch(String input, String alias) {
-        String[] inputSplit = input.split(" ");
-        String[] aliasSplit = alias.split(" ");
-
-        if(inputSplit.length < aliasSplit.length) return false;
-
-        for(int i = 0; i< aliasSplit.length; i++)
-            if(!aliasSplit[i].equals(inputSplit[i])) return false;
-
-        return true;
-    }
-
+//    private static boolean isMatch(String input, String alias) {
+//        String[] inputSplit = input.split(" ");
+//        String[] aliasSplit = alias.split(" ");
+//
+//        if(inputSplit.length < aliasSplit.length) return false;
+//
+//        for(int i = 0; i< aliasSplit.length; i++)
+//            if(!aliasSplit[i].equals(inputSplit[i])) return false;
+//
+//        return true;
+//    }
+//
     public boolean startsWith(String input) {
         final String flatInput = flatting(input);
         if(flatInput.equals(COMMAND)) return true;
@@ -54,6 +54,5 @@ public class UpdateRequestCommand {
     private static String flatting(String commandStr) {
         return UpdateRequestCommandSplit.flattingInput(commandStr);
     }
-
 
 }

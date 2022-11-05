@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.dispatcher.basic;
+package infoqoch.telegram.framework.update.dispatcher.mapper.basic;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateConfig;
