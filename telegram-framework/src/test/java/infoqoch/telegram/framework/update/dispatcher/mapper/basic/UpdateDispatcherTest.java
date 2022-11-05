@@ -1,7 +1,6 @@
 package infoqoch.telegram.framework.update.dispatcher.mapper.basic;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
-import infoqoch.telegram.framework.update.UpdateConfig;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
@@ -32,8 +31,7 @@ class UpdateDispatcherTest {
         final SampleHandler bean = ac.getBean(SampleHandler.class);
         assert bean != null;
 
-        final UpdateConfig updateConfig = new UpdateConfig();
-        updateDispatcher = updateConfig.updateDispatcher(ac);
+        updateDispatcher = ac.getBean(UpdateDispatcher.class);
     }
 
     @Test
