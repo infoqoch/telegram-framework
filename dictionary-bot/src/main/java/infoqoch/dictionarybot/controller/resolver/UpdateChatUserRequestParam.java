@@ -13,7 +13,6 @@ public class UpdateChatUserRequestParam implements UpdateRequestParam {
 
     public UpdateChatUserRequestParam(ChatUserRepository chatUserRepository) {
         this.chatUserRepository = chatUserRepository;
-
     }
 
     @Override

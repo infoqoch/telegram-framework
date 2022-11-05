@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.controller;
+package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.controller.ChatUserController;
 import infoqoch.dictionarybot.model.user.ChatUser;

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.main;
+package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;

@@ -1,5 +1,6 @@
 package infoqoch.dictionarybot.main;
 
+import infoqoch.dictionarybot.AdminUserRunner;
 import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;

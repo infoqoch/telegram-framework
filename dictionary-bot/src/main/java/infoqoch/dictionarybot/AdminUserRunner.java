@@ -1,13 +1,13 @@
-package infoqoch.dictionarybot.main;
+package infoqoch.dictionarybot;
 
+import infoqoch.dictionarybot.log.UpdateLog;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.dictionarybot.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.event.Events;
-import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

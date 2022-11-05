@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.request;
+package infoqoch.dictionarybot.request;
 
 class UpdateRequestCommandAndValueTest {
 //    @DisplayName("UpdateRequest가 UpdateRequestMessage으로 정상 변환됨을 확인한다.")

@@ -1,7 +1,8 @@
-package infoqoch.telegram.framework.update.controller.resolver.returns;
+package infoqoch.dictionarybot.controller.resolver.returns;
 
 import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
 import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
+import infoqoch.dictionarybot.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
@@ -35,7 +36,7 @@ class UpdateRequestCommandAndValueReturnListTest {
     @Test
     void dictionary(){
         // give
-        final Dictionary target = createSimpleDictionary(createSimpleDictionaryContent(), 123);
+        final Dictionary target = MockDictionary.createSimpleDictionary(createSimpleDictionaryContent(), 123);
 
         // when
         final Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(target)).findAny();

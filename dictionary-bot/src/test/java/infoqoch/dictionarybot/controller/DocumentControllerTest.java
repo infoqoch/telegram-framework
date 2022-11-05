@@ -1,6 +1,5 @@
-package infoqoch.telegram.framework.update.controller;
+package infoqoch.dictionarybot.controller;
 
-import infoqoch.dictionarybot.controller.DocumentController;
 import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;

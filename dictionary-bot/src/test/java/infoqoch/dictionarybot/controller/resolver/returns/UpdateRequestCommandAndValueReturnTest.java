@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.controller.resolver.returns;
+package infoqoch.dictionarybot.controller.resolver.returns;
 
 import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;

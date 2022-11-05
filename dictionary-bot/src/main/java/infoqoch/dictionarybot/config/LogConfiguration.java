@@ -1,6 +1,7 @@
-package infoqoch.dictionarybot.system.log;
+package infoqoch.dictionarybot.config;
 
 import com.p6spy.engine.spy.P6SpyOptions;
+import infoqoch.dictionarybot.system.log.MyP6spyFormattingStrategy;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;

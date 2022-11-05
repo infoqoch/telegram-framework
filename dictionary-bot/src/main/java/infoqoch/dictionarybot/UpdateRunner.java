@@ -1,11 +1,11 @@
-package infoqoch.dictionarybot.main;
+package infoqoch.dictionarybot;
 
+import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.dictionarybot.log.repository.UpdateLogRepository;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
-import infoqoch.dictionarybot.log.UpdateLog;
-import infoqoch.dictionarybot.log.repository.UpdateLogRepository;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.TelegramBot;

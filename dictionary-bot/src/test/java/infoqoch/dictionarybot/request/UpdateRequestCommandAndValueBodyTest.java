@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.request;
+package infoqoch.dictionarybot.request;
 
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.telegram.framework.update.request.body.UpdateChat;

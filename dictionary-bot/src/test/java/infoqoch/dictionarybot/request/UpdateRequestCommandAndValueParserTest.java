@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.request;
+package infoqoch.dictionarybot.request;
 
 
 @Deprecated

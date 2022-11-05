@@ -1,5 +1,6 @@
-package infoqoch.dictionarybot.system.event;
+package infoqoch.dictionarybot.config;
 
+import infoqoch.dictionarybot.system.event.Events;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;

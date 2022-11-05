@@ -1,6 +1,6 @@
-package infoqoch.telegram.framework.update.controller;
+package infoqoch.dictionarybot.controller;
 
-import infoqoch.dictionarybot.main.UpdateRunner;
+import infoqoch.dictionarybot.UpdateRunner;
 import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.mock.data.MockUpdate;
 import infoqoch.dictionarybot.model.user.ChatUser;
