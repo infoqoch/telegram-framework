@@ -1,7 +1,5 @@
 package infoqoch.telegram.framework.update.resolver.customparam;
 
-import infoqoch.telegram.framework.update.EnableTelegramFramework;
-import infoqoch.telegram.framework.update.UpdateConfig;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
@@ -12,11 +10,8 @@ import infoqoch.telegram.framework.update.resolver.param.UpdateRequestUpdateRequ
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -28,7 +23,7 @@ class CustomUpdateRequestParamRegisterTest {
 
     @BeforeEach
     void setUp(){
-        ApplicationContext ac = new AnnotationConfigApplicationContext(Config.class, UpdateConfig.class);
+        ApplicationContext ac = new AnnotationConfigApplicationContext(Config.class);
         returnRegister = ac.getBean(UpdateRequestParamRegister.class);
     }
 
@@ -72,20 +67,5 @@ class CustomUpdateRequestParamRegisterTest {
         final Method updateRequestMethod = SampleHandler.class.getDeclaredMethod("updateRequestMethod", UpdateRequest.class, UpdateDocument.class, Sample.class);
         final Parameter[] parameters = updateRequestMethod.getParameters();
         return parameters;
-    }
-
-
-    @Configuration
-    @EnableTelegramFramework
-    static class Config {
-        @Bean
-        SampleHandler sampleHandler(){
-            return new SampleHandler();
-        }
-
-        @Autowired
-        public void addUpdateRequestParam(@Autowired UpdateRequestParamRegister register) {
-            register.add(new SampleUpdateRequestParam());
-        }
     }
 }

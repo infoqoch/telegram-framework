@@ -1,9 +1,13 @@
 package infoqoch.telegram.framework.update.resolver.returns;
 
+import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateConfig;
+import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -11,7 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestReturnRegisterTest {
-    UpdateRequestReturnRegister returnRegister = new UpdateConfig().updateRequestReturnRegister();
+    UpdateRequestReturnRegister returnRegister = new UpdateConfig(new AnnotationConfigApplicationContext(Config.class)).updateRequestReturnRegister();
 
     @Test
     void not_supported(){
@@ -48,5 +52,14 @@ class UpdateRequestReturnRegisterTest {
         Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(StringUpdateRequestReturn.class);
         assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
+    }
+
+    @Configuration
+    @EnableTelegramFramework
+    static class Config{
+        @UpdateRequestMethodMapper("*")
+        public String any(){
+            return "any";
+        }
     }
 }

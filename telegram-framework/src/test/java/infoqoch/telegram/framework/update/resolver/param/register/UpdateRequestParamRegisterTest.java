@@ -1,23 +1,28 @@
-package infoqoch.telegram.framework.update.resolver.param;
+package infoqoch.telegram.framework.update.resolver.param.register;
 
+import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateConfig;
 import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
+import infoqoch.telegram.framework.update.resolver.param.UpdateDocumentUpdateRequestParam;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParamRegister;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestUpdateRequestParam;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UpdateRequestParamRegisterTest {
-    UpdateRequestParamRegister returnRegister = new UpdateConfig().updateRequestParamRegister();
+    UpdateRequestParamRegister returnRegister = new UpdateConfig(new AnnotationConfigApplicationContext(Config.class)).updateRequestParamRegister();
 
     @Test
     void support(){
@@ -25,9 +30,9 @@ class UpdateRequestParamRegisterTest {
 
         assertThat(returnRegister.findSupportedResolverBy(params[0])).isInstanceOf(UpdateRequestUpdateRequestParam.class);
         assertThat(returnRegister.findSupportedResolverBy(params[1])).isInstanceOf(UpdateDocumentUpdateRequestParam.class);
-        assertThatThrownBy(()->
-                        returnRegister.findSupportedResolverBy(params[2])
-        ).isInstanceOf(IllegalArgumentException.class);
+//        assertThatThrownBy(()->
+//                        returnRegister.findSupportedResolverBy(params[2])
+//        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -44,16 +49,23 @@ class UpdateRequestParamRegisterTest {
     }
 
     @SneakyThrows
-    private static Parameter[] getSampleParameters() {
-        final Method updateRequestMethod = Sample.class.getDeclaredMethod("updateRequestMethod", UpdateRequest.class, UpdateDocument.class, LocalDateTime.class);
+    private Parameter[] getSampleParameters() {
+        final Method updateRequestMethod = Config.class.getDeclaredMethod("updateRequestMethod", UpdateRequest.class, UpdateDocument.class);
         final Parameter[] parameters = updateRequestMethod.getParameters();
         return parameters;
     }
 
-    static class Sample{
+    @Configuration
+    @EnableTelegramFramework
+    static class Config{
         @UpdateRequestMethodMapper("hi")
-        void updateRequestMethod(UpdateRequest updateRequest, UpdateDocument updateDocument, LocalDateTime localDateTime){
+        public String updateRequestMethod(UpdateRequest updateRequest, UpdateDocument updateDocument){
+            return "hi!";
+        }
 
+        @UpdateRequestMethodMapper("*")
+        public  String any(){
+            return "any";
         }
     }
 }

@@ -3,34 +3,82 @@ package infoqoch.telegram.framework.update;
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
+import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParamRegister;
+import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.resolver.param.*;
-import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturnRegister;
-import infoqoch.telegram.framework.update.resolver.returns.UpdateResponseUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.*;
 import infoqoch.telegram.framework.update.util.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class UpdateConfig {
+    private final ApplicationContext context;
 
     @Bean
     public TelegramFileHandler telegramFileHandler(){
         return new TelegramFileHandler(telegramBot(), telegramProperties());
+    }
+
+    @Bean
+    public CustomUpdateRequestReturnRegister customUpdateRequestReturnRegister(){
+        List<UpdateRequestReturn> result = new ArrayList<>();
+
+        final Set<Class<? extends CustomUpdateRequestReturnRegister>> subTypesOf = new Reflections(
+                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(context))).setScanners(Scanners.SubTypes)
+        ).getSubTypesOf(CustomUpdateRequestReturnRegister.class);
+
+        for (Class<? extends CustomUpdateRequestReturnRegister> aClass : subTypesOf) {
+            try{
+                final CustomUpdateRequestReturnRegister bean = context.getBean(aClass);
+                result.addAll(bean.returnRegister());
+                log.info("{} implements CustomUpdateRequestReturnRegister and added resolvers in UpdateRequestReturnRegister", aClass);
+            }catch (Exception e){
+                e.printStackTrace();
+                log.info("{} implements CustomUpdateRequestReturnRegister but not bean", aClass);
+            }
+        }
+
+        return () -> result;
+    }
+
+    @Bean
+    public CustomUpdateRequestParamRegister customUpdateRequestParamRegister(){
+        List<UpdateRequestParam> result = new ArrayList<>();
+
+        final Set<Class<? extends CustomUpdateRequestParamRegister>> subTypesOf = new Reflections(
+                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(context))).setScanners(Scanners.SubTypes)
+        ).getSubTypesOf(CustomUpdateRequestParamRegister.class);
+
+        for (Class<? extends CustomUpdateRequestParamRegister> aClass : subTypesOf) {
+            try{
+                final CustomUpdateRequestParamRegister bean = context.getBean(aClass);
+                result.addAll(bean.paramRegister());
+                log.info("{} implements CustomUpdateRequestParamRegister and added resolvers in UpdateRequestParamRegister", aClass);
+            }catch (Exception e){
+                e.printStackTrace();
+                log.info("{} implements CustomUpdateRequestParamRegister but not bean", aClass);
+            }
+        }
+
+        return () -> result;
     }
 
     @Bean
@@ -44,6 +92,11 @@ public class UpdateConfig {
         updateRequestReturnRegister.add(new MSBUpdateRequestReturn());
         updateRequestReturnRegister.add(new StringUpdateRequestReturn());
         updateRequestReturnRegister.add(new UpdateResponseUpdateRequestReturn());
+
+        for (UpdateRequestReturn updateRequestReturn : customUpdateRequestReturnRegister().returnRegister()) {
+            updateRequestReturnRegister.add(updateRequestReturn);
+        }
+
         return updateRequestReturnRegister;
     }
 
@@ -55,18 +108,23 @@ public class UpdateConfig {
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
         paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties()));
+
+        for (UpdateRequestParam updateRequestParam : customUpdateRequestParamRegister().paramRegister()) {
+            paramResolvers.add(updateRequestParam);
+        }
+
         return paramResolvers;
     }
 
     @Bean
-    TelegramBot telegramBot(){
+    public TelegramBot telegramBot(){
         return DefaultTelegramBotFactory.init(telegramProperties().token());
     }
 
     @Bean
-    public UpdateDispatcher updateDispatcher(ApplicationContext context){
+    public UpdateDispatcher updateDispatcher(){
         final SpringBeanContext springContext = new SpringBeanContext(context);
-        final Collection<URL> urls = getUrlsExcludeTest(context);
+        final Collection<URL> urls = generateTargetUrl(extractBasePackageName(context));
         final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(
                 springContext
                 , urls
@@ -74,6 +132,10 @@ public class UpdateConfig {
                 , updateRequestReturnRegister()
         );
         return new UpdateDispatcher(methodResolvers);
+    }
+
+    private static String extractBasePackageName(ApplicationContext context) {
+        return context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny().get().getClass().getPackageName();
     }
 
     // TODO
@@ -87,25 +149,19 @@ public class UpdateConfig {
     // 하지만 ComponentScan의 원칙은 해당 메서드를 기점으로부터 검색한다.
     // 이러한 부분을 내가 놓쳤고, 관련하여 URL 객체를 새로 구현토록 하였다.
     // 이 부분은 테스트 이후 어떤식으로 처리할지 확정한다.
-    private Set<URL> getUrlsExcludeTest(ApplicationContext context) {
-        final Object listener = context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny().get();
-        final String packageName = listener.getClass().getPackageName();
-
-        final Set<URL> collect = ClasspathHelper.forPackage(packageName).stream()
+    private Set<URL> generateTargetUrl(String basePackageName) {
+        return ClasspathHelper.forPackage(basePackageName).stream()
 //                .filter(url -> !url.toString().contains("/test-classes")) // maven
 //                .filter(url -> !url.toString().contains("/test/classes")) // gradle
 //                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
-                .map(u -> generateNewUrl(packageName, u))
+                .map(u -> appendPackageName(u, basePackageName))
+                .peek(u -> log.info("url = {}", u))
                 .collect(Collectors.toSet());
-        for (URL url : collect) {
-            System.out.println("url = " + url);
-        }
-        return collect;
     }
 
-    private static URL generateNewUrl(String packageName, URL u) {
+    private static URL appendPackageName(URL url, String packageName) {
         try {
-            return new URL(u.toString() + packageName.replaceAll("[.]", "/"));
+            return new URL(url.toString() + packageName.replaceAll("[.]", "/"));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
