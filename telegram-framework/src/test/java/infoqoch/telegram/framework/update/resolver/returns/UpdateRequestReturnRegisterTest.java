@@ -6,13 +6,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UpdateRequestReturnRegisterTest {
-    UpdateRequestReturnRegister returnRegister = new UpdateConfig().updateRequestReturnRegister(Collections.emptyList());
+    UpdateRequestReturnRegister returnRegister = new UpdateConfig().updateRequestReturnRegister();
 
     @Test
     void not_supported(){

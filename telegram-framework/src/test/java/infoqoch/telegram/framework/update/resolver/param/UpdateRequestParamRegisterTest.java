@@ -12,13 +12,12 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UpdateRequestParamRegisterTest {
-    UpdateRequestParamRegister returnRegister = new UpdateConfig().updateRequestParamRegister(Collections.emptyList());
+    UpdateRequestParamRegister returnRegister = new UpdateConfig().updateRequestParamRegister();
 
     @Test
     void support(){

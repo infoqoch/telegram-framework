@@ -3,10 +3,11 @@ package infoqoch.telegram.framework.update;
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
-import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParam;
-import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturn;
 import infoqoch.telegram.framework.update.resolver.param.*;
-import infoqoch.telegram.framework.update.resolver.returns.*;
+import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturnRegister;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateResponseUpdateRequestReturn;
 import infoqoch.telegram.framework.update.util.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -18,7 +19,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -35,40 +38,23 @@ public class UpdateConfig {
         return TelegramProperties.generate();
     }
 
-
     @Bean
-    public CustomUpdateRequestParam emptyCustomUpdateRequestParam(){
-        return () -> Collections.emptyList();
-    }
-
-    @Bean
-    public CustomUpdateRequestReturn emptyCustomUpdateRequestReturn(){
-        return () -> Collections.emptyList();
-    }
-
-    @Bean
-    public UpdateRequestReturnRegister updateRequestReturnRegister(List<UpdateRequestReturn> updateRequestReturns){
+    public UpdateRequestReturnRegister updateRequestReturnRegister(){
         UpdateRequestReturnRegister updateRequestReturnRegister = new UpdateRequestReturnRegister();
         updateRequestReturnRegister.add(new MSBUpdateRequestReturn());
         updateRequestReturnRegister.add(new StringUpdateRequestReturn());
         updateRequestReturnRegister.add(new UpdateResponseUpdateRequestReturn());
-        for (UpdateRequestReturn updateRequestReturn : updateRequestReturns) {
-            updateRequestReturnRegister.add(updateRequestReturn);
-        }
         return updateRequestReturnRegister;
     }
 
     @Bean
-    public UpdateRequestParamRegister updateRequestParamRegister(List<UpdateRequestParam> updateRequestParams){
+    public UpdateRequestParamRegister updateRequestParamRegister(){
         UpdateRequestParamRegister paramResolvers = new UpdateRequestParamRegister();
         paramResolvers.add(new UpdateRequestUpdateRequestParam());
         paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
         paramResolvers.add(new UpdateChatUpdateRequestParam());
         paramResolvers.add(new UpdateDocumentUpdateRequestParam());
         paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties()));
-        for (UpdateRequestParam updateRequestParam : updateRequestParams) {
-            paramResolvers.add(updateRequestParam);
-        }
         return paramResolvers;
     }
 
@@ -81,14 +67,11 @@ public class UpdateConfig {
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
         final SpringBeanContext springContext = new SpringBeanContext(context);
         final Collection<URL> urls = getUrlsExcludeTest(context);
-        final CustomUpdateRequestReturn bean = context.getBean(CustomUpdateRequestReturn.class);
-        System.out.println("bean = " + bean);
-
         final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(
                 springContext
                 , urls
-                , updateRequestParamRegister(context.getBean(CustomUpdateRequestParam.class).addUpdateRequestParam())
-                , updateRequestReturnRegister(bean.addUpdateRequestReturn())
+                , updateRequestParamRegister()
+                , updateRequestReturnRegister()
         );
         return new UpdateDispatcher(methodResolvers);
     }
