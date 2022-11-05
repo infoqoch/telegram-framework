@@ -5,12 +5,8 @@ import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.custom.EmptyCustomUpdateRequestParamAndReturn;
 import infoqoch.telegram.framework.update.resolver.param.*;
-import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.returns.StringUpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
-import infoqoch.telegram.framework.update.resolver.returns.UpdateResponseUpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.*;
 import infoqoch.telegram.framework.update.util.TelegramProperties;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -19,8 +15,6 @@ import org.reflections.util.ClasspathHelper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,18 +26,6 @@ import java.util.stream.Collectors;
 public class UpdateConfig {
 
     @Bean
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    public CustomUpdateRequestReturn emptyCustomUpdateRequestReturn(){
-        return new EmptyCustomUpdateRequestParamAndReturn();
-    }
-
-    @Bean
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    public CustomUpdateRequestParam emptyCustomUpdateRequestParam(){
-        return new EmptyCustomUpdateRequestParamAndReturn();
-    }
-
-    @Bean
     public TelegramFileHandler telegramFileHandler(){
         return new TelegramFileHandler(telegramBot(), telegramProperties());
     }
@@ -53,18 +35,41 @@ public class UpdateConfig {
         return TelegramProperties.generate();
     }
 
-    @Bean
-    @Order(Integer.MAX_VALUE-101)
-    public List<UpdateRequestReturn> returnResolvers(){
-        List<UpdateRequestReturn> returnResolvers = new ArrayList<>();
-        returnResolvers.add(new MSBUpdateRequestReturn());
-        returnResolvers.add(new StringUpdateRequestReturn());
-        returnResolvers.add(new UpdateResponseUpdateRequestReturn());
-        emptyCustomUpdateRequestReturn().addUpdateRequestReturn().stream().forEach(
-                r -> returnResolvers.add(r)
-        );
 
-        return returnResolvers;
+    @Bean
+    public CustomUpdateRequestParam emptyCustomUpdateRequestParam(){
+        return () -> Collections.emptyList();
+    }
+
+    @Bean
+    public CustomUpdateRequestReturn emptyCustomUpdateRequestReturn(){
+        return () -> Collections.emptyList();
+    }
+
+    @Bean
+    public UpdateRequestReturnRegister updateRequestReturnRegister(List<UpdateRequestReturn> updateRequestReturns){
+        UpdateRequestReturnRegister updateRequestReturnRegister = new UpdateRequestReturnRegister();
+        updateRequestReturnRegister.add(new MSBUpdateRequestReturn());
+        updateRequestReturnRegister.add(new StringUpdateRequestReturn());
+        updateRequestReturnRegister.add(new UpdateResponseUpdateRequestReturn());
+        for (UpdateRequestReturn updateRequestReturn : updateRequestReturns) {
+            updateRequestReturnRegister.add(updateRequestReturn);
+        }
+        return updateRequestReturnRegister;
+    }
+
+    @Bean
+    public UpdateRequestParamRegister updateRequestParamRegister(List<UpdateRequestParam> updateRequestParams){
+        UpdateRequestParamRegister paramResolvers = new UpdateRequestParamRegister();
+        paramResolvers.add(new UpdateRequestUpdateRequestParam());
+        paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
+        paramResolvers.add(new UpdateChatUpdateRequestParam());
+        paramResolvers.add(new UpdateDocumentUpdateRequestParam());
+        paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties()));
+        for (UpdateRequestParam updateRequestParam : updateRequestParams) {
+            paramResolvers.add(updateRequestParam);
+        }
+        return paramResolvers;
     }
 
     @Bean
@@ -73,29 +78,18 @@ public class UpdateConfig {
     }
 
     @Bean
-    @Order(Integer.MAX_VALUE-100)
-    public List<UpdateRequestParam> paramResolvers(){
-        List<UpdateRequestParam> paramResolvers = new ArrayList<>();
-        paramResolvers.add(new UpdateRequestUpdateRequestParam());
-        paramResolvers.add(new UpdateRequestMessageUpdateRequestParam());
-        paramResolvers.add(new UpdateChatUpdateRequestParam());
-        paramResolvers.add(new UpdateDocumentUpdateRequestParam());
-
-        paramResolvers.add(new TelegramPropertiesRequestParam(telegramProperties()));
-
-        emptyCustomUpdateRequestParam().addUpdateRequestParam().stream().forEach(
-                r -> paramResolvers.add(r)
-        );
-
-        return paramResolvers;
-    }
-
-    @Bean
     public UpdateDispatcher updateDispatcher(ApplicationContext context){
         final SpringBeanContext springContext = new SpringBeanContext(context);
         final Collection<URL> urls = getUrlsExcludeTest(context);
-        final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers
-                = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(springContext, urls, paramResolvers(), returnResolvers());
+        final CustomUpdateRequestReturn bean = context.getBean(CustomUpdateRequestReturn.class);
+        System.out.println("bean = " + bean);
+
+        final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(
+                springContext
+                , urls
+                , updateRequestParamRegister(context.getBean(CustomUpdateRequestParam.class).addUpdateRequestParam())
+                , updateRequestReturnRegister(bean.addUpdateRequestReturn())
+        );
         return new UpdateDispatcher(methodResolvers);
     }
 

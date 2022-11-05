@@ -1,9 +1,9 @@
 package infoqoch.telegram.framework.update;
 
 import infoqoch.telegram.framework.update.resolver.bean.BeanContext;
-import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
-import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParamRegister;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturnRegister;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 class UpdateRequestMethodResolverFactory {
-    static  Map<UpdateRequestCommand, UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+    static  Map<UpdateRequestCommand, UpdateRequestMethodResolver> collectUpdateRequestMappedMethods(BeanContext context, Collection<URL> urls, UpdateRequestParamRegister paramResolvers, UpdateRequestReturnRegister returnResolvers) {
         Map<UpdateRequestCommand, UpdateRequestMethodResolver> concretedCommand = new ConcurrentHashMap<>();
 
         for (Method method : getMethodsAnnotated(urls)) {

@@ -2,14 +2,15 @@ package infoqoch.telegram.framework.update;
 
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
+import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParamRegister;
 import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
+import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.List;
 import java.util.Optional;
 
 class UpdateRequestMethodResolver {
@@ -24,7 +25,7 @@ class UpdateRequestMethodResolver {
         return "UpdateRequestMethodResolver{"+method.getName()+"}";
     }
 
-    UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, List<UpdateRequestParam> paramResolvers, List<UpdateRequestReturn> returnResolvers) {
+    UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, UpdateRequestParamRegister paramResolvers, UpdateRequestReturnRegister returnResolvers) {
         this.bean = bean;
         this.method = method;
         this.mapper = mapper;
@@ -54,31 +55,23 @@ class UpdateRequestMethodResolver {
         }
     }
 
-    private UpdateRequestReturn findReturnResolver(List<UpdateRequestReturn> returnResolvers) {
+    private UpdateRequestReturn findReturnResolver(UpdateRequestReturnRegister returnResolvers) {
 
-        Optional<UpdateRequestReturn> resolver = returnResolvers.stream().filter(r -> r.support(method)).findAny();
+        Optional<UpdateRequestReturn> resolver = returnResolvers.support(method);
 
         if(resolver.isEmpty())  throw new IllegalArgumentException("can not resolve the return type (1). return type : " + method.getReturnType());
 
         return resolver.get();
     }
 
-    private UpdateRequestParam[] wrappingParameter(List<UpdateRequestParam> paramResolvers) {
+    private UpdateRequestParam[] wrappingParameter(UpdateRequestParamRegister paramResolvers) {
         final Parameter[] parameters = method.getParameters();
 
         final UpdateRequestParam[] updateRequestParams = new UpdateRequestParam[parameters.length];
         for (int i=0; i<parameters.length; i++) {
-            updateRequestParams[i] = findSupportParameterResolver(parameters[i], paramResolvers);
+            updateRequestParams[i] = paramResolvers.findSupportedResolverBy(parameters[i]);
         }
 
         return updateRequestParams;
-    }
-
-    private UpdateRequestParam findSupportParameterResolver(Parameter parameter, List<UpdateRequestParam> paramResolvers) {
-        Optional<UpdateRequestParam> resolver = paramResolvers.stream().filter(r -> r.support(parameter)).findAny();
-
-        if(resolver.isEmpty())  throw new IllegalArgumentException("can not resolve the parameter type. parameter type : " + parameter.getType());
-
-        return resolver.get();
     }
 }
