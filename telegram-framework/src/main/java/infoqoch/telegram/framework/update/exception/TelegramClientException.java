@@ -1,10 +1,11 @@
 package infoqoch.telegram.framework.update.exception;
 
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.util.Optional;
 
-public class TelegramClientException extends RuntimeException implements TelegramException{
+public class TelegramClientException extends TelegramException{
     private final MarkdownStringBuilder response;
 
     public TelegramClientException() {
@@ -36,5 +37,10 @@ public class TelegramClientException extends RuntimeException implements Telegra
     @Override
     public Optional<MarkdownStringBuilder> response(){
         return Optional.ofNullable(response);
+    }
+
+    @Override
+    public SendType resolveErrorType() {
+        return SendType.CLIENT_ERROR;
     }
 }

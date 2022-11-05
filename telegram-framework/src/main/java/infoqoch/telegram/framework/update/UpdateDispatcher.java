@@ -42,11 +42,12 @@ public class UpdateDispatcher {
             return UpdateRequestCommand.of("*");
         }else if(commands.size()==1){
             return commands.get(0);
+        }else{
+            return commands.stream().sorted(Comparator.comparingInt(o -> o.get().length())).toList().get(0);
         }
-
-        return commands.stream().sorted(Comparator.comparingInt(o -> o.get().length())).toList().get(0);
     }
 
+    // TODO 예외 처리와 그것의 응답값을 고민한다. MSB 에 종속되는 것이 좋아 보이진 않는다. 특히 발송과 관계를 끝는 상태라면.
     private UpdateResponse exceptionHandler(Exception e) {
         final Optional<TelegramException> telegramException = TelegramException.checkIfCausedByTelegramException(e);
 

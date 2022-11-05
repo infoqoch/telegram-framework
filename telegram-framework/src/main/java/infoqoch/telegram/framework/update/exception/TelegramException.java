@@ -5,10 +5,16 @@ import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 import java.util.Optional;
 
-public interface TelegramException {
-    Optional<MarkdownStringBuilder> response();
+public class TelegramException extends RuntimeException {
+    Optional<MarkdownStringBuilder> response;
 
-    static Optional<TelegramException> checkIfCausedByTelegramException(Throwable e) {
+    public TelegramException(String message) {
+    }
+
+    public TelegramException(String message, Throwable cause) {
+    }
+
+    public static Optional<TelegramException> checkIfCausedByTelegramException(Throwable e) {
         if(e instanceof TelegramException) return Optional.of((TelegramException)e);
 
         if(e.getCause() != null) return checkIfCausedByTelegramException(e.getCause());
@@ -16,7 +22,11 @@ public interface TelegramException {
         return Optional.empty();
     }
 
-    default SendType resolveErrorType() {
-        return this instanceof TelegramClientException ? SendType.CLIENT_ERROR: SendType.SERVER_ERROR;
+    public Optional<MarkdownStringBuilder> response(){
+        return response;
+    }
+
+    public SendType resolveErrorType() {
+        return SendType.ERROR;
     }
 }
