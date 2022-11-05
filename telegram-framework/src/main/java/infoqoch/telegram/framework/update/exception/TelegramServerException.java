@@ -3,11 +3,7 @@ package infoqoch.telegram.framework.update.exception;
 import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
-import java.util.Optional;
-
-public class TelegramServerException extends TelegramException {
-    private final MarkdownStringBuilder response;
-
+public class TelegramServerException extends TelegramException{
     public TelegramServerException() {
         this(null, null, null);
     }
@@ -24,14 +20,12 @@ public class TelegramServerException extends TelegramException {
         this(null, message, cause);
     }
 
-    public TelegramServerException(MarkdownStringBuilder response, String message, Throwable cause) {
-        super(message, cause);
-        this.response = response;
+    public TelegramServerException(MarkdownStringBuilder response, String message) {
+        super(response, message, null);
     }
 
-    @Override
-    public Optional<MarkdownStringBuilder> response(){
-        return Optional.ofNullable(response);
+    public TelegramServerException(MarkdownStringBuilder response, String message, Throwable cause) {
+        super(response, message, cause);
     }
 
     @Override

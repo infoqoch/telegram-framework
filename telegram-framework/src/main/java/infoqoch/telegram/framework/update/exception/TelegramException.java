@@ -6,12 +6,11 @@ import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import java.util.Optional;
 
 public class TelegramException extends RuntimeException {
-    Optional<MarkdownStringBuilder> response;
+    private final Optional<MarkdownStringBuilder> response;
 
-    public TelegramException(String message) {
-    }
-
-    public TelegramException(String message, Throwable cause) {
+    public TelegramException(MarkdownStringBuilder msb, String message, Throwable cause) {
+        super(message, cause);
+        this.response = Optional.ofNullable(msb);
     }
 
     public static Optional<TelegramException> checkIfCausedByTelegramException(Throwable e) {
