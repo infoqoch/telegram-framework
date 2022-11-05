@@ -8,6 +8,7 @@ import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -45,6 +46,7 @@ class UpdateDispatcherTest {
     }
 
     @Test
+    @DisplayName("예외를 클라이언트에 응답하는 메시지(MSB)가 존재한다. 이 경우 TelegramException으로 예외를 발생시킨다.")
     void wrong_request_input_telegramEx(){
         // given
         final String notSpecificCommand = "wmiofewjmf";
@@ -56,6 +58,21 @@ class UpdateDispatcherTest {
         // then
         assertThat(updateResponse.getSendType()).isEqualTo(SendType.CLIENT_ERROR);
         assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("정확한 명령어를 입력해야 합니다.").toString());
+    }
+
+    @Test
+    @DisplayName("예외를 클라이언트에 응답하는 메시지(MSB)가 없는 경우, default message가 전달된다.")
+    void wrong_request_input_telegramEx_no_response(){
+        // given
+        final String noReseponseExceptionCommand = "/noresponse hi!";
+        final UpdateRequest request = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson(noReseponseExceptionCommand));
+
+        // when
+        final UpdateResponse updateResponse = updateDispatcher.process(request);
+
+        // then
+        assertThat(updateResponse.getSendType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
     }
 
     @EnableTelegramFramework
