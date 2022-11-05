@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // @UpdateRequestMethodMapper 의 명령어를 기준으로 적합한 리턴 값을 전달하는 것
 // 기본적인 동작...
 // 리팩터링의 기준이 된다.
-class UpdateDispatcherTest {
+class BasicUpdateDispatcherTest {
 
     private UpdateDispatcher updateDispatcher;
 

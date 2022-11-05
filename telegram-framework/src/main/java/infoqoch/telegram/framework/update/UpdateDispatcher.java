@@ -43,7 +43,8 @@ public class UpdateDispatcher {
         }else if(commands.size()==1){
             return commands.get(0);
         }else{
-            return commands.stream().sorted(Comparator.comparingInt(o -> o.get().length())).toList().get(0);
+            // 명령어에 걸리는 여러 개의 리졸버가 있을 경우, 긴 명령어를 가진 리졸버를 사용한다.
+            return commands.stream().sorted(Comparator.comparingInt(o -> - o.get().length())).toList().get(0);
         }
     }
 
