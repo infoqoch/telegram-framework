@@ -1,21 +1,19 @@
 package infoqoch.mock.update;
 
-import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
-import infoqoch.telegram.framework.update.request.UpdateRequest;
-
-import java.lang.reflect.Parameter;
-
+@Deprecated
 // 대역 중 예외 처리를 위한 객체이다.
-public class ThrowRuntimeExceptionRequestParam implements UpdateRequestParam {
+class ThrowRuntimeExceptionRequestParam
+        // implements UpdateRequestParam
+{
 
-    @Override
-    public boolean support(Parameter target) {
-        return target.getType()== RuntimeException.class;
-    }
-
-    @Override
-    public Object resolve(UpdateRequest request) {
-        if(true) throw new RuntimeException("강제 에러 발생!!!");
-        return null;
-    }
+//    @Override
+//    public boolean support(Parameter target) {
+//        return target.getType()== RuntimeException.class;
+//    }
+//
+//    @Override
+//    public Object resolve(UpdateRequest request) {
+//        if(true) throw new RuntimeException("강제 에러 발생!!!");
+//        return null;
+//    }
 }
