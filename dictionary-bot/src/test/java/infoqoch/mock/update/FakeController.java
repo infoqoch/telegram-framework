@@ -1,6 +1,6 @@
-package infoqoch.dictionarybot.mock.update;
+package infoqoch.mock.update;
 
-import infoqoch.dictionarybot.mock.data.MockDictionary;
+import infoqoch.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
 import infoqoch.telegram.framework.update.exception.TelegramClientException;

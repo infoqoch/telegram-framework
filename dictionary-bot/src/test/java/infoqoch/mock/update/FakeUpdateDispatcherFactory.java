@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.update;
+package infoqoch.mock.update;
 
 import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
 import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;

@@ -6,5 +6,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({DictionaryProperties.class})
-public class ConfigProperties {
+public class PropertiesConfig {
 }

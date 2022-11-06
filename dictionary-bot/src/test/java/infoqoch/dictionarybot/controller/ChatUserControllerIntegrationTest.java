@@ -1,12 +1,12 @@
 package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.UpdateRunner;
-import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
-import infoqoch.dictionarybot.mock.data.MockUpdate;
+import infoqoch.dictionarybot.FakeSendRequestEventListener;
+import infoqoch.mock.data.MockUpdate;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
-import infoqoch.dictionarybot.mock.bot.FakeTelegramUpdate;
+import infoqoch.mock.bot.FakeTelegramBot;
+import infoqoch.mock.bot.FakeTelegramUpdate;
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.telegram.framework.update.util.TelegramProperties;
 import infoqoch.telegram.framework.update.UpdateDispatcher;

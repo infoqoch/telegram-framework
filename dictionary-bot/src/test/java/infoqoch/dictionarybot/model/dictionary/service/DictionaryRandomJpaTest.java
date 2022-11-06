@@ -1,10 +1,11 @@
 package infoqoch.dictionarybot.model.dictionary.service;
 
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
+import infoqoch.dictionarybot.config.CustomUpdateResolverConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
+import infoqoch.mock.repository.QuerydslConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(QuerydslConfig.class)
+@Import({QuerydslConfig.class, CustomUpdateResolverConfig.class})
 public class DictionaryRandomJpaTest {
     @Autowired EntityManager em;
 	@Autowired LookupRepository repository;

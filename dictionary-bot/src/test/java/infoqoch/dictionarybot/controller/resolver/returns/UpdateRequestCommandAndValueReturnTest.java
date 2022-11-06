@@ -6,8 +6,8 @@ import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import org.junit.jupiter.api.Test;
 
-import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionary;
-import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
+import static infoqoch.mock.data.MockDictionary.createSimpleDictionary;
+import static infoqoch.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // TODO

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.repository;
+package infoqoch.mock.repository;
 
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.telegram.framework.update.response.SendType;

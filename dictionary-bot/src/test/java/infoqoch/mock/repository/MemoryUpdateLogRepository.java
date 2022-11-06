@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.repository;
+package infoqoch.mock.repository;
 
 import infoqoch.dictionarybot.log.UpdateLog;
 import infoqoch.dictionarybot.log.repository.UpdateLogRepository;

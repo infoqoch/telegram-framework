@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.data;
+package infoqoch.mock.data;
 
 public class MockSendResponse {
 

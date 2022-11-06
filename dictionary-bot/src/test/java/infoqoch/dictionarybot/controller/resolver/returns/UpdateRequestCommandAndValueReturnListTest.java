@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.controller.resolver.returns;
 
 import infoqoch.dictionarybot.controller.resolver.DictionariesUpdateRequestReturn;
 import infoqoch.dictionarybot.controller.resolver.DictionaryUpdateRequestReturn;
-import infoqoch.dictionarybot.mock.data.MockDictionary;
+import infoqoch.mock.data.MockDictionary;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.telegram.framework.update.resolver.returns.MSBUpdateRequestReturn;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionary;
-import static infoqoch.dictionarybot.mock.data.MockDictionary.createSimpleDictionaryContent;
+import static infoqoch.mock.data.MockDictionary.createSimpleDictionary;
+import static infoqoch.mock.data.MockDictionary.createSimpleDictionaryContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // UpdateRequestMessageReturn의 리스트가 stream을 통해 적절한 데이터타입리졸버를 리턴함을 확인한다.

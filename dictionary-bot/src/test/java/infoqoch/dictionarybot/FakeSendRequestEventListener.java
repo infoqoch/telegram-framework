@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock;
+package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.repository.SendRepository;

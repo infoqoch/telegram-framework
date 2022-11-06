@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.data;
+package infoqoch.mock.data;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;

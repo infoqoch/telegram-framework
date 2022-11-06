@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.bot;
+package infoqoch.mock.bot;
 
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;

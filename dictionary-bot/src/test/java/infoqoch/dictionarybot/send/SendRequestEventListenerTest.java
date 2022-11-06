@@ -1,9 +1,9 @@
 package infoqoch.dictionarybot.send;
 
-import infoqoch.dictionarybot.mock.bot.FakeTelegramBot;
-import infoqoch.dictionarybot.mock.bot.FakeTelegramSend;
-import infoqoch.dictionarybot.mock.data.MockSendResponse;
-import infoqoch.dictionarybot.mock.repository.MemorySendRepository;
+import infoqoch.mock.bot.FakeTelegramBot;
+import infoqoch.mock.bot.FakeTelegramSend;
+import infoqoch.mock.data.MockSendResponse;
+import infoqoch.mock.repository.MemorySendRepository;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

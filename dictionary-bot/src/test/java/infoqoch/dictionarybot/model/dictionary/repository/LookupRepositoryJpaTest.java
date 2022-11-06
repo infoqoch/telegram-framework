@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.model.dictionary.repository;
 
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
+import infoqoch.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.user.ChatUser;

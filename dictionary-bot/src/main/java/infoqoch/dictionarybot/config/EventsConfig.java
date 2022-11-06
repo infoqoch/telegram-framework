@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class EventsConfiguration {
+public class EventsConfig {
 	private final ApplicationContext applicationContext;
 
 	@Bean

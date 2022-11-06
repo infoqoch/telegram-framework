@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.model.user;
 
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
+import infoqoch.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;

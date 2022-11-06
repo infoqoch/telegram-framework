@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.HourlyDictionaryRunner;
-import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;

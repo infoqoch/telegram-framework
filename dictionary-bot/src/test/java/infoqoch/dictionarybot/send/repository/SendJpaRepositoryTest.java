@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.send.repository;
 
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
+import infoqoch.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
 import infoqoch.telegram.framework.update.response.SendType;

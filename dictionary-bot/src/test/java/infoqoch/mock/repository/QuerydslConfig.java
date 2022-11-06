@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.repository;
+package infoqoch.mock.repository;
 
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import org.springframework.beans.factory.annotation.Autowired;

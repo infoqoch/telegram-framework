@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.mock.update;
+package infoqoch.mock.update;
 
 import infoqoch.telegram.framework.update.resolver.bean.BeanContext;
 import lombok.Setter;

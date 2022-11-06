@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.request;
 
-import infoqoch.dictionarybot.mock.data.MockUpdate;
+import infoqoch.mock.data.MockUpdate;
 import infoqoch.telegram.framework.update.request.body.UpdateChat;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Update;

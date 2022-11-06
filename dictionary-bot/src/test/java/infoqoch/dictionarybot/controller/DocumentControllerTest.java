@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.controller;
 
-import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
+import infoqoch.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
@@ -21,8 +21,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static infoqoch.dictionarybot.mock.data.MockUpdate.excelDocumentJson;
-import static infoqoch.dictionarybot.mock.data.MockUpdate.jsonToUpdateRequest;
+import static infoqoch.mock.data.MockUpdate.excelDocumentJson;
+import static infoqoch.mock.data.MockUpdate.jsonToUpdateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
