@@ -1,23 +1,21 @@
 package infoqoch.dictionarybot.send.repository;
 
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.send.SendType;
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static infoqoch.dictionarybot.send.SendType.*;
+import static infoqoch.telegram.framework.update.response.SendType.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
-@DataJpaTest
-@Import(QuerydslConfig.class)
+@SpringBootTest
+@Transactional
 class SendJpaRepositoryTest {
     @Autowired
     EntityManager em;
@@ -60,16 +58,12 @@ class SendJpaRepositoryTest {
         assertThat(sendRepository.findByNoGreaterThanAndRequestSendType(first, CLIENT_ERROR)).size().isEqualTo(3);
     }
 
-
-    private void saveSend(SendType...types) {
+    public void saveSend(SendType...types) {
         for (SendType type : types) {
-             Send send = Send.of(SendRequest.send(123l, type, new MarkdownStringBuilder("hi"), null));
-             em.persist(send);
+            Send send = Send.of(SendRequest.send(123l, type, new MarkdownStringBuilder("hi"), null));
+            em.persist(send);
         }
         em.flush();
         em.clear();
     }
-
-
-
 }

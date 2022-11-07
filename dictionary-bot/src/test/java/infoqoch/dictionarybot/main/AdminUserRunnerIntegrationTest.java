@@ -1,10 +1,11 @@
 package infoqoch.dictionarybot.main;
 
-import infoqoch.dictionarybot.mock.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.AdminUserRunner;
+import infoqoch.dictionarybot.FakeSendRequestEventListener;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.send.Send;
 import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.send.SendType;
+import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.dictionarybot.send.repository.SendRepository;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.dictionarybot.system.event.EventsConfigurationSupporter;
@@ -24,7 +25,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static infoqoch.dictionarybot.send.SendType.*;
+import static infoqoch.telegram.framework.update.response.SendType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // AdminUserRunner를 테스트한다.
