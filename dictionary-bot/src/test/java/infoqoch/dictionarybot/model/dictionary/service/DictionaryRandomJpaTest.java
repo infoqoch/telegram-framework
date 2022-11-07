@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.model.dictionary.service;
 
-import infoqoch.dictionarybot.mock.repository.QuerydslConfig;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
@@ -8,8 +7,8 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -20,8 +19,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@Import(QuerydslConfig.class)
+@SpringBootTest
+@Transactional
 public class DictionaryRandomJpaTest {
     @Autowired EntityManager em;
 	@Autowired LookupRepository repository;

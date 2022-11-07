@@ -28,6 +28,7 @@ public class MyTest {
     }
 
     @Test
+    @Disabled
     void test2(){
         final TelegramSend send = telegramBot.send();
         final Response<SendMessageResponse> message = send.message(new SendMessageRequest(39327045l, "hi!"));

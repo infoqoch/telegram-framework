@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary;
 
-import infoqoch.dictionarybot.mock.data.MockDictionary;
+import infoqoch.mock.data.MockDictionary;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

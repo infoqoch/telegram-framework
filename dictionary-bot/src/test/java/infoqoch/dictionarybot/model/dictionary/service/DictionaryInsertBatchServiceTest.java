@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.model.dictionary.service;
 
-import infoqoch.dictionarybot.mock.repository.MemoryDictionaryRepository;
+import infoqoch.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
