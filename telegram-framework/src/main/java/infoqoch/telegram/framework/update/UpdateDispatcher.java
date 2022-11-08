@@ -24,8 +24,7 @@ public class UpdateDispatcher {
         log.debug("updateRequest = {}", updateRequest);
         try{
             final UpdateRequestCommand command = getUpdateRequestCommand(updateRequest);
-            updateRequest.setupWithCommand(command);
-
+            updateRequest.setupCommand(command);
             return methodResolvers.get(command).process(updateRequest);
         } catch (Exception e){
             log.error("[error] failed resolve update ", e);

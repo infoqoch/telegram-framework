@@ -98,7 +98,7 @@ public class UpdateRequest {
         return extractInputText();
     }
 
-    public void setupWithCommand(UpdateRequestCommand command) {
+    public void setupCommand(UpdateRequestCommand command) {
         String value = command.extractValue(extractInputText());
         updateRequestCommandAndValue = new UpdateRequestCommandAndValue(command, value);
         log.info("this updateRequestCommandAndValue : {}", updateRequestCommandAndValue);

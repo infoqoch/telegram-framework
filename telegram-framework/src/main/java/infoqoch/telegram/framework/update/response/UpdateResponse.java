@@ -18,6 +18,10 @@ public class UpdateResponse {
         this.document = document;
     }
 
+    public static UpdateResponse voids(){
+        return new UpdateResponse(SendType.VOID, null, null);
+    }
+
     public static UpdateResponse message(MarkdownStringBuilder message){
         return new UpdateResponse(SendType.MESSAGE, message, null);
     }

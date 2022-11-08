@@ -92,6 +92,7 @@ public class UpdateConfig {
         updateRequestReturnRegister.add(new MSBUpdateRequestReturn());
         updateRequestReturnRegister.add(new StringUpdateRequestReturn());
         updateRequestReturnRegister.add(new UpdateResponseUpdateRequestReturn());
+        updateRequestReturnRegister.add(new VoidUpdateRequestReturn());
 
         for (UpdateRequestReturn updateRequestReturn : customUpdateRequestReturnRegister().returnRegister()) {
             updateRequestReturnRegister.add(updateRequestReturn);

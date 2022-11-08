@@ -46,7 +46,6 @@ public class UpdateRequestCommand {
 
     public String extractValue(String input) {
         final String flatInput = flatting(input);
-        System.out.println("flatInput = " + flatInput);
         final int length = COMMAND.equals("*")?0:COMMAND.length();
         return flatting(flatInput.substring(length));
     }

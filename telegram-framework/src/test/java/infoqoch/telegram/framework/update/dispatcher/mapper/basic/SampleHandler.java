@@ -20,4 +20,8 @@ public class SampleHandler {
         return UpdateResponse.document(new MarkdownStringBuilder("send document!"), "document_as_file_id");
     }
 
+    @UpdateRequestMethodMapper("voids")
+    public void voids() {
+        System.out.println("hi!");
+    }
 }
