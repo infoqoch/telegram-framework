@@ -29,10 +29,9 @@ public class DocumentController {
     public String excelPush(UpdateDocument document, ChatUser chatUser) {
         log.info("UpdateRequestMethodMapper : excel_push");
 
-        if(!document.hasDocument())
-            throw new TelegramClientException(new MarkdownStringBuilder().bold("파일을 첨부해야 합니다!").lineSeparator().command("excel", "help"), "document가 누락되었습니다.");
+        valid(document);
 
-        final File file = telegramFileHandler.extractExcelFile(document);
+        final File file = telegramFileHandler.documentToFile(document);
 
         final DictionarySource source = new DictionarySource(document.getDocument().getFileId(), EXCEL, chatUser);
 
@@ -42,4 +41,13 @@ public class DocumentController {
 
         return saved + "의 사전이 등록되었습니다!";
     }
+
+    private void valid(UpdateDocument document) {
+        if(!document.hasDocument())
+            throw new TelegramClientException(new MarkdownStringBuilder().bold("파일을 첨부해야 합니다!").lineSeparator().command("excel", "help"), "document가 누락되었습니다.");
+
+        if(!document.getDocument().getMimeType().contains("sheet"))
+            throw new IllegalArgumentException("excel 파일만 가능합니다!");
+    }
+
 }

@@ -80,7 +80,7 @@ class DocumentControllerTest {
     @Test
     void success() {
         // given
-        when(mockFileHandler.extractExcelFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile()));
+        when(mockFileHandler.documentToFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile()));
 
         final ChatUser chatUser = new ChatUser(123l, "kim");
 
