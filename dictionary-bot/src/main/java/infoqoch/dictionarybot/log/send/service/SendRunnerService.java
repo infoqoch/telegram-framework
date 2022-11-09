@@ -1,8 +1,8 @@
-package infoqoch.dictionarybot.send.service;
+package infoqoch.dictionarybot.log.send.service;
 
-import infoqoch.dictionarybot.send.Send;
+import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.repository.SendRepository;
 import infoqoch.telegram.framework.update.response.SendType;
-import infoqoch.dictionarybot.send.repository.SendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

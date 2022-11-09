@@ -6,7 +6,7 @@ import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.send.Send;
+import infoqoch.dictionarybot.log.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

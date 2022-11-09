@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    // telegram bot
+    implementation 'io.github.infoqoch:telegram-bot:0.2.3'
+
+    // di container
+    implementation 'org.springframework:spring-context:5.3.21'
+
+    // 리플렉션
+    implementation 'org.reflections:reflections:0.10.2'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    // 로그
+    implementation 'org.slf4j:slf4j-api:2.0.3'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.4'
+
+    // 테스트
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.mockito:mockito-core:4.5.1'
+    testImplementation 'org.skyscreamer:jsonassert:1.5.0'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+version = '0.4.0'
+
+publishToMavenLocal{
+
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.infoqoch'
+            artifactId = 'telegram-framework'
+            from components.java
+        }
+    }
+}

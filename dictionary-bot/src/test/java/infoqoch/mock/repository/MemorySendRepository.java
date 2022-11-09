@@ -1,8 +1,8 @@
 package infoqoch.mock.repository;
 
-import infoqoch.dictionarybot.send.Send;
+import infoqoch.dictionarybot.log.send.Send;
 import infoqoch.telegram.framework.update.response.SendType;
-import infoqoch.dictionarybot.send.repository.SendRepository;
+import infoqoch.dictionarybot.log.send.repository.SendRepository;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package infoqoch.dictionarybot.log;
+package infoqoch.dictionarybot.log.update;
 
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 

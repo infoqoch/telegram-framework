@@ -1,7 +1,7 @@
 package infoqoch.mock.repository;
 
-import infoqoch.dictionarybot.log.UpdateLog;
-import infoqoch.dictionarybot.log.repository.UpdateLogRepository;
+import infoqoch.dictionarybot.log.update.UpdateLog;
+import infoqoch.dictionarybot.log.update.repository.UpdateLogRepository;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;

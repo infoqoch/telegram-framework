@@ -1,87 +1,77 @@
-package infoqoch.dictionarybot.send;
+package infoqoch.telegram.framework.update.send;
 
-import infoqoch.dictionarybot.log.UpdateLog;
 import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.request.SendDocumentRequest;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
-import lombok.AccessLevel;
-import lombok.Builder;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.*;
+import java.util.Optional;
+import java.util.UUID;
 
-import static infoqoch.dictionarybot.send.Send.Status.*;
-import static javax.persistence.FetchType.LAZY;
+import static infoqoch.telegram.framework.update.send.Send.Status.*;
 
 
-@Slf4j
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
+@Slf4j
 public class Send {
-    @Id @GeneratedValue
-    private Long no;
+    private final String id = UUID.randomUUID().toString();
+    private final Optional<Long> updateId;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "update_log_no")
-    private UpdateLog updateLog;
+    private final Long chatId;
+    private final SendType sendType;
+    private final MarkdownStringBuilder message;
+    private final String document;
 
-    @Embedded
-    private SendRequest request;
-
-    @Enumerated(EnumType.STRING)
     private Status status;
-
     private int errorCode;
     private String errorMessage;
 
-    public enum Status{
+    private Optional<Send> resend;
+
+    public enum Status {
         REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
     }
 
-    // 생성자
-
-    @Builder
-    public Send(Long no, SendRequest request, UpdateLog updateLog, Status status) {
-        this.no = no;
-        this.request = request;
-        this.updateLog = updateLog;
-        this.status = status;
+    private Send(Long updateId, Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
+        this.chatId = chatId;
+        this.sendType = sendType;
+        this.document = document;
+        this.message = msb;
+        this.updateId = Optional.ofNullable(updateId);
     }
 
-    public Send(Long no, SendRequest request, Status status) {
-        this.no = no;
-        this.request = request;
-        this.status = status;
+    public static Send sendMessage(long chatId, MarkdownStringBuilder msb, Long updateId) {
+        return new Send(updateId, chatId, SendType.MESSAGE, null, msb);
     }
 
-    public static Send of(SendRequest request, UpdateLog updateLog) {
-        return Send.builder()
-                .request(request)
-                .updateLog(updateLog)
-                .status(REQUEST)
-                .build();
+    public static Send sendDocument(Long chatId, String document, MarkdownStringBuilder msb, Long updateId) {
+        return new Send(updateId, chatId, SendType.DOCUMENT, document, msb);
     }
 
-    public static Send of(SendRequest request) {
-        return Send.builder()
-                .request(request)
-                .updateLog(null)
-                .status(REQUEST)
-                .build();
+    public static Send send(Long chatId, SendType sendType, MarkdownStringBuilder message, String document, Long updateId) {
+        return new Send(updateId, chatId, sendType, document, message);
     }
 
-    public SendResult result(){
-        return new SendResult(status, errorCode, errorMessage, request.copy());
+    public MarkdownStringBuilder getMessage() {
+        return new MarkdownStringBuilder().append(message);
     }
 
     // 실제 발송 로직
     public void sending(TelegramSend telegramSend){
         this.status = SENDING;
+        send(telegramSend);
+    }
+
+    public void resending(SendType type, MarkdownStringBuilder msb, TelegramSend telegramSend){
+        resend = Optional.of(Send.send(chatId,SendType.SERVER_ERROR, msb, null, updateId.orElse(null)));
+        resend.get().send(telegramSend);
+    }
+
+    private void send(TelegramSend telegramSend) {
         try {
             Response<?> sendResponse = sendDispatcher(telegramSend); // telegram-bot의 응답 데이터를 받는다. 이하 이를 분석하고 결과값을 전달한다.
             resolveResponse(sendResponse);
@@ -92,9 +82,8 @@ public class Send {
     }
 
     private Response<?> sendDispatcher(TelegramSend telegramSend) {
-        if(request.getSendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(request.getChatId(), request.getDocument(), request.getMessage()));
-        return telegramSend.message(new SendMessageRequest(request.getChatId(), request.getMessage()));
-        // throw new TelegramServerException("not supported SendType");
+        if(getSendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(getChatId(), getDocument(), getMessage()));
+        return telegramSend.message(new SendMessageRequest(getChatId(), getMessage()));
     }
 
     private void resolveResponse(Response response) {

@@ -11,7 +11,7 @@ import java.time.Instant;
 @Getter
 @ToString
 @Builder
-public class UpdateChat {
+public class    UpdateChat {
     private Long updateId;
     private Long messageId;
     private Instant date;

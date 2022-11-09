@@ -1,4 +1,4 @@
-package infoqoch.telegram.framework.update.util;
+package infoqoch.telegram.framework.update;
 
 import lombok.ToString;
 
@@ -46,5 +46,9 @@ public class TelegramProperties {
         }catch (Exception e){
             throw new IllegalArgumentException("check properties ("+PROPERTIES_FILE+")", e);
         }
+    }
+
+    public boolean sendMessageAfterUpdateResolved() {
+        return true;
     }
 }

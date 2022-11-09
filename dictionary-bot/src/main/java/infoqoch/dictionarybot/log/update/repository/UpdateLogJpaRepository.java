@@ -1,6 +1,6 @@
-package infoqoch.dictionarybot.log.repository;
+package infoqoch.dictionarybot.log.update.repository;
 
-import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.dictionarybot.log.update.UpdateLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

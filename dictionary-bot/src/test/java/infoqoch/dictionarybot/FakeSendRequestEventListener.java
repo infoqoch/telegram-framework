@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.repository.SendRepository;
+import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.repository.SendRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;

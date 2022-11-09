@@ -7,7 +7,8 @@ import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestPar
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.*;
-import infoqoch.telegram.framework.update.util.TelegramProperties;
+import infoqoch.telegram.framework.update.send.SendRequestEventListener;
+import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +44,7 @@ public class UpdateConfig {
         List<UpdateRequestReturn> result = new ArrayList<>();
 
         final Set<Class<? extends CustomUpdateRequestReturnRegister>> subTypesOf = new Reflections(
-                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(context))).setScanners(Scanners.SubTypes)
+                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
         ).getSubTypesOf(CustomUpdateRequestReturnRegister.class);
 
         for (Class<? extends CustomUpdateRequestReturnRegister> aClass : subTypesOf) {
@@ -64,7 +66,7 @@ public class UpdateConfig {
         List<UpdateRequestParam> result = new ArrayList<>();
 
         final Set<Class<? extends CustomUpdateRequestParamRegister>> subTypesOf = new Reflections(
-                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(context))).setScanners(Scanners.SubTypes)
+                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
         ).getSubTypesOf(CustomUpdateRequestParamRegister.class);
 
         for (Class<? extends CustomUpdateRequestParamRegister> aClass : subTypesOf) {
@@ -125,7 +127,9 @@ public class UpdateConfig {
     @Bean
     public UpdateDispatcher updateDispatcher(){
         final SpringBeanContext springContext = new SpringBeanContext(context);
-        final Collection<URL> urls = generateTargetUrl(extractBasePackageName(context));
+        final Collection<URL> urls = generateTargetUrl(extractBasePackageName(frameworkBase().get()));
+        urls.stream().peek(u -> log.info("url = {}", u));
+
         final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(
                 springContext
                 , urls
@@ -135,8 +139,29 @@ public class UpdateConfig {
         return new UpdateDispatcher(methodResolvers);
     }
 
-    private static String extractBasePackageName(ApplicationContext context) {
-        return context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny().get().getClass().getPackageName();
+    @Bean
+    public UpdateRunner updateRunner(){
+        System.out.println("UpdateConfig.updateRunner");
+        return new UpdateRunner(telegramBot(), updateDispatcher());
+    }
+
+
+    @Bean
+    public SendRequestEventListener sendRequestEventListener(){
+        return new SendRequestEventListener(telegramBot().send());
+    }
+
+    @Bean
+    public InitializingBean eventsInitializer() {
+        return () -> Events.setPublisher(context);
+    }
+
+    private Optional<Object> frameworkBase() {
+        return context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny();
+    }
+
+    private static String extractBasePackageName(Object frameworkBase) {
+        return frameworkBase.getClass().getPackageName();
     }
 
     // TODO
@@ -156,7 +181,6 @@ public class UpdateConfig {
 //                .filter(url -> !url.toString().contains("/test/classes")) // gradle
 //                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
                 .map(u -> appendPackageName(u, basePackageName))
-                .peek(u -> log.info("url = {}", u))
                 .collect(Collectors.toSet());
     }
 

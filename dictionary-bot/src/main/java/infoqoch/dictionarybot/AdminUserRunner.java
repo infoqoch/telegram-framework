@@ -1,11 +1,11 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.dictionarybot.log.update.UpdateLog;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.send.service.SendRunnerService;
+import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.SendRequest;
+import infoqoch.dictionarybot.log.send.service.SendRunnerService;
 import infoqoch.dictionarybot.system.event.Events;
 import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;

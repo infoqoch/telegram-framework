@@ -2,7 +2,7 @@ package infoqoch.telegram.framework.update.file;
 
 import infoqoch.telegram.framework.update.exception.TelegramServerException;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
-import infoqoch.telegram.framework.update.util.TelegramProperties;
+import infoqoch.telegram.framework.update.TelegramProperties;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramFile;
 import infoqoch.telegrambot.bot.entity.FilePath;

@@ -1,6 +1,6 @@
-package infoqoch.dictionarybot.send.repository;
+package infoqoch.dictionarybot.log.send.repository;
 
-import infoqoch.dictionarybot.send.Send;
+import infoqoch.dictionarybot.log.send.Send;
 import infoqoch.telegram.framework.update.response.SendType;
 import org.springframework.data.jpa.repository.Query;
 

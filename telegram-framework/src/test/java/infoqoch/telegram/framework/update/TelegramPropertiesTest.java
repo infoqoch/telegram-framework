@@ -1,5 +1,6 @@
-package infoqoch.telegram.framework.update.util;
+package infoqoch.telegram.framework.update;
 
+import infoqoch.telegram.framework.update.TelegramProperties;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

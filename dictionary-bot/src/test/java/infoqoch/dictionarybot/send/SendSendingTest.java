@@ -1,5 +1,8 @@
 package infoqoch.dictionarybot.send;
 
+import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.SendRequest;
+import infoqoch.dictionarybot.log.send.SendResult;
 import infoqoch.mock.data.MockSendResponse;
 import infoqoch.mock.bot.FakeTelegramSend;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -7,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static infoqoch.dictionarybot.send.Send.Status.REQUEST;
-import static infoqoch.dictionarybot.send.Send.Status.SUCCESS;
+import static infoqoch.dictionarybot.log.send.Send.Status.REQUEST;
+import static infoqoch.dictionarybot.log.send.Send.Status.SUCCESS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 // 텔레그램에 메시지를 전달할 때, 정상적으로 데이터를 전달하고, 응답받은 데이터를 정상적으로 처리하는지 확인한다.
