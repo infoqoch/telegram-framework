@@ -7,6 +7,7 @@ import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +21,7 @@ import static infoqoch.telegram.framework.update.response.SendType.SERVER_ERROR;
 public class UpdateDispatcher {
     private final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers;
 
+    @Transactional
     public UpdateResponse process(UpdateRequest updateRequest) {
         log.debug("updateRequest = {}", updateRequest);
         try{
