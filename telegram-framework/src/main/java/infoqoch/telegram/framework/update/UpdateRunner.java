@@ -27,7 +27,7 @@ public class UpdateRunner {
         this.updateDispatcher = updateDispatcher;
     }
 
-    @Scheduled(fixedDelay = 500)
+    @Scheduled(fixedDelay = 100)
     public void run() {
         final Response<List<Update>> telegramUpdateResponse = updater.get(LAST_UPDATE_ID);
 
@@ -46,6 +46,8 @@ public class UpdateRunner {
     }
 
     private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        Events.raise(Send.send(updateRequest.chatId(), updateResponse.getSendType(), updateResponse.getMessage(), updateResponse.getDocument(), updateRequest.updateId()));
+        final Send send = Send.send(updateRequest.chatId(), updateResponse.getSendType(), updateResponse.getMessage(), updateResponse.getDocument());
+        send.setupUpdate(updateRequest.updateId(), updateRequest, updateResponse);
+        Events.raise(send);
     }
 }
