@@ -1,20 +1,18 @@
 package infoqoch.telegram.framework.update;
 
+import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegram.framework.update.send.Send;
-import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramUpdate;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
 
-@Async
 @Slf4j
 public class UpdateRunner {
     private final TelegramUpdate updater;
@@ -27,9 +25,11 @@ public class UpdateRunner {
         this.updateDispatcher = updateDispatcher;
     }
 
+    // @Async
     @Scheduled(fixedDelay = 100)
     public void run() {
         final Response<List<Update>> telegramUpdateResponse = updater.get(LAST_UPDATE_ID);
+        log.info("telegramUpdateResponse {}" , telegramUpdateResponse);
 
         for (Update update : telegramUpdateResponse.getResult()) {
             upToDateUpdateId(update.getUpdateId());

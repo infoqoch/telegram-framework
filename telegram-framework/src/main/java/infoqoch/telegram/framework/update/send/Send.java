@@ -32,11 +32,11 @@ public class Send {
     private int errorCode;
     private String errorMessage;
 
-    private Optional<Send> resend;
+    private Optional<Send> resend = Optional.empty();
 
-    private Optional<Long> updateId;
-    private Optional<UpdateRequest> updateRequest;
-    private Optional<UpdateResponse> updateResponse;
+    private Optional<Long> updateId = Optional.empty();
+    private Optional<UpdateRequest> updateRequest = Optional.empty();
+    private Optional<UpdateResponse> updateResponse = Optional.empty();
 
     public CompletableFuture<Boolean> job = new CompletableFuture<>();
 

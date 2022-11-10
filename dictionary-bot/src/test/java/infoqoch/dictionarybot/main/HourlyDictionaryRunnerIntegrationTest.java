@@ -2,11 +2,11 @@ package infoqoch.dictionarybot.main;
 
 import infoqoch.dictionarybot.HourlyDictionaryRunner;
 import infoqoch.dictionarybot.FakeSendRequestEventListener;
+import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContent;
 import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.dictionarybot.log.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,9 +63,9 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getLatestSent();
+        final SendLog sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
-                sent.getRequest().getMessage().toString()
+                sent.getMessage().toString()
         ).isEqualTo(
                 new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(new DictionaryContentMarkdownPrinter(chatUser.getDictionaries().get(0)).toMarkdown()).toString()
         );
@@ -88,9 +88,9 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getLatestSent();
+        final SendLog sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
-                sent.getRequest().getMessage().toString()
+                sent.getMessage().toString()
         ).isEqualTo(
                 new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().append(new DictionaryContentMarkdownPrinter(someone.getDictionaries().get(0)).toMarkdown()).toString()
         );
@@ -114,9 +114,9 @@ class HourlyDictionaryRunnerIntegrationTest {
 
         // then
         assertThat(fakeSendRequestEventListener.isCalled()).isTrue();
-        final Send sent = fakeSendRequestEventListener.getLatestSent();
+        final SendLog sent = fakeSendRequestEventListener.getLatestSent();
         assertThat(
-                sent.getRequest().getMessage().toString()
+                sent.getMessage().toString()
         ).isEqualTo(
                 new MarkdownStringBuilder().bold("=정시의 영어단어장!=").lineSeparator().plain("아직 등록한 사전이 없습니다!").toString()
         );

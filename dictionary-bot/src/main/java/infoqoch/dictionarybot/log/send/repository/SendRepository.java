@@ -1,23 +1,24 @@
 package infoqoch.dictionarybot.log.send.repository;
 
-import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.send.Send;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface SendRepository {
-    Send save(Send send);
+    SendLog save(SendLog sendLog);
 
-    @Query(" select max(s.no) from Send s")
+    @Query(" select max(s.no) from SendLog s")
     Long maxNo();
 
-    List<Send> findByNoGreaterThanAndRequestSendType(Long no, SendType status);
+    List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType status);
 
-    List<Send> findByStatus(Send.Status status);
+    List<SendLog> findByStatus(Send.Status status);
 
-    Optional<Send> findByNo(Long no);
+    Optional<SendLog> findByNo(Long no);
 
-    List<Send> findAll();
+    List<SendLog> findAll();
 }

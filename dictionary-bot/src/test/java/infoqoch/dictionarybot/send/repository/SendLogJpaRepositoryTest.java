@@ -1,9 +1,9 @@
 package infoqoch.dictionarybot.send.repository;
 
-import infoqoch.dictionarybot.log.send.Send;
-import infoqoch.dictionarybot.log.send.SendRequest;
+import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendJpaRepository;
 import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static infoqoch.telegram.framework.update.response.SendType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
-class SendJpaRepositoryTest {
+class SendLogJpaRepositoryTest {
     @Autowired
     EntityManager em;
 
@@ -53,16 +53,16 @@ class SendJpaRepositoryTest {
 
         // when
         saveSend(DOCUMENT, CLIENT_ERROR, MESSAGE, DOCUMENT, SERVER_ERROR, CLIENT_ERROR, CLIENT_ERROR, MESSAGE);
-        assertThat(sendRepository.findByNoGreaterThanAndRequestSendType(first, MESSAGE)).size().isEqualTo(2);
-        assertThat(sendRepository.findByNoGreaterThanAndRequestSendType(first, DOCUMENT)).size().isEqualTo(2);
-        assertThat(sendRepository.findByNoGreaterThanAndRequestSendType(first, SERVER_ERROR)).size().isEqualTo(1);
-        assertThat(sendRepository.findByNoGreaterThanAndRequestSendType(first, CLIENT_ERROR)).size().isEqualTo(3);
+        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, MESSAGE)).size().isEqualTo(2);
+        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, DOCUMENT)).size().isEqualTo(2);
+        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, SERVER_ERROR)).size().isEqualTo(1);
+        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, CLIENT_ERROR)).size().isEqualTo(3);
     }
 
     public void saveSend(SendType...types) {
         for (SendType type : types) {
-            Send send = Send.of(SendRequest.send(123l, type, new MarkdownStringBuilder("hi"), null));
-            em.persist(send);
+            SendLog sendLog = SendLog.of(Send.send(123l, type, new MarkdownStringBuilder("hi"), null));
+            em.persist(sendLog);
         }
         em.flush();
         em.clear();

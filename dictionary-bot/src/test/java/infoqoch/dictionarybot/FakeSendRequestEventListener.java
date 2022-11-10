@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.log.send.Send;
+import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +23,15 @@ public class FakeSendRequestEventListener {
 	private final SendRepository sendRepository;
 
     private boolean called = false;
-    private Send latestSent;
-    private List<Send> sentList = new ArrayList<>();
+    private SendLog latestSent;
+    private List<SendLog> sentList = new ArrayList<>();
 
-    @EventListener(Send.class)
-    public void handle(Send send) {
+    @EventListener(SendLog.class)
+    public void handle(SendLog sendLog) {
         System.out.println("== FakeSendRequestEventListener CALLED!! === ");
         called = true;
-        latestSent = sendRepository.save(send);
-        sentList.add(send);
+        latestSent = sendRepository.save(sendLog);
+        sentList.add(sendLog);
     }
 
     public void clear() {

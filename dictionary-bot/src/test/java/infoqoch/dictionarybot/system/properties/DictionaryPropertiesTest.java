@@ -1,6 +1,6 @@
 package infoqoch.dictionarybot.system.properties;
 
-import infoqoch.telegram.framework.update.util.TelegramProperties;
+import infoqoch.telegram.framework.update.TelegramProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
