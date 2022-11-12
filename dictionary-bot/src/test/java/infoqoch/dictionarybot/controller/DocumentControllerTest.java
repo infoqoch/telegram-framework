@@ -1,6 +1,5 @@
 package infoqoch.dictionarybot.controller;
 
-import infoqoch.mock.repository.MemoryDictionaryRepository;
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.repository.DictionaryRepository;
@@ -8,9 +7,10 @@ import infoqoch.dictionarybot.model.dictionary.repository.DictionarySourceReposi
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
-import infoqoch.telegram.framework.update.util.TelegramProperties;
-import infoqoch.telegram.framework.update.file.TelegramFileHandler;
+import infoqoch.mock.repository.MemoryDictionaryRepository;
+import infoqoch.telegram.framework.update.TelegramProperties;
 import infoqoch.telegram.framework.update.exception.TelegramClientException;
+import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Document;
@@ -80,7 +80,7 @@ class DocumentControllerTest {
     @Test
     void success() {
         // given
-        when(mockFileHandler.extractExcelFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile()));
+        when(mockFileHandler.documentToFile(any())).thenReturn(new File(getClass().getClassLoader().getResource("exceltest/dictionary_test.xlsx").getFile()));
 
         final ChatUser chatUser = new ChatUser(123l, "kim");
 

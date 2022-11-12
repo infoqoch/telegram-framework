@@ -3,8 +3,8 @@ package infoqoch.telegram.framework.update.request;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
 @Getter
+@ToString
 public class UpdateRequestCommandAndValue {
     private final UpdateRequestCommand command;
     private final String value;

@@ -1,6 +1,6 @@
 package infoqoch.telegram.framework.update.resolver.param;
 
-import infoqoch.telegram.framework.update.util.TelegramProperties;
+import infoqoch.telegram.framework.update.TelegramProperties;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 
 import java.lang.reflect.Parameter;

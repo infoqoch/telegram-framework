@@ -1,6 +1,6 @@
 package infoqoch.telegram.framework.update.exception;
 
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 public class TelegramClientException extends TelegramException{
@@ -29,7 +29,7 @@ public class TelegramClientException extends TelegramException{
     }
 
     @Override
-    public SendType resolveErrorType() {
-        return SendType.CLIENT_ERROR;
+    public ResponseType resolveErrorType() {
+        return ResponseType.CLIENT_ERROR;
     }
 }

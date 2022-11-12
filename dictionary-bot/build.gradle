@@ -27,7 +27,7 @@ repositories {
 dependencies {
     // telegram bot
     implementation 'io.github.infoqoch:telegram-bot:0.2.3'
-    implementation 'io.github.infoqoch:telegram-framework:0.4.0'
+    implementation 'io.github.infoqoch:telegram-framework:0.4.1'
 
     // spring
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

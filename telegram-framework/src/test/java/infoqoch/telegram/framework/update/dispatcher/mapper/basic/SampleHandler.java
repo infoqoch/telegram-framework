@@ -1,23 +1,27 @@
 package infoqoch.telegram.framework.update.dispatcher.mapper.basic;
 
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 
 public class SampleHandler {
-    @UpdateRequestMethodMapper({"help", "*"})
+    @UpdateRequestMapper({"help", "*"})
     public String help(){
         return "I am going to help you!";
     }
 
-    @UpdateRequestMethodMapper("hello")
+    @UpdateRequestMapper("hello")
     public String hello(){
         return "hi!";
     }
 
-    @UpdateRequestMethodMapper("docu")
+    @UpdateRequestMapper("docu")
     public UpdateResponse document() {
         return UpdateResponse.document(new MarkdownStringBuilder("send document!"), "document_as_file_id");
     }
 
+    @UpdateRequestMapper("voids")
+    public void voids() {
+        System.out.println("hi!");
+    }
 }

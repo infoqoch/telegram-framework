@@ -2,7 +2,7 @@ package infoqoch.telegram.framework.update.resolver.returns;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateConfig;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ class UpdateRequestReturnRegisterTest {
     @Configuration
     @EnableTelegramFramework
     static class Config{
-        @UpdateRequestMethodMapper("*")
+        @UpdateRequestMapper("*")
         public String any(){
             return "any";
         }

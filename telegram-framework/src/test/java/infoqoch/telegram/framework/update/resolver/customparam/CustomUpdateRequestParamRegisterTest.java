@@ -1,8 +1,10 @@
 package infoqoch.telegram.framework.update.resolver.customparam;
 
+import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
+import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParamRegister;
 import infoqoch.telegram.framework.update.resolver.param.UpdateDocumentUpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParamRegister;
@@ -12,9 +14,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,4 +75,22 @@ class CustomUpdateRequestParamRegisterTest {
         final Parameter[] parameters = updateRequestMethod.getParameters();
         return parameters;
     }
+
+
+    @Configuration
+    @ComponentScan
+    @EnableTelegramFramework
+    static class Config implements CustomUpdateRequestParamRegister {
+
+        @Bean
+        public SampleHandler sampleHandler(){
+            return new SampleHandler();
+        }
+
+        @Override
+        public List<UpdateRequestParam> paramRegister() {
+            return Arrays.asList(new SampleUpdateRequestParam());
+        }
+    }
+
 }

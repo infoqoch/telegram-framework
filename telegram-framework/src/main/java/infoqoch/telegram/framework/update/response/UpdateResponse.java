@@ -8,26 +8,30 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UpdateResponse {
-    private final SendType sendType;
+    private final ResponseType responseType;
     private final String document;
     private final MarkdownStringBuilder message;
 
-    private UpdateResponse(SendType sendType, MarkdownStringBuilder message, String document) {
-        this.sendType = sendType;
+    private UpdateResponse(ResponseType responseType, MarkdownStringBuilder message, String document) {
+        this.responseType = responseType;
         this.message = message;
         this.document = document;
     }
 
+    public static UpdateResponse voids(){
+        return new UpdateResponse(ResponseType.VOID, null, null);
+    }
+
     public static UpdateResponse message(MarkdownStringBuilder message){
-        return new UpdateResponse(SendType.MESSAGE, message, null);
+        return new UpdateResponse(ResponseType.MESSAGE, message, null);
     }
 
     public static UpdateResponse document(MarkdownStringBuilder message, String document){
-        return new UpdateResponse(SendType.DOCUMENT, message, document);
+        return new UpdateResponse(ResponseType.DOCUMENT, message, document);
     }
 
-    public static UpdateResponse send(SendType sendType, MarkdownStringBuilder message){
-        return new UpdateResponse(sendType, message,null);
+    public static UpdateResponse send(ResponseType responseType, MarkdownStringBuilder message){
+        return new UpdateResponse(responseType, message,null);
     }
 
     public static UpdateResponse error(TelegramException e, MarkdownStringBuilder defaultMessage){

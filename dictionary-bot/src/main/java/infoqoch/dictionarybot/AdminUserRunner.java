@@ -1,23 +1,21 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.log.UpdateLog;
+import infoqoch.dictionarybot.log.send.SendLog;
+import infoqoch.dictionarybot.log.send.service.SendRunnerService;
+import infoqoch.dictionarybot.log.update.UpdateLog;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.send.service.SendRunnerService;
-import infoqoch.dictionarybot.system.event.Events;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.event.Events;
+import infoqoch.telegram.framework.update.response.ResponseType;
+import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Async
 @Slf4j
 @Component
 public class AdminUserRunner {
@@ -31,10 +29,10 @@ public class AdminUserRunner {
         setupLastSendNo();
     }
 
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(cron = "0 0/10 * * * *")
     @Transactional
     public void run() {
-        final List<Send> serverErrorSent = sendRunnerService.findByNoGreaterThanAndRequestSendTypeForScheduler(LAST_SEND_NO, SendType.SERVER_ERROR);
+        final List<SendLog> serverErrorSent = sendRunnerService.findByNoGreaterThanAndResponseTypeForScheduler(LAST_SEND_NO, ResponseType.SERVER_ERROR);
         if(serverErrorSent.size()==0) return;
 
         upToDateLastSendNo(serverErrorSent);
@@ -43,7 +41,7 @@ public class AdminUserRunner {
 
         final List<ChatUser> admins = chatUserRepository.findByRole(ChatUser.Role.ADMIN);
         for (ChatUser admin : admins) {
-            requestSending(SendRequest.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null));
+            Events.raise(Send.send(admin.getChatId(), ResponseType.MESSAGE, message, null));
         }
     }
 
@@ -56,21 +54,21 @@ public class AdminUserRunner {
         }
     }
 
-    private void upToDateLastSendNo(List<Send> serverErrorSent) {
-        for (Send send : serverErrorSent)
-            if(send.getNo()>LAST_SEND_NO) LAST_SEND_NO = send.getNo();
+    private void upToDateLastSendNo(List<SendLog> serverErrorSent) {
+        for (SendLog sendLog : serverErrorSent)
+            if(sendLog.getNo()>LAST_SEND_NO) LAST_SEND_NO = sendLog.getNo();
     }
 
-    private MarkdownStringBuilder convertAdminAlert(List<Send> serverErrorSent) {
+    private MarkdownStringBuilder convertAdminAlert(List<SendLog> serverErrorSent) {
         final MarkdownStringBuilder result = new MarkdownStringBuilder();
         result.bold("=어드민 경고 알림!=").lineSeparator();
 
-        for (Send send : serverErrorSent) {
+        for (SendLog sendLog : serverErrorSent) {
             result
-                    .plain("send no : ").plain(String.valueOf(send.getNo())).lineSeparator()
-                    .plain("sent message : [").append(send.getRequest().getMessage()).plain("]").lineSeparator()
-                    .append(errorMessage(send.getErrorCode(), send.getErrorMessage()))
-                    .append(causedByUpdate(send.getUpdateLog()))
+                    .plain("send no : ").plain(String.valueOf(sendLog.getNo())).lineSeparator()
+                    .plain("sent message : [").append(sendLog.getMessage()).plain("]").lineSeparator()
+                    .append(errorMessage(sendLog.getErrorCode(), sendLog.getErrorMessage()))
+                    .append(causedByUpdate(sendLog.getUpdateLog()))
                     .lineSeparator();
         }
         return result;
@@ -86,12 +84,13 @@ public class AdminUserRunner {
         if(updateLog==null) return null;
 
         return new MarkdownStringBuilder()
-                .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
+                // .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator() // TODO 같은 값이 들어갈 경우 _italic__italic_ 형태가 되어 __ 가 정상적으로 인식되지 아니함.
+                .italic("caused by update id : ").plain(" ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
                 .plain("  -> command : ").plain(updateLog.getUpdateCommand().toString()).plain(" : ").plain(updateLog.getUpdateValue()==null?"":updateLog.getUpdateValue()).lineSeparator();
     }
 
-    private void requestSending(SendRequest sendRequest) {
-        final Send send = Send.of(sendRequest);
-        Events.raise(send);
-    }
+//    private void requestSending(SendRequest sendRequest) {
+//        final SendLog sendLog = SendLog.of(sendRequest);
+//        Events.raise(sendLog);
+//    }
 }
