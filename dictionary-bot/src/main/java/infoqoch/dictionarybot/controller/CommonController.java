@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.controller;
 
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommonController {
     private final DictionaryProperties dictionaryProperties;
 
-    @UpdateRequestMethodMapper({"excel help", "help excel"})
+    @UpdateRequestMapper({"excel help", "help excel"})
     public UpdateResponse excel_help(UpdateRequestCommandAndValue message) {
 
         final MarkdownStringBuilder msb = new MarkdownStringBuilder()
@@ -30,9 +30,9 @@ public class CommonController {
         return UpdateResponse.document(msb, dictionaryProperties.sampleExcelPush());
     }
 
-    @UpdateRequestMethodMapper({"help", "start"})
+    @UpdateRequestMapper({"help", "start"})
     public MarkdownStringBuilder help(UpdateRequestCommandAndValue message) {
-        log.info("UpdateRequestMethodMapper : help!");
+        log.info("UpdateRequestMapper : help!");
 
         throwEx(message);
 

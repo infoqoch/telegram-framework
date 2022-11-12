@@ -1,7 +1,7 @@
 package infoqoch.telegram.framework.update.mock;
 
 import infoqoch.telegram.framework.update.request.UpdateRequest;
-import infoqoch.telegram.framework.update.request.body.UpdateChat;
+import infoqoch.telegram.framework.update.request.body.UpdateMessage;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.entity.Update;
@@ -58,7 +58,7 @@ public class MockUpdate {
     @Test
     void wrapper_to_chat_request() {
         final Update update = MockUpdate.jsonToUpdate(MockUpdate.chatJson("/help"));
-        final UpdateChat chat = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson("/help")).toChat();
+        final UpdateMessage chat = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson("/help")).toChat();
 
         assertThat(chat.getUpdateId()).isEqualTo(update.getUpdateId());
         assertThat(chat.getMessageId()).isEqualTo(update.getMessage().getMessageId());

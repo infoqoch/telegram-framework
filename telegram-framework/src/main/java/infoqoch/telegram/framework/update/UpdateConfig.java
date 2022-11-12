@@ -3,12 +3,11 @@ package infoqoch.telegram.framework.update;
 import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
-import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestParamRegister;
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.*;
-import infoqoch.telegram.framework.update.send.SendRequestEventListener;
+import infoqoch.telegram.framework.update.send.SendUpdateResponseEventListener;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
@@ -41,21 +40,20 @@ public class UpdateConfig {
 
     @Bean
     public CustomUpdateRequestReturnRegister customUpdateRequestReturnRegister(){
-        System.out.println("hihi!");
         List<UpdateRequestReturn> result = new ArrayList<>();
 
-        final Set<Class<? extends CustomUpdateRequestReturnRegister>> subTypesOf = new Reflections(
+        final Set<Class<? extends CustomUpdateRequestReturnRegister>> registers = new Reflections(
                 new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
         ).getSubTypesOf(CustomUpdateRequestReturnRegister.class);
 
-        for (Class<? extends CustomUpdateRequestReturnRegister> aClass : subTypesOf) {
+        for (Class<? extends CustomUpdateRequestReturnRegister> register : registers) {
             try{
-                final CustomUpdateRequestReturnRegister bean = context.getBean(aClass);
+                final CustomUpdateRequestReturnRegister bean = context.getBean(register);
                 result.addAll(bean.returnRegister());
-                log.info("{} implements CustomUpdateRequestReturnRegister and added resolvers in UpdateRequestReturnRegister", aClass);
+                log.info("{} implements CustomUpdateRequestReturnRegister and added resolvers in UpdateRequestReturnRegister", register);
             }catch (Exception e){
                 e.printStackTrace();
-                log.info("{} implements CustomUpdateRequestReturnRegister but not bean", aClass);
+                log.info("{} implements CustomUpdateRequestReturnRegister but not bean", register);
             }
         }
 
@@ -66,27 +64,26 @@ public class UpdateConfig {
     public CustomUpdateRequestParamRegister customUpdateRequestParamRegister(){
         List<UpdateRequestParam> result = new ArrayList<>();
 
-        final Set<Class<? extends CustomUpdateRequestParamRegister>> subTypesOf = new Reflections(
+        final Set<Class<? extends CustomUpdateRequestParamRegister>> registers = new Reflections(
                 new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
         ).getSubTypesOf(CustomUpdateRequestParamRegister.class);
 
-        for (Class<? extends CustomUpdateRequestParamRegister> aClass : subTypesOf) {
+        for (Class<? extends CustomUpdateRequestParamRegister> register : registers) {
             try{
-                final CustomUpdateRequestParamRegister bean = context.getBean(aClass);
+                final CustomUpdateRequestParamRegister bean = context.getBean(register);
                 result.addAll(bean.paramRegister());
-                log.info("{} implements CustomUpdateRequestParamRegister and added resolvers in UpdateRequestParamRegister", aClass);
+                log.info("{} implements CustomUpdateRequestParamRegister and added resolvers in UpdateRequestParamRegister", register);
             }catch (Exception e){
                 e.printStackTrace();
-                log.info("{} implements CustomUpdateRequestParamRegister but not bean", aClass);
+                log.info("{} implements CustomUpdateRequestParamRegister but not bean", register);
             }
         }
-
         return () -> result;
     }
 
     @Bean
     public TelegramProperties telegramProperties(){
-        return TelegramProperties.generate();
+        return TelegramProperties.generate("telegram-framework.properties");
     }
 
     @Bean
@@ -127,12 +124,11 @@ public class UpdateConfig {
 
     @Bean
     public UpdateDispatcher updateDispatcher(){
-        final SpringBeanContext springContext = new SpringBeanContext(context);
         final Collection<URL> urls = generateTargetUrl(extractBasePackageName(frameworkBase().get()));
         urls.stream().peek(u -> log.info("url = {}", u));
 
-        final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers = UpdateRequestMethodResolverFactory.collectUpdateRequestMappedMethods(
-                springContext
+        final Map<UpdateRequestCommand, UpdateRequestResolver> methodResolvers = UpdateRequestMapperFactory.collectUpdateRequestMappedMethods(
+                context
                 , urls
                 , updateRequestParamRegister()
                 , updateRequestReturnRegister()
@@ -145,15 +141,17 @@ public class UpdateConfig {
         return new UpdateRunner(telegramBot(), updateDispatcher());
     }
 
-
-    @Bean
-    public SendRequestEventListener sendRequestEventListener(){
-        return new SendRequestEventListener(telegramBot().send());
-    }
-
     @Bean
     public InitializingBean eventsInitializer() {
         return () -> Events.setPublisher(context);
+    }
+
+    @Bean
+    public SendUpdateResponseEventListener sendRequestEventListener(){
+        if(telegramProperties().sendMessageAfterUpdateResolved()){
+            return new SendUpdateResponseEventListener(telegramBot().send());
+        }
+        return null;
     }
 
     private Optional<Object> frameworkBase() {
@@ -164,22 +162,8 @@ public class UpdateConfig {
         return frameworkBase.getClass().getPackageName();
     }
 
-    // TODO
-    // 통합 테스트(@SpringBootTest)가 동작할 때 클래스로더가 두 개 동작하며 그것의 절대 경로는 ../target/test-classes 와 ../target/classes 이다.
-    // 실제 스프링 컨테이너를 로딩할 때는, 테스트를 사용하지 않으므로 이러한 코드가 필요 없다. 테스트를 할 때는 두 개의 클래스로더가 동작하기 때문에 불가피하게 아래와 같이 "/test-classes"에 있는 파일을 읽지 않도록 한다.
-    // 운영이 테스트를 위한 코드에 종속되는 것은 좋지 않아서 최대한 해소하려 하였으나 어쩔 수 없이 아래와 같이 코드를 작성하였음.
-    // 이에 대한 개선책이 반드시 필요함.
-
-    // TODO
-    // 지금까지 url은 src/main src/test 로부터 시작한다.
-    // 하지만 ComponentScan의 원칙은 해당 메서드를 기점으로부터 검색한다.
-    // 이러한 부분을 내가 놓쳤고, 관련하여 URL 객체를 새로 구현토록 하였다.
-    // 이 부분은 테스트 이후 어떤식으로 처리할지 확정한다.
     private Set<URL> generateTargetUrl(String basePackageName) {
         return ClasspathHelper.forPackage(basePackageName).stream()
-//                .filter(url -> !url.toString().contains("/test-classes")) // maven
-//                .filter(url -> !url.toString().contains("/test/classes")) // gradle
-//                .filter(url -> !url.toString().contains("/java/test/")) // gradle test
                 .map(u -> appendPackageName(u, basePackageName))
                 .collect(Collectors.toSet());
     }

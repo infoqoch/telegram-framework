@@ -5,11 +5,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class UpdateRequestCommand {
     private final String COMMAND;
-    private final String COMMAND_WITH_SPACE;
 
     private UpdateRequestCommand(String command) {
         this.COMMAND = command;
-        this.COMMAND_WITH_SPACE = COMMAND + " ";
     }
 
     public String get(){
@@ -21,22 +19,10 @@ public class UpdateRequestCommand {
         return new UpdateRequestCommand(flatting(commandStr));
     }
 
-//    private static boolean isMatch(String input, String alias) {
-//        String[] inputSplit = input.split(" ");
-//        String[] aliasSplit = alias.split(" ");
-//
-//        if(inputSplit.length < aliasSplit.length) return false;
-//
-//        for(int i = 0; i< aliasSplit.length; i++)
-//            if(!aliasSplit[i].equals(inputSplit[i])) return false;
-//
-//        return true;
-//    }
-//
     public boolean startsWith(String input) {
         final String flatInput = flatting(input);
         if(flatInput.equals(COMMAND)) return true;
-        return flatInput.startsWith(COMMAND_WITH_SPACE);
+        return flatInput.startsWith(commandWithSpace());
     }
 
     @Override
@@ -48,6 +34,10 @@ public class UpdateRequestCommand {
         final String flatInput = flatting(input);
         final int length = COMMAND.equals("*")?0:COMMAND.length();
         return flatting(flatInput.substring(length));
+    }
+
+    private String commandWithSpace(){
+        return COMMAND + " ";
     }
 
     private static String flatting(String commandStr) {

@@ -4,7 +4,7 @@ import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,14 +34,14 @@ class ExUpdateDispatcherTest {
     @Test
     void wrong_request_input_null(){
         final UpdateResponse updateResponse = updateDispatcher.process(null);
-        assertThat(updateResponse.getSendType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(updateResponse.getResponseType()).isEqualTo(ResponseType.SERVER_ERROR);
         assertThat(updateResponse.getMessage().toString()).isEqualTo("서버에 문제가 발생하였습니다\\. 죄송합니다\\. \\(2\\)");
     }
 
     @Test
     void wrong_request_input_empty(){
         final UpdateResponse updateResponse = updateDispatcher.process(new UpdateRequest(null));
-        assertThat(updateResponse.getSendType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(updateResponse.getResponseType()).isEqualTo(ResponseType.SERVER_ERROR);
         assertThat(updateResponse.getMessage().toString()).isEqualTo("서버에 문제가 발생하였습니다\\. 죄송합니다\\. \\(2\\)");
     }
 
@@ -56,7 +56,7 @@ class ExUpdateDispatcherTest {
         final UpdateResponse updateResponse = updateDispatcher.process(request);
 
         // then
-        assertThat(updateResponse.getSendType()).isEqualTo(SendType.CLIENT_ERROR);
+        assertThat(updateResponse.getResponseType()).isEqualTo(ResponseType.CLIENT_ERROR);
         assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("정확한 명령어를 입력해야 합니다.").toString());
     }
 
@@ -71,7 +71,7 @@ class ExUpdateDispatcherTest {
         final UpdateResponse updateResponse = updateDispatcher.process(request);
 
         // then
-        assertThat(updateResponse.getSendType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(updateResponse.getResponseType()).isEqualTo(ResponseType.SERVER_ERROR);
         assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)").toString());
     }
 

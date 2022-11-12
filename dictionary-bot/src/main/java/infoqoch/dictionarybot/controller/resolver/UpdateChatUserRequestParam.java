@@ -4,16 +4,14 @@ import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
+import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class UpdateChatUserRequestParam implements UpdateRequestParam {
     private final ChatUserRepository chatUserRepository;
-
-    public UpdateChatUserRequestParam(ChatUserRepository chatUserRepository) {
-        this.chatUserRepository = chatUserRepository;
-    }
 
     @Override
     public boolean support(Parameter target) {

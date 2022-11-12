@@ -45,7 +45,7 @@ public class UpdateRunner {
     }
 
     private void requestSending(UpdateRequest updateRequest, UpdateResponse updateResponse) {
-        final Send send = Send.send(updateRequest.chatId(), updateResponse.getSendType(), updateResponse.getMessage(), updateResponse.getDocument());
+        final Send send = Send.send(updateRequest.chatId(), updateResponse.getResponseType(), updateResponse.getMessage(), updateResponse.getDocument());
         send.setupUpdate(updateRequest.updateId(), updateRequest, updateResponse);
         Events.raise(send);
     }

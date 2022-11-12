@@ -1,10 +1,10 @@
 package infoqoch.dictionarybot.log.update;
 
-import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
 import infoqoch.telegram.framework.update.request.body.UpdateDataType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class UpdateLog {
     private String updateFileName;
 
     @Enumerated(EnumType.STRING)
-    private SendType sendType;
+    private ResponseType responseType;
     private String sendDocument;
 
     @Column(length = 10000)
@@ -63,7 +63,7 @@ public class UpdateLog {
                 .updateFileId(fileId)
                 .updateFileName(fileName)
 
-                .sendType(updateResponse.getSendType())
+                .responseType(updateResponse.getResponseType())
                 .sendDocument(updateResponse.getDocument())
                 .sendMessage(updateResponse.getMessage().toString())
                 .build();

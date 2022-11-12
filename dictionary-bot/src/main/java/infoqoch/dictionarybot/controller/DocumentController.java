@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.controller;
 import infoqoch.dictionarybot.model.dictionary.DictionarySource;
 import infoqoch.dictionarybot.model.dictionary.service.DictionaryInsertBatchService;
 import infoqoch.dictionarybot.model.user.ChatUser;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.exception.TelegramClientException;
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
@@ -23,9 +23,9 @@ public class DocumentController {
     private final DictionaryInsertBatchService dictionaryInsertBatchService;
     private final TelegramFileHandler telegramFileHandler;
 
-    @UpdateRequestMethodMapper({"excel push", "push", "replace"})
+    @UpdateRequestMapper({"excel push", "push", "replace"})
     public String excelPush(UpdateDocument document, ChatUser chatUser) {
-        log.info("UpdateRequestMethodMapper : excel_push");
+        log.info("UpdateRequestMapper : excel_push");
 
         valid(document);
 

@@ -1,7 +1,7 @@
 package infoqoch.telegram.framework.update.send;
 
 import infoqoch.telegram.framework.update.request.UpdateRequest;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
@@ -18,15 +18,14 @@ import java.util.concurrent.CompletableFuture;
 
 import static infoqoch.telegram.framework.update.send.Send.Status.*;
 
-
-@ToString
-@Getter
 @Slf4j
+@Getter
+@ToString
 public class Send {
     private final String id = UUID.randomUUID().toString();
 
     private final Long chatId;
-    private final SendType sendType;
+    private final ResponseType responseType;
     private final MarkdownStringBuilder message;
     private final String document;
 
@@ -54,23 +53,23 @@ public class Send {
         REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
     }
 
-    private Send(Long chatId, SendType sendType, String document, MarkdownStringBuilder msb) {
+    private Send(Long chatId, ResponseType responseType, String document, MarkdownStringBuilder msb) {
         this.chatId = chatId;
-        this.sendType = sendType;
+        this.responseType = responseType;
         this.document = document;
         this.message = msb;
     }
 
     public static Send sendMessage(long chatId, MarkdownStringBuilder msb) {
-        return new Send(chatId, SendType.MESSAGE, null, msb);
+        return new Send(chatId, ResponseType.MESSAGE, null, msb);
     }
 
     public static Send sendDocument(Long chatId, String document, MarkdownStringBuilder msb) {
-        return new Send(chatId, SendType.DOCUMENT, document, msb);
+        return new Send(chatId, ResponseType.DOCUMENT, document, msb);
     }
 
-    public static Send send(Long chatId, SendType sendType, MarkdownStringBuilder message, String document) {
-        return new Send(chatId, sendType, document, message);
+    public static Send send(Long chatId, ResponseType responseType, MarkdownStringBuilder message, String document) {
+        return new Send(chatId, responseType, document, message);
     }
 
     public void setupUpdate(Long updateId, UpdateRequest updateRequest, UpdateResponse updateResponse){
@@ -89,8 +88,8 @@ public class Send {
         send(telegramSend);
     }
 
-    public void resending(SendType type, MarkdownStringBuilder msb, TelegramSend telegramSend){
-        resend = Optional.of(Send.send(chatId,SendType.SERVER_ERROR, msb, null));
+    public void resending(ResponseType type, MarkdownStringBuilder msb, TelegramSend telegramSend){
+        resend = Optional.of(Send.send(chatId, ResponseType.SERVER_ERROR, msb, null));
         resend.get().send(telegramSend);
     }
 
@@ -105,7 +104,7 @@ public class Send {
     }
 
     private Response<?> sendDispatcher(TelegramSend telegramSend) {
-        if(getSendType() == SendType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(getChatId(), getDocument(), getMessage()));
+        if(getResponseType() == ResponseType.DOCUMENT) return telegramSend.document(new SendDocumentRequest(getChatId(), getDocument(), getMessage()));
         return telegramSend.message(new SendMessageRequest(getChatId(), getMessage()));
     }
 

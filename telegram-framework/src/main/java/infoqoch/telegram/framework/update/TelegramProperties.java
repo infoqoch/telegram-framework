@@ -1,22 +1,43 @@
 package infoqoch.telegram.framework.update;
 
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
 import java.util.Properties;
 
+@Slf4j
 @ToString
 public class TelegramProperties {
-    private static final String PROPERTIES_FILE = "telegram-framework.properties";
+    private static String PROPERTIES_FILE;
     private final String token;
     private final String fileUploadPath;
+    private final Boolean sendMessageAfterUpdateResolved;
+
+    public static TelegramProperties generate(String propertiesFileName) {
+        PROPERTIES_FILE = propertiesFileName;
+
+        return new TelegramProperties(
+                findProperty("telegram.token")
+                , findProperty("telegram.file-upload-path")
+                , checkSendMessageAfterUpdateResolved()
+        );
+    }
 
     public static TelegramProperties generate() {
-        final String token = findProperty("telegram.token");
-        final String fileUploadPath = findProperty("telegram.file-upload-path");
-        return new TelegramProperties(token, fileUploadPath);
+        PROPERTIES_FILE = "telegram-framework.properties";
+
+        return new TelegramProperties(
+                findProperty("telegram.token")
+                , findProperty("telegram.file-upload-path")
+                , checkSendMessageAfterUpdateResolved()
+        );
+    }
+
+    private static Boolean checkSendMessageAfterUpdateResolved() {
+        return Boolean.valueOf(findProperty("telegram.send-message-after-update-resolved"));
     }
 
     public String token() {
@@ -29,9 +50,10 @@ public class TelegramProperties {
         return fileUploadPath;
     }
 
-    private TelegramProperties(String token, String fileUploadPath) {
+    private TelegramProperties(String token, String fileUploadPath, boolean sendMessageAfterUpdateResolved) {
         this.token = token;
         this.fileUploadPath = fileUploadPath;
+        this.sendMessageAfterUpdateResolved = sendMessageAfterUpdateResolved;
     }
 
     private static String findProperty(String key) {
@@ -49,6 +71,6 @@ public class TelegramProperties {
     }
 
     public boolean sendMessageAfterUpdateResolved() {
-        return true;
+        return sendMessageAfterUpdateResolved;
     }
 }

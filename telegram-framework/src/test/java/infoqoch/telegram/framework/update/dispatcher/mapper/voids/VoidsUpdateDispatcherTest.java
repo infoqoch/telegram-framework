@@ -4,7 +4,7 @@ import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateDispatcher;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
 import infoqoch.telegrambot.bot.entity.Update;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +44,7 @@ class VoidsUpdateDispatcherTest {
         final UpdateResponse process = updateDispatcher.process(updateRequest);
 
         // then
-        assertThat(process.getSendType()).isEqualTo(SendType.VOID);
+        assertThat(process.getResponseType()).isEqualTo(ResponseType.VOID);
     }
 
     private UpdateRequest chatMessageToUpdateRequest(String docu) {

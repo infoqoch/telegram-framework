@@ -2,7 +2,8 @@ package infoqoch.dictionarybot.send.repository;
 
 import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendJpaRepository;
-import infoqoch.telegram.framework.update.response.SendType;
+
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static infoqoch.telegram.framework.update.response.SendType.*;
+import static infoqoch.telegram.framework.update.response.ResponseType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
@@ -53,14 +54,14 @@ class SendLogJpaRepositoryTest {
 
         // when
         saveSend(DOCUMENT, CLIENT_ERROR, MESSAGE, DOCUMENT, SERVER_ERROR, CLIENT_ERROR, CLIENT_ERROR, MESSAGE);
-        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, MESSAGE)).size().isEqualTo(2);
-        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, DOCUMENT)).size().isEqualTo(2);
-        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, SERVER_ERROR)).size().isEqualTo(1);
-        assertThat(sendRepository.findByNoGreaterThanAndSendType(first, CLIENT_ERROR)).size().isEqualTo(3);
+        assertThat(sendRepository.findByNoGreaterThanAndResponseType(first, MESSAGE)).size().isEqualTo(2);
+        assertThat(sendRepository.findByNoGreaterThanAndResponseType(first, DOCUMENT)).size().isEqualTo(2);
+        assertThat(sendRepository.findByNoGreaterThanAndResponseType(first, SERVER_ERROR)).size().isEqualTo(1);
+        assertThat(sendRepository.findByNoGreaterThanAndResponseType(first, CLIENT_ERROR)).size().isEqualTo(3);
     }
 
-    public void saveSend(SendType...types) {
-        for (SendType type : types) {
+    public void saveSend(ResponseType...types) {
+        for (ResponseType type : types) {
             SendLog sendLog = SendLog.of(Send.send(123l, type, new MarkdownStringBuilder("hi"), null));
             em.persist(sendLog);
             System.out.println("sendLog = " + sendLog);

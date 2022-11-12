@@ -14,10 +14,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
-class UpdateRequestMethodResolver {
+class UpdateRequestResolver {
     private final Object bean;
     private final Method method;
-    private final UpdateRequestMethodMapper mapper;
+    private final UpdateRequestMapper mapper;
     private final UpdateRequestParam[] parameters;
     private final UpdateRequestReturn returnResolver;
 
@@ -26,7 +26,7 @@ class UpdateRequestMethodResolver {
         return "UpdateRequestMethodResolver{"+method.getName()+"}";
     }
 
-    UpdateRequestMethodResolver(Object bean, Method method, UpdateRequestMethodMapper mapper, UpdateRequestParamRegister paramResolvers, UpdateRequestReturnRegister returnResolvers) {
+    UpdateRequestResolver(Object bean, Method method, UpdateRequestMapper mapper, UpdateRequestParamRegister paramResolvers, UpdateRequestReturnRegister returnResolvers) {
         this.bean = bean;
         this.method = method;
         this.mapper = mapper;

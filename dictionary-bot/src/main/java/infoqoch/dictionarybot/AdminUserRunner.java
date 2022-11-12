@@ -6,7 +6,7 @@ import infoqoch.dictionarybot.log.update.UpdateLog;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.telegram.framework.update.event.Events;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +29,10 @@ public class AdminUserRunner {
         setupLastSendNo();
     }
 
-    @Scheduled(cron = "0/10 * 7-22 * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
     @Transactional
     public void run() {
-        final List<SendLog> serverErrorSent = sendRunnerService.findByNoGreaterThanAndSendTypeForScheduler(LAST_SEND_NO, SendType.SERVER_ERROR);
+        final List<SendLog> serverErrorSent = sendRunnerService.findByNoGreaterThanAndResponseTypeForScheduler(LAST_SEND_NO, ResponseType.SERVER_ERROR);
         if(serverErrorSent.size()==0) return;
 
         upToDateLastSendNo(serverErrorSent);
@@ -41,7 +41,7 @@ public class AdminUserRunner {
 
         final List<ChatUser> admins = chatUserRepository.findByRole(ChatUser.Role.ADMIN);
         for (ChatUser admin : admins) {
-            Events.raise(Send.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null));
+            Events.raise(Send.send(admin.getChatId(), ResponseType.MESSAGE, message, null));
         }
     }
 

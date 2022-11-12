@@ -1,7 +1,7 @@
 package infoqoch.telegram.framework.update.send;
 
 import infoqoch.telegram.framework.update.mock.MockSendResponse;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegrambot.bot.TelegramSend;
 import infoqoch.telegrambot.bot.entity.Response;
 import infoqoch.telegrambot.bot.response.SendMessageResponse;
@@ -15,15 +15,15 @@ import org.junit.jupiter.api.Timeout;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static infoqoch.telegram.framework.update.response.SendType.MESSAGE;
+import static infoqoch.telegram.framework.update.response.ResponseType.MESSAGE;
 import static infoqoch.telegram.framework.update.send.Send.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class SendRequestEventListenerTest {
-    SendRequestEventListener listener;
+class SendUpdateResponseEventListenerTest {
+    SendUpdateResponseEventListener listener;
     TelegramSend mockTelegramSend;
     final DefaultJsonBind binder = DefaultJsonBind.getInstance();
 
@@ -31,7 +31,7 @@ class SendRequestEventListenerTest {
     @BeforeEach
     void setUp(){
         mockTelegramSend = mock(TelegramSend.class);
-        listener = new SendRequestEventListener(mockTelegramSend);
+        listener = new SendUpdateResponseEventListener(mockTelegramSend);
     }
 
     @Test
@@ -65,13 +65,13 @@ class SendRequestEventListenerTest {
 
         // then
         while(!send.isDone());
-        assertThat(send.getSendType()).isEqualTo(MESSAGE);
+        assertThat(send.getResponseType()).isEqualTo(MESSAGE);
         assertThat(send.getStatus()).isEqualTo(ERROR);
 
         final Optional<Send> resend = send.getResend();
         assertThat(resend).isPresent();
         assertThat(resend.get().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
-        assertThat(resend.get().getSendType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(resend.get().getResponseType()).isEqualTo(ResponseType.SERVER_ERROR);
     }
 
     @Test

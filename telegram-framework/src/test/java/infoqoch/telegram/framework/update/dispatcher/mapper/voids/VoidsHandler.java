@@ -1,14 +1,14 @@
 package infoqoch.telegram.framework.update.dispatcher.mapper.voids;
 
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 
 public class VoidsHandler {
-    @UpdateRequestMethodMapper("*")
+    @UpdateRequestMapper("*")
     public String any(){
         return "any!";
     }
 
-    @UpdateRequestMethodMapper("voids")
+    @UpdateRequestMapper("voids")
     public void voids(){
 
     }

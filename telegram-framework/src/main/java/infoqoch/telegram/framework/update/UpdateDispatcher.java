@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static infoqoch.telegram.framework.update.response.SendType.SERVER_ERROR;
+import static infoqoch.telegram.framework.update.response.ResponseType.SERVER_ERROR;
 
 @Slf4j
 @RequiredArgsConstructor
 public class UpdateDispatcher {
-    private final Map<UpdateRequestCommand, UpdateRequestMethodResolver> methodResolvers;
+    private final Map<UpdateRequestCommand, UpdateRequestResolver> methodResolvers;
 
     @Transactional
     public UpdateResponse process(UpdateRequest updateRequest) {
@@ -44,12 +44,15 @@ public class UpdateDispatcher {
         }else if(commands.size()==1){
             return commands.get(0);
         }else{
-            // 명령어에 걸리는 여러 개의 리졸버가 있을 경우, 긴 명령어를 가진 리졸버를 사용한다.
-            return commands.stream().sorted(Comparator.comparingInt(o -> - o.get().length())).toList().get(0);
+            return takeLongestResolver(commands);
         }
     }
 
-    // TODO 예외 처리와 그것의 응답값을 고민한다. MSB 에 종속되는 것이 좋아 보이진 않는다. 특히 발송과 관계를 끝는 상태라면.
+    // 명령어에 여러 개의 리졸버가 해당될 경우, 가장 긴 명령어를 가진 리졸버를 사용한다.
+    private static UpdateRequestCommand takeLongestResolver(List<UpdateRequestCommand> commands) {
+        return commands.stream().sorted(Comparator.comparingInt(o -> -o.get().length())).toList().get(0);
+    }
+
     private UpdateResponse exceptionHandler(Exception e) {
         final Optional<TelegramException> telegramException = TelegramException.checkIfCausedByTelegramException(e);
 

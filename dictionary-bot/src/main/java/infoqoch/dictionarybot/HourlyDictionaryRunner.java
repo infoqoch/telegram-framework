@@ -24,7 +24,7 @@ public class HourlyDictionaryRunner {
     private final ChatUserRepository chatUserRepository;
     private final LookupRepository repository;
 
-    @Scheduled(cron = "0/10 * 7-22 * * *")
+    @Scheduled(cron = "0 0/30 7-22 * * *")
     @Transactional
     public void hourlyDictionaryRun() {
         log.info("HourlyDictionaryRunner#hourlyDictionaryRun");

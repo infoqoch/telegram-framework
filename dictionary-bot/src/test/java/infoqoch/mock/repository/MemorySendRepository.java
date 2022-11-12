@@ -2,7 +2,7 @@ package infoqoch.mock.repository;
 
 import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendRepository;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.send.Send;
 import lombok.SneakyThrows;
 
@@ -59,7 +59,7 @@ public class MemorySendRepository implements SendRepository {
     // TODO
     // not yet implemented
     @Override
-    public List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType sendType) {
+    public List<SendLog> findByNoGreaterThanAndResponseType(Long no, ResponseType responseType) {
         new UnsupportedOperationException("not support operation");
         return null;
     }

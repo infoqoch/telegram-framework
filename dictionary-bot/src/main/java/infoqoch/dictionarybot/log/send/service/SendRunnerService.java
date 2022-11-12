@@ -2,7 +2,7 @@ package infoqoch.dictionarybot.log.send.service;
 
 import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendRepository;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.send.Send;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ public class SendRunnerService {
         return sendRepository.findByStatus(status);
     }
 
-    public List<SendLog> findByNoGreaterThanAndSendTypeForScheduler(long sendNo, SendType type) {
-        return sendRepository.findByNoGreaterThanAndSendType(sendNo, type);
+    public List<SendLog> findByNoGreaterThanAndResponseTypeForScheduler(long sendNo, ResponseType type) {
+        return sendRepository.findByNoGreaterThanAndResponseType(sendNo, type);
     }
 
     public Long maxNo() {

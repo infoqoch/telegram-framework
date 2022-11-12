@@ -1,7 +1,7 @@
 package infoqoch.telegram.framework.update.request;
 
 import infoqoch.telegram.framework.update.exception.TelegramServerException;
-import infoqoch.telegram.framework.update.request.body.UpdateChat;
+import infoqoch.telegram.framework.update.request.body.UpdateMessage;
 import infoqoch.telegram.framework.update.request.body.UpdateDataType;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
 import infoqoch.telegrambot.bot.entity.Update;
@@ -38,8 +38,8 @@ public class UpdateRequest {
         return updateRequestCommandAndValue;
     }
 
-    public UpdateChat toChat() {
-        return UpdateChat.builder()
+    public UpdateMessage toChat() {
+        return UpdateMessage.builder()
                 .updateId(update.getUpdateId())
                 .messageId(update.getMessage().getMessageId())
                 .date(update.getMessage().getDate())
@@ -66,7 +66,7 @@ public class UpdateRequest {
     }
 
     public Object findBodyByType(Class<?> type) {
-        if(type == UpdateChat.class) return toChat();
+        if(type == UpdateMessage.class) return toChat();
         if(type == UpdateDocument.class) return toDocument();
         throw new TelegramServerException("not support data type (4)");
     }

@@ -1,7 +1,7 @@
 package infoqoch.dictionarybot.log.send;
 
 import infoqoch.dictionarybot.log.update.UpdateLog;
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import infoqoch.telegrambot.util.NotEscapedMSBException;
@@ -31,7 +31,7 @@ public class SendLog {
     private Long chatId;
 
     @Enumerated(EnumType.STRING)
-    private SendType sendType;
+    private ResponseType responseType;
 
     @Convert(converter=MarkdownStringBuilderConverter.class)
     @Column(columnDefinition = "varchar(10000)")
@@ -49,7 +49,7 @@ public class SendLog {
         final SendLogBuilder builder = SendLog.builder()
                 .updateLog(sendToUpdateLog(send))
                 .status(send.getStatus())
-                .sendType(send.getSendType())
+                .responseType(send.getResponseType())
                 .chatId(send.getChatId());
 
         if(send.getResend().isPresent()){

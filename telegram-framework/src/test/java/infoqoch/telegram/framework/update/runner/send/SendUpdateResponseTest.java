@@ -1,31 +1,32 @@
-package infoqoch.telegram.framework.update.runner;
+package infoqoch.telegram.framework.update.runner.send;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.TelegramProperties;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.UpdateRunner;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.runner.bot.FakeTelegramBot;
 import infoqoch.telegram.framework.update.runner.bot.FakeTelegramSend;
 import infoqoch.telegram.framework.update.runner.bot.FakeTelegramUpdate;
-import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.bot.TelegramBot;
-import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UpdateRunnerTest {
+class SendUpdateResponseTest {
     UpdateRunner runner;
     FakeTelegramBot telegramBot;
     FakeTelegramUpdate update;
-    SendSubscribeEventListener listener;
+    FakeTelegramSend send;
 
     @BeforeEach
     void setUp() {
@@ -36,11 +37,14 @@ class UpdateRunnerTest {
         assert telegramBot instanceof FakeTelegramBot;
         this.telegramBot = (FakeTelegramBot) telegramBot;
         update = (FakeTelegramUpdate) this.telegramBot.update();
+        send = (FakeTelegramSend) this.telegramBot.send();
 
         runner = ac.getBean(UpdateRunner.class);
-        listener = ac.getBean(SendSubscribeEventListener.class);
     }
 
+    // 중요!
+    // FakeTelegramSend가 완전하게 정의되지 않아 메시지가 두 번 호출 됨(정상호출 -> 미완성된 구현으로 인한 에러 대응 메시지 호출)
+    // 이벤트 리스너의 정상동작을 확인하는 것이 우선이기 때문에 추가적인 구현은 생략한다.
     @Test
     void success(){
         // given
@@ -50,53 +54,40 @@ class UpdateRunnerTest {
         runner.run();
 
         // then
-        final List<Send> list = listener.list;
-        assertThat(list).size().isEqualTo(1);
-        assertThat(list.get(0).getUpdateRequest().get().updateRequestCommandAndValue().getCommand().get()).isEqualTo("help");
-        assertThat(list.get(0).getUpdateRequest().get().updateRequestCommandAndValue().getValue()).isEqualTo("hihi");
-        assertThat(list.get(0).getUpdateResponse().get().getMessage().toString()).isEqualTo(new MarkdownStringBuilder("I am going to help you!").toString());
-    }
-
-    public static class SendSubscribeEventListener{
-        public List<Send> list = new ArrayList<>();
-
-        @EventListener(Send.class)
-        public void handle(Send send) {
-            list.add(send);
-        }
+        final List<SendMessageRequest> messageRequests = send.messageRequests;
+        assertThat(messageRequests).size().isGreaterThanOrEqualTo(1);
     }
 
     public static class SampleHandler {
-        @UpdateRequestMethodMapper({"help", "*"})
+        @UpdateRequestMapper({"help", "*"})
         public String help(){
             return "I am going to help you!";
         }
 
-        @UpdateRequestMethodMapper("voids")
+        @UpdateRequestMapper("voids")
         public void voids() {
             System.out.println("hi!");
         }
     }
 
     @Configuration
-    @ComponentScan
     @EnableTelegramFramework
     static class Config{
-
         @Primary
         @Bean
         TelegramBot telegramBot(){
             return new FakeTelegramBot(new FakeTelegramUpdate(), new FakeTelegramSend());
         }
 
+        @Primary
         @Bean
-        SampleHandler sampleHandler(){
-            return new SampleHandler();
+        TelegramProperties telegramProperties(){
+            return TelegramProperties.generate("telegram-framework-send.properties");
         }
 
         @Bean
-        SendSubscribeEventListener sendSubscribeEventListener(){
-            return new SendSubscribeEventListener();
+        SampleHandler sampleHandler(){
+            return new SampleHandler();
         }
     }
 }
