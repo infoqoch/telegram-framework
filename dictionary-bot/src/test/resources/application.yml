@@ -1,7 +1,0 @@
-spring:
-  profiles:
-    active: test
-    group:
-      "test": "db-mem,os-window,bot-dev" # default
-      "test-oracle": "db-oracle,os-window,bot-dev"
-      "test-maria": "db-maria,os-window,bot-dev"
