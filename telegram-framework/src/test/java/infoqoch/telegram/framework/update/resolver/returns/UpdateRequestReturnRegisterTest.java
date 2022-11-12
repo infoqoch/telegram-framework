@@ -37,7 +37,7 @@ class UpdateRequestReturnRegisterTest {
         //then
         Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(MSBUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(resolver.get().resolve(target).getMessage().toString()).isEqualTo(target.toString());
     }
 
     @Test
@@ -51,7 +51,7 @@ class UpdateRequestReturnRegisterTest {
         //then
         Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(StringUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(new MarkdownStringBuilder(target));
+        assertThat(resolver.get().resolve(target).getMessage().toString()).isEqualTo(new MarkdownStringBuilder(target).toString());
     }
 
     @Configuration

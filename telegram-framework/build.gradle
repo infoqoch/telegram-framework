@@ -1,6 +1,14 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'signing'
+}
+
+sourceCompatibility = '8'
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 repositories {
@@ -9,7 +17,7 @@ repositories {
 
 dependencies {
     // telegram bot
-    implementation 'io.github.infoqoch:telegram-bot:0.2.3'
+    implementation 'io.github.infoqoch:telegram-bot:0.2.4'
 
     // di container
     implementation 'org.springframework:spring-context:5.3.23'
@@ -19,38 +27,88 @@ dependencies {
     implementation 'org.reflections:reflections:0.10.2'
 
     // lombok
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testCompileOnly 'org.projectlombok:lombok:1.18.22'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     // 로그
     implementation 'org.slf4j:slf4j-api:2.0.3'
     testImplementation 'ch.qos.logback:logback-classic:1.4.4'
 
     // 테스트
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    testImplementation 'org.mockito:mockito-core:4.5.1'
-    testImplementation 'org.skyscreamer:jsonassert:1.5.0'
-    testImplementation 'org.assertj:assertj-core:3.22.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.skyscreamer:jsonassert:1.5.1'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+}
+
+build{
+
 }
 
 test {
     useJUnitPlatform()
 }
 
-version = '0.4.1'
-
-publishToMavenLocal{
-
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
+    publications{
+
+        mavenJava(MavenPublication){
+
             groupId = 'io.github.infoqoch'
             artifactId = 'telegram-framework'
+            version = '0.4.2'
             from components.java
+
+            pom {
+                name = 'telegram-framework'
+                description = 'easy to handle telegram with annotation based framework. focus on business logic'
+                url = 'https://github.com/infoqoch/telegram-framework'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'infoqoch'
+                        name = 'infoqoch'
+                        email = 'infoqoch@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git:github.com/infoqoch/telegram-framework.git'
+                    developerConnection = 'scm:git:ssh://github.com/infoqoch/telegram-framework.git'
+                    url = 'https://github.com/infoqoch/telegram-framework'
+                }
+            }
         }
     }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = project.properties["ossrhUsername"]
+                password = project.properties["ossrhPassword"]
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }

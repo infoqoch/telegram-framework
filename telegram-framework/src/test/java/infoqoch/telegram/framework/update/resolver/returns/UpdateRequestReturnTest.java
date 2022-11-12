@@ -42,7 +42,7 @@ public class UpdateRequestReturnTest {
 
         // resolve
         UpdateResponse result =  resolver.resolve(target);
-        assertThat(result.getMessage()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(result.getMessage().toString()).isEqualTo(target.toString());
         assertThat(result.getMessage().toString()).isEqualTo(expected);
     }
 }

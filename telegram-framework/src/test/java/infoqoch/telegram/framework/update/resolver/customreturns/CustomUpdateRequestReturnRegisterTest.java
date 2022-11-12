@@ -61,7 +61,7 @@ class CustomUpdateRequestReturnRegisterTest {
         //then
         Assertions.assertThat(resolver).isPresent();
         assertThat(resolver.get()).isInstanceOf(MSBUpdateRequestReturn.class);
-        assertThat(resolver.get().resolve(target).getMessage()).usingRecursiveComparison().isEqualTo(target);
+        assertThat(resolver.get().resolve(target).getMessage().toString()).isEqualTo(target.toString());
     }
 
     @Configuration
