@@ -1,6 +1,6 @@
 package infoqoch.telegram.framework.update.resolver.param;
 
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
@@ -61,7 +61,7 @@ public class UpdateRequestParamTest {
     }
 
     static class Sample{
-        @UpdateRequestMethodMapper("hi")
+        @UpdateRequestMapper("hi")
         void updateRequestMethod(UpdateRequest updateRequest, UpdateDocument updateDocumentUpdateRequestParam){
 
         }

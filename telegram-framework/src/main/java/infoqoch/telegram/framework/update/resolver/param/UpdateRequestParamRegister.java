@@ -19,5 +19,4 @@ public class UpdateRequestParamRegister {
 
         return resolver.get();
     }
-
 }

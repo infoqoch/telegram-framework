@@ -1,8 +1,9 @@
 package infoqoch.mock.repository;
 
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.telegram.framework.update.response.SendType;
-import infoqoch.dictionarybot.send.repository.SendRepository;
+import infoqoch.dictionarybot.log.send.SendLog;
+import infoqoch.dictionarybot.log.send.repository.SendRepository;
+import infoqoch.telegram.framework.update.response.ResponseType;
+import infoqoch.telegram.framework.update.send.Send;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
@@ -10,40 +11,40 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MemorySendRepository implements SendRepository {
-    private final Map<Long, Send> repository = new HashMap<>();
+    private final Map<Long, SendLog> repository = new HashMap<>();
 
     @Override
-    public Send save(Send send) {
+    public SendLog save(SendLog sendLog) {
         final Long no = maxNo();
 
-        setNoWithReflect(send, no);
+        setNoWithReflect(sendLog, no);
 
-        repository.put(no, send);
+        repository.put(no, sendLog);
 
-        return send;
+        return sendLog;
     }
 
     @Override
-    public List<Send> findByStatus(Send.Status status) {
+    public List<SendLog> findByStatus(Send.Status status) {
         return repository.values().stream().filter(s -> s.getStatus()==status).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Send> findByNo(Long no) {
+    public Optional<SendLog> findByNo(Long no) {
         return Optional.empty();
     }
 
     @Override
-    public List<Send> findAll() {
+    public List<SendLog> findAll() {
         return repository.values().stream().toList();
     }
 
 
     @SneakyThrows
-    private void setNoWithReflect(Send send, Long no) {
-        Field noField = send.getClass().getDeclaredField("no");
+    private void setNoWithReflect(SendLog sendLog, Long no) {
+        Field noField = sendLog.getClass().getDeclaredField("no");
         noField.setAccessible(true);
-        noField.set(send, no);
+        noField.set(sendLog, no);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class MemorySendRepository implements SendRepository {
     // TODO
     // not yet implemented
     @Override
-    public List<Send> findByNoGreaterThanAndRequestSendType(Long no, SendType status) {
+    public List<SendLog> findByNoGreaterThanAndResponseType(Long no, ResponseType responseType) {
         new UnsupportedOperationException("not support operation");
         return null;
     }

@@ -5,14 +5,13 @@ import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@Disabled("비지니스로직에 치명적인 부분은 아니므로 현재 생략한다. 프로젝트가 안정화 된 후 완성한다.")
+// TODO 컨트롤러의 메서드 전체를 테스트하지는 않음.
 public class ChatUserControllerTest {
     ChatUserController chatUserController;
     ChatUserRepository chatUserRepository;

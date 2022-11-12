@@ -1,8 +1,8 @@
 package infoqoch.dictionarybot.request;
 
 import infoqoch.mock.data.MockUpdate;
-import infoqoch.telegram.framework.update.request.body.UpdateChat;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
+import infoqoch.telegram.framework.update.request.body.UpdateMessage;
 import infoqoch.telegrambot.bot.entity.Update;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,14 @@ public class UpdateRequestCommandAndValueBodyTest {
     @Test
     void wrapper_to_chat_request() {
         final Update update = MockUpdate.jsonToUpdate(MockUpdate.chatJson("/help"));
-        final UpdateChat chat = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson("/help")).toChat();
+        final UpdateMessage message = MockUpdate.jsonToUpdateRequest(MockUpdate.chatJson("/help")).toChat();
 
-        assertThat(chat.getUpdateId()).isEqualTo(update.getUpdateId());
-        assertThat(chat.getMessageId()).isEqualTo(update.getMessage().getMessageId());
-        assertThat(chat.getDate()).isEqualTo(update.getMessage().getDate());
-        assertThat(chat.getText()).isEqualTo(update.getMessage().getText());
-        assertThat(chat.getFrom()).usingRecursiveComparison().isEqualTo(update.getMessage().getFrom());
-        assertThat(chat.getChat()).usingRecursiveComparison().isEqualTo(update.getMessage().getChat());
+        assertThat(message.getUpdateId()).isEqualTo(update.getUpdateId());
+        assertThat(message.getMessageId()).isEqualTo(update.getMessage().getMessageId());
+        assertThat(message.getDate()).isEqualTo(update.getMessage().getDate());
+        assertThat(message.getText()).isEqualTo(update.getMessage().getText());
+        assertThat(message.getFrom()).usingRecursiveComparison().isEqualTo(update.getMessage().getFrom());
+        assertThat(message.getChat()).usingRecursiveComparison().isEqualTo(update.getMessage().getChat());
     }
 
     @DisplayName("chat로 전달한 telegram의 raw json을 Update와 UpdateChat으로 정상 변환됨을 확인한다.")

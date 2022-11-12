@@ -30,6 +30,14 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
         return false;
     }
 
+    @Override
+    public UpdateResponse resolve(Object target) {
+        MarkdownStringBuilder msb = toMarkdown((List<Dictionary>) target);
+        if(msb.size()==0) return UpdateResponse.message(new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
+
+        return UpdateResponse.message(msb);
+    }
+
     private List<Dictionary> type = new ArrayList<>();
 
     private Class<?> type(){
@@ -40,14 +48,6 @@ public class DictionariesUpdateRequestReturn implements UpdateRequestReturn {
         } catch (NoSuchFieldException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    @Override
-    public UpdateResponse resolve(Object target) {
-        MarkdownStringBuilder msb = toMarkdown((List<Dictionary>) target);
-        if(msb.size()==0) return UpdateResponse.message(new MarkdownStringBuilder("검색결과를 찾을 수 없습니다."));
-
-        return UpdateResponse.message(msb);
     }
 
     private MarkdownStringBuilder toMarkdown(List<Dictionary> dictionaries) {

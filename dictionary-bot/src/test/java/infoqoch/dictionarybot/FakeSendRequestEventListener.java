@@ -1,7 +1,8 @@
 package infoqoch.dictionarybot;
 
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.repository.SendRepository;
+import infoqoch.dictionarybot.log.send.SendLog;
+import infoqoch.dictionarybot.log.send.repository.SendRepository;
+import infoqoch.telegram.framework.update.send.Send;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -23,15 +24,15 @@ public class FakeSendRequestEventListener {
 	private final SendRepository sendRepository;
 
     private boolean called = false;
-    private Send latestSent;
-    private List<Send> sentList = new ArrayList<>();
+    private SendLog latestSent;
+    private List<SendLog> sentList = new ArrayList<>();
 
     @EventListener(Send.class)
     public void handle(Send send) {
         System.out.println("== FakeSendRequestEventListener CALLED!! === ");
         called = true;
-        latestSent = sendRepository.save(send);
-        sentList.add(send);
+        latestSent = sendRepository.save(SendLog.of(send));
+        sentList.add(SendLog.of(send));
     }
 
     public void clear() {

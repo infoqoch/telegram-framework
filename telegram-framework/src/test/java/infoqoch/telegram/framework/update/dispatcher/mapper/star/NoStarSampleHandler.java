@@ -1,14 +1,14 @@
 package infoqoch.telegram.framework.update.dispatcher.mapper.star;
 
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 
 public class NoStarSampleHandler {
-    @UpdateRequestMethodMapper({"help!"})
+    @UpdateRequestMapper({"help!"})
     public String help(){
         return "I am going to help you!";
     }
 
-    @UpdateRequestMethodMapper("good")
+    @UpdateRequestMapper("good")
     public String good(){
         return "good!!";
     }

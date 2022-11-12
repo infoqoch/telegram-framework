@@ -1,10 +1,7 @@
 package infoqoch.dictionarybot.model.user;
 
 import infoqoch.dictionarybot.model.dictionary.Dictionary;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,6 +26,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@ToString(exclude = "dictionaries")
 public class ChatUser {
     @Id
     @GeneratedValue
@@ -78,5 +76,4 @@ public class ChatUser {
     public void changeRole(Role role){
         this.role = role;
     }
-
 }

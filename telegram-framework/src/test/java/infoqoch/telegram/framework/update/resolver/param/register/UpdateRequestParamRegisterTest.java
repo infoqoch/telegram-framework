@@ -2,7 +2,7 @@ package infoqoch.telegram.framework.update.resolver.param.register;
 
 import infoqoch.telegram.framework.update.EnableTelegramFramework;
 import infoqoch.telegram.framework.update.UpdateConfig;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.mock.MockUpdate;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
@@ -58,12 +58,12 @@ class UpdateRequestParamRegisterTest {
     @Configuration
     @EnableTelegramFramework
     static class Config{
-        @UpdateRequestMethodMapper("hi")
+        @UpdateRequestMapper("hi")
         public String updateRequestMethod(UpdateRequest updateRequest, UpdateDocument updateDocument){
             return "hi!";
         }
 
-        @UpdateRequestMethodMapper("*")
+        @UpdateRequestMapper("*")
         public  String any(){
             return "any";
         }

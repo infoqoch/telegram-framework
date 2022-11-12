@@ -5,20 +5,18 @@ import infoqoch.dictionarybot.model.dictionary.DictionaryContentMarkdownPrinter;
 import infoqoch.dictionarybot.model.dictionary.repository.LookupRepository;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
-import infoqoch.dictionarybot.send.Send;
-import infoqoch.dictionarybot.send.SendRequest;
-import infoqoch.dictionarybot.system.event.Events;
+import infoqoch.telegram.framework.update.event.Events;
+import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@Async
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,8 +24,10 @@ public class HourlyDictionaryRunner {
     private final ChatUserRepository chatUserRepository;
     private final LookupRepository repository;
 
-    @Scheduled(cron = "0 0 7-22 * * *")
+    @Scheduled(cron = "0 0/30 7-22 * * *")
+    @Transactional
     public void hourlyDictionaryRun() {
+        log.info("HourlyDictionaryRunner#hourlyDictionaryRun");
         final Optional<Dictionary> publicDictionary = findPublicRandomDictionary();
 
         if (existsDictionary(publicDictionary)) return;
@@ -64,8 +64,7 @@ public class HourlyDictionaryRunner {
     }
 
     private void sendingDictionary(ChatUser chatUser, Dictionary dictionary) {
-        Events.raise(Send.of(SendRequest.sendMessage(
-                chatUser.getChatId(), msgHeader().append(new DictionaryContentMarkdownPrinter(dictionary).toMarkdown()))));
+        Events.raise(Send.sendMessage(chatUser.getChatId(), msgHeader().append(new DictionaryContentMarkdownPrinter(dictionary).toMarkdown())));
     }
 
     private MarkdownStringBuilder msgHeader() {
@@ -85,9 +84,6 @@ public class HourlyDictionaryRunner {
     }
 
     private void sendingNoResult(ChatUser chatUser) {
-        Events.raise(Send.of(SendRequest.sendMessage(
-                chatUser.getChatId()
-                , msgHeader().plain("아직 등록한 사전이 없습니다!")
-        )));
+        Events.raise(Send.sendMessage(chatUser.getChatId(), msgHeader().plain("아직 등록한 사전이 없습니다!")));
     }
 }

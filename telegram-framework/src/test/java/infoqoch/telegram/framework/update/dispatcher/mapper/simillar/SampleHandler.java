@@ -1,19 +1,19 @@
 package infoqoch.telegram.framework.update.dispatcher.mapper.simillar;
 
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 
 public class SampleHandler {
-    @UpdateRequestMethodMapper("*")
+    @UpdateRequestMapper("*")
     public String any(){
         return "any!";
     }
 
-    @UpdateRequestMethodMapper("help")
+    @UpdateRequestMapper("help")
     public String help(){
         return "help!";
     }
 
-    @UpdateRequestMethodMapper("help me")
+    @UpdateRequestMapper("help me")
     public String helpMe(){
         return "help ME!!";
     }

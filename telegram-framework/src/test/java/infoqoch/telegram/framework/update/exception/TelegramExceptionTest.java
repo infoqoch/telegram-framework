@@ -1,6 +1,6 @@
 package infoqoch.telegram.framework.update.exception;
 
-import infoqoch.telegram.framework.update.response.SendType;
+import infoqoch.telegram.framework.update.response.ResponseType;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ class TelegramExceptionTest {
             op = TelegramException.checkIfCausedByTelegramException(e);
         }
         assertThat(op).isPresent();
-        assertThat(op.get().resolveErrorType()).isEqualTo(SendType.CLIENT_ERROR);
+        assertThat(op.get().resolveErrorType()).isEqualTo(ResponseType.CLIENT_ERROR);
     }
 
     @Test
@@ -32,7 +32,7 @@ class TelegramExceptionTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().resolveErrorType()).isEqualTo(SendType.CLIENT_ERROR);
+        assertThat(result.get().resolveErrorType()).isEqualTo(ResponseType.CLIENT_ERROR);
         assertThat(result.get().response().get().toString()).isEqualTo(new MarkdownStringBuilder("사용자 전달 메시지").toString());
     }
 
@@ -46,7 +46,7 @@ class TelegramExceptionTest {
 
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().resolveErrorType()).isEqualTo(SendType.SERVER_ERROR);
+        assertThat(result.get().resolveErrorType()).isEqualTo(ResponseType.SERVER_ERROR);
         assertThat(result.get().response().get().toString()).isEqualTo(new MarkdownStringBuilder("사용자 전달 메시지").toString());
     }
 

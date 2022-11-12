@@ -3,7 +3,7 @@ package infoqoch.dictionarybot.controller;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
 import infoqoch.dictionarybot.system.properties.DictionaryProperties;
-import infoqoch.telegram.framework.update.UpdateRequestMethodMapper;
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
 import infoqoch.telegram.framework.update.exception.TelegramClientException;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
@@ -22,9 +22,9 @@ public class ChatUserController {
     private final String HOURLY_ALARM = "hourly";
     private final String PROMOTION = "promotion";
 
-    @UpdateRequestMethodMapper(LOOKUP_ALL_USERS)
+    @UpdateRequestMapper(LOOKUP_ALL_USERS)
     public MarkdownStringBuilder lookupAllUsers(ChatUser chatUser, UpdateRequestCommandAndValue message) {
-        log.info("UpdateRequestMethodMapper : LOOKUP_ALL_USERS");
+        log.info("UpdateRequestMapper : LOOKUP_ALL_USERS");
         chatUser.setLookupAllUsers(lookupAllUsers(message));
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
@@ -32,9 +32,9 @@ public class ChatUserController {
                 .plain(message.getValue());
     }
 
-    @UpdateRequestMethodMapper(SHARE_MINE)
+    @UpdateRequestMapper(SHARE_MINE)
     public MarkdownStringBuilder shareMine(ChatUser chatUser, UpdateRequestCommandAndValue message) {
-        log.info("UpdateRequestMethodMapper : SHARE_MINE");
+        log.info("UpdateRequestMapper : SHARE_MINE");
         chatUser.setShareMine(shareMine(message));
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
@@ -42,18 +42,18 @@ public class ChatUserController {
                 .plain(message.getValue());
     }
 
-    @UpdateRequestMethodMapper(HOURLY_ALARM)
+    @UpdateRequestMapper(HOURLY_ALARM)
     public MarkdownStringBuilder hourlyAlarm(ChatUser chatUser, UpdateRequestCommandAndValue message) {
-        log.info("UpdateRequestMethodMapper : HOURLY_ALARM");
+        log.info("UpdateRequestMapper : HOURLY_ALARM");
         chatUser.setHourlyAlarm(hourlyAlarm(message.getValue()));
         return new MarkdownStringBuilder()
                 .bold("정상적으로 변경되었습니다!").lineSeparator()
                 .plain("매시 알림 여부 : ").plain(message.getValue());
     }
 
-    @UpdateRequestMethodMapper(PROMOTION)
+    @UpdateRequestMapper(PROMOTION)
     public MarkdownStringBuilder promotionRole(ChatUser chatUser, UpdateRequestCommandAndValue message) {
-        log.info("UpdateRequestMethodMapper : PROMOTION_ROLE");
+        log.info("UpdateRequestMapper : PROMOTION_ROLE");
         if(matchesPromotionCode(message)){
             chatUser.changeRole(ChatUser.Role.ADMIN);
             return new MarkdownStringBuilder()
@@ -67,10 +67,10 @@ public class ChatUserController {
         return dictionaryProperties.user().promotionToAdmin().equals(message.getValue().trim().replaceAll("_", " "));
     }
 
-    @UpdateRequestMethodMapper({"status", "상태"})
+    @UpdateRequestMapper({"status", "상태"})
     public MarkdownStringBuilder myStatus(ChatUser chatUser) {
         System.out.println("chatUser = " + chatUser);
-        log.info("UpdateRequestMethodMapper : SHARE_MINE");
+        log.info("UpdateRequestMapper : SHARE_MINE");
         return new MarkdownStringBuilder()
 
                 .bold("==나의 상태").italic(chatUser.getRole()==ChatUser.Role.ADMIN?"[ADMIN]":" ").bold("==").lineSeparator()
