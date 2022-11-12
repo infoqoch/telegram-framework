@@ -59,7 +59,7 @@ public class MemorySendRepository implements SendRepository {
     // TODO
     // not yet implemented
     @Override
-    public List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType status) {
+    public List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType sendType) {
         new UnsupportedOperationException("not support operation");
         return null;
     }

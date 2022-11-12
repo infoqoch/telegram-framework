@@ -13,6 +13,7 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.LAZY;
 
 
+@ToString(exclude = "updateLog")
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -48,6 +49,7 @@ public class SendLog {
         final SendLogBuilder builder = SendLog.builder()
                 .updateLog(sendToUpdateLog(send))
                 .status(send.getStatus())
+                .sendType(send.getSendType())
                 .chatId(send.getChatId());
 
         if(send.getResend().isPresent()){

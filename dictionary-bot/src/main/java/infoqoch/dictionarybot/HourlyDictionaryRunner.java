@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,9 @@ public class HourlyDictionaryRunner {
     private final LookupRepository repository;
 
     @Scheduled(cron = "0/10 * 7-22 * * *")
+    @Transactional
     public void hourlyDictionaryRun() {
+        log.info("HourlyDictionaryRunner#hourlyDictionaryRun");
         final Optional<Dictionary> publicDictionary = findPublicRandomDictionary();
 
         if (existsDictionary(publicDictionary)) return;

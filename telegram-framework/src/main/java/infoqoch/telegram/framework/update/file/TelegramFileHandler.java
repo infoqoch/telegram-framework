@@ -1,8 +1,8 @@
 package infoqoch.telegram.framework.update.file;
 
+import infoqoch.telegram.framework.update.TelegramProperties;
 import infoqoch.telegram.framework.update.exception.TelegramServerException;
 import infoqoch.telegram.framework.update.request.body.UpdateDocument;
-import infoqoch.telegram.framework.update.TelegramProperties;
 import infoqoch.telegrambot.bot.TelegramBot;
 import infoqoch.telegrambot.bot.TelegramFile;
 import infoqoch.telegrambot.bot.entity.FilePath;
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Slf4j
 public class TelegramFileHandler {
@@ -39,7 +39,7 @@ public class TelegramFileHandler {
     }
 
     private String createFileName(UpdateDocument document) {
-        return document.getChat().getId() + "_" + LocalDateTime.now() + "_" + document.getDocument().getFileName();
+        return document.getChat().getId() + "_" + LocalDate.now() + "_" + System.currentTimeMillis() + "_" + document.getDocument().getFileName();
     }
 
     private File directory() {

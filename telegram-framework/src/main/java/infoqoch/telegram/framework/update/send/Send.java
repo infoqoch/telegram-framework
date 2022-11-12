@@ -9,6 +9,7 @@ import infoqoch.telegrambot.bot.request.SendDocumentRequest;
 import infoqoch.telegrambot.bot.request.SendMessageRequest;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import static infoqoch.telegram.framework.update.send.Send.Status.*;
 
 
+@ToString
 @Getter
 @Slf4j
 public class Send {

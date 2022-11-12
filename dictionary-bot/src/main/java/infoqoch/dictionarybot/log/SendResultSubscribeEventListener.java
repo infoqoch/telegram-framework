@@ -21,7 +21,7 @@ public class SendResultSubscribeEventListener {
     @EventListener(Send.class)
     public void handle(Send send) {
         while(!send.isDone());
-
+        System.out.println("is working!! now!");
         SendLog sendLog = SendLog.of(send);
         if(sendLog.getUpdateLog()!=null){
             updateLogRepository.save(sendLog.getUpdateLog());

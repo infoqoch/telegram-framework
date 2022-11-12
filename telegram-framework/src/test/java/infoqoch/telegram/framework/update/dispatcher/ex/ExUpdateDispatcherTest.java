@@ -72,7 +72,7 @@ class ExUpdateDispatcherTest {
 
         // then
         assertThat(updateResponse.getSendType()).isEqualTo(SendType.SERVER_ERROR);
-        assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (2)").toString());
+        assertThat(updateResponse.getMessage().toString()).isEqualTo(new MarkdownStringBuilder("서버에 문제가 발생하였습니다. 죄송합니다. (1)").toString());
     }
 
     @EnableTelegramFramework

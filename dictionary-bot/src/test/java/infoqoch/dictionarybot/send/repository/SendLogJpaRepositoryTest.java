@@ -63,6 +63,7 @@ class SendLogJpaRepositoryTest {
         for (SendType type : types) {
             SendLog sendLog = SendLog.of(Send.send(123l, type, new MarkdownStringBuilder("hi"), null));
             em.persist(sendLog);
+            System.out.println("sendLog = " + sendLog);
         }
         em.flush();
         em.clear();

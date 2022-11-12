@@ -1,12 +1,13 @@
 package infoqoch.telegram.framework.update;
 
+import infoqoch.telegram.framework.update.exception.TelegramException;
+import infoqoch.telegram.framework.update.exception.TelegramServerException;
 import infoqoch.telegram.framework.update.request.UpdateRequest;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParam;
 import infoqoch.telegram.framework.update.resolver.param.UpdateRequestParamRegister;
 import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturn;
 import infoqoch.telegram.framework.update.resolver.returns.UpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.response.UpdateResponse;
-import lombok.SneakyThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -46,12 +47,13 @@ class UpdateRequestMethodResolver {
         return args;
     }
 
-    @SneakyThrows
     private UpdateResponse resolveReturn(Object[] args){
         try {
             return returnResolver.resolve(method.invoke(bean, args));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw e.getCause();
+            if(e.getCause()==null) throw new TelegramServerException(e);
+            if(e.getCause() instanceof TelegramException) throw (TelegramException) e.getCause();
+            throw new TelegramServerException(e.getCause());
         }
     }
 

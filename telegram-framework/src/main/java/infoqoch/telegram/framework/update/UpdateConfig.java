@@ -1,5 +1,6 @@
 package infoqoch.telegram.framework.update;
 
+import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegram.framework.update.file.TelegramFileHandler;
 import infoqoch.telegram.framework.update.request.UpdateRequestCommand;
 import infoqoch.telegram.framework.update.resolver.bean.SpringBeanContext;
@@ -8,7 +9,6 @@ import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestRet
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.*;
 import infoqoch.telegram.framework.update.send.SendRequestEventListener;
-import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +41,7 @@ public class UpdateConfig {
 
     @Bean
     public CustomUpdateRequestReturnRegister customUpdateRequestReturnRegister(){
+        System.out.println("hihi!");
         List<UpdateRequestReturn> result = new ArrayList<>();
 
         final Set<Class<? extends CustomUpdateRequestReturnRegister>> subTypesOf = new Reflections(
@@ -141,7 +142,6 @@ public class UpdateConfig {
 
     @Bean
     public UpdateRunner updateRunner(){
-        System.out.println("UpdateConfig.updateRunner");
         return new UpdateRunner(telegramBot(), updateDispatcher());
     }
 

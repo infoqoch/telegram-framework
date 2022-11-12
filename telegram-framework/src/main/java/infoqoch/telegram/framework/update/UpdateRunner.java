@@ -25,7 +25,6 @@ public class UpdateRunner {
         this.updateDispatcher = updateDispatcher;
     }
 
-    // @Async
     @Scheduled(fixedDelay = 100)
     public void run() {
         final Response<List<Update>> telegramUpdateResponse = updater.get(LAST_UPDATE_ID);

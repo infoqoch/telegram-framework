@@ -11,7 +11,6 @@ import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 
@@ -19,7 +18,6 @@ import static infoqoch.dictionarybot.model.dictionary.DictionarySource.Type.EXCE
 
 @Slf4j
 @Component
-@Transactional
 @RequiredArgsConstructor
 public class DocumentController {
     private final DictionaryInsertBatchService dictionaryInsertBatchService;

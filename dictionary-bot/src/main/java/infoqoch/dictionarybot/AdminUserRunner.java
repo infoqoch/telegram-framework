@@ -5,17 +5,19 @@ import infoqoch.dictionarybot.log.send.service.SendRunnerService;
 import infoqoch.dictionarybot.log.update.UpdateLog;
 import infoqoch.dictionarybot.model.user.ChatUser;
 import infoqoch.dictionarybot.model.user.ChatUserRepository;
+import infoqoch.telegram.framework.update.event.Events;
 import infoqoch.telegram.framework.update.response.SendType;
 import infoqoch.telegram.framework.update.send.Send;
 import infoqoch.telegrambot.util.MarkdownStringBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
-// @Component
+@Component
 public class AdminUserRunner {
     private final ChatUserRepository chatUserRepository;
     private final SendRunnerService sendRunnerService;
@@ -27,7 +29,7 @@ public class AdminUserRunner {
         setupLastSendNo();
     }
 
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(cron = "0/10 * 7-22 * * *")
     @Transactional
     public void run() {
         final List<SendLog> serverErrorSent = sendRunnerService.findByNoGreaterThanAndSendTypeForScheduler(LAST_SEND_NO, SendType.SERVER_ERROR);
@@ -39,7 +41,7 @@ public class AdminUserRunner {
 
         final List<ChatUser> admins = chatUserRepository.findByRole(ChatUser.Role.ADMIN);
         for (ChatUser admin : admins) {
-            Send.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null);
+            Events.raise(Send.send(admin.getChatId(), SendType.ADMIN_ALERT, message, null));
         }
     }
 
@@ -82,7 +84,8 @@ public class AdminUserRunner {
         if(updateLog==null) return null;
 
         return new MarkdownStringBuilder()
-                .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
+                // .italic("caused by update id : ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator() // TODO 같은 값이 들어갈 경우 _italic__italic_ 형태가 되어 __ 가 정상적으로 인식되지 아니함.
+                .italic("caused by update id : ").plain(" ").italic(String.valueOf(updateLog.getUpdateId())).lineSeparator()
                 .plain("  -> command : ").plain(updateLog.getUpdateCommand().toString()).plain(" : ").plain(updateLog.getUpdateValue()==null?"":updateLog.getUpdateValue()).lineSeparator();
     }
 

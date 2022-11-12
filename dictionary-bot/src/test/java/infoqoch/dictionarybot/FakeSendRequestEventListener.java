@@ -2,6 +2,7 @@ package infoqoch.dictionarybot;
 
 import infoqoch.dictionarybot.log.send.SendLog;
 import infoqoch.dictionarybot.log.send.repository.SendRepository;
+import infoqoch.telegram.framework.update.send.Send;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -26,12 +27,12 @@ public class FakeSendRequestEventListener {
     private SendLog latestSent;
     private List<SendLog> sentList = new ArrayList<>();
 
-    @EventListener(SendLog.class)
-    public void handle(SendLog sendLog) {
+    @EventListener(Send.class)
+    public void handle(Send send) {
         System.out.println("== FakeSendRequestEventListener CALLED!! === ");
         called = true;
-        latestSent = sendRepository.save(sendLog);
-        sentList.add(sendLog);
+        latestSent = sendRepository.save(SendLog.of(send));
+        sentList.add(SendLog.of(send));
     }
 
     public void clear() {

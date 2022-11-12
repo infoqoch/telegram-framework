@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.Executors;
 
@@ -19,6 +20,7 @@ public class SendRequestEventListener {
 
     @Async
     @SneakyThrows
+    @Transactional
     @EventListener(Send.class)
     public void handle(Send send) {
         Executors.newCachedThreadPool().submit(() -> {

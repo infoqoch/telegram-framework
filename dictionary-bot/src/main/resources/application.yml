@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: default, db-maria, os-window, bot-dev, scheduler
+    active: default, db-mem, os-window, bot-dev, scheduler
   datasource:
     driver-class-name: # 입력해야 합니다.
     username: # 입력해야 합니다.

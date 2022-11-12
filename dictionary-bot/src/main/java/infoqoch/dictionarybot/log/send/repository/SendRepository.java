@@ -14,7 +14,7 @@ public interface SendRepository {
     @Query(" select max(s.no) from SendLog s")
     Long maxNo();
 
-    List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType status);
+    List<SendLog> findByNoGreaterThanAndSendType(Long no, SendType sendType);
 
     List<SendLog> findByStatus(Send.Status status);
 
