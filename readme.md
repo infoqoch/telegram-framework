@@ -195,5 +195,5 @@ public class SomeListener{
   - 오픈소스로 배포 (sonatype.org)
 
 # 버전 로그 
-- 0.4.1 오픈 소스 배포
-- 0.4.2 java 8 버전 대응
+- 0.4.2 오픈 소스 배포
+- 0.4.3 java 8 버전 대응
