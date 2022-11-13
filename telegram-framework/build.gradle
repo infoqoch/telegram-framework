@@ -63,7 +63,7 @@ publishing {
 
             groupId = 'io.github.infoqoch'
             artifactId = 'telegram-framework'
-            version = '0.4.2'
+            version = '0.4.3'
             from components.java
 
             pom {

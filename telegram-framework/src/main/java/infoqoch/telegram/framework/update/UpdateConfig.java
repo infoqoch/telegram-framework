@@ -147,7 +147,7 @@ public class UpdateConfig {
     }
 
     @Bean
-    public SendUpdateResponseEventListener sendRequestEventListener(){
+    public SendUpdateResponseEventListener sendUpdateResponseEventListener(){
         if(telegramProperties().sendMessageAfterUpdateResolved()){
             return new SendUpdateResponseEventListener(telegramBot().send());
         }
@@ -159,7 +159,7 @@ public class UpdateConfig {
     }
 
     private static String extractBasePackageName(Object frameworkBase) {
-        return frameworkBase.getClass().getPackageName();
+        return frameworkBase.getClass().getPackage().getName();
     }
 
     private Set<URL> generateTargetUrl(String basePackageName) {
