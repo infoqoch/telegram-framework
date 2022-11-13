@@ -15,6 +15,7 @@ DictionaryQueryRepositoryWithChatUserTest.java
 
 # Project exclude paths
 /dictionary-bot/.gradle/
+/dictionary-bot/gradle/
 /dictionary-bot/build/
 /dictionary-bot/out/
 /dictionary-bot/out/production/classes/

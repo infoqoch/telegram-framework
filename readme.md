@@ -1,126 +1,199 @@
-# Dictionary bot (Telegram) 
+# telegram-framework
+- 어너테이션 기반의 확장 가능한 텔레그램 채팅 봇 프레임워크
+- main 파티션과 application 파티션의 분리를 통하여 사용성을 높이고 비니지스 로직에 집중할 수 있도록 지원
 
-## 개요 
-## 어플리케이션
-- 텔래그램 봇을 활용한 채팅 봇
-- 영어 공유 사전. 사전을 등록하고 사전을 검색한다.
-- 매시간 랜덤 사전, 어드민, 다른 회원과의 사전 공유 기능 외 편의 기능 마련
+# 사용
+- telegram-bot과 telegram-framework을 의존성에 추가
+- spring-context를 기반으로 구현되었음. spring-boot을 부모로 하여 코드 작성을 권장
 
-## 아키텍쳐
-### 확장성 
-- front controller pattern 을 활용하여, 채팅 명령어를 처리하는 핸들러에 대한 확장에 열려있음.
-- adapter pattern 을 활용하여, 핸들러의 파라미터 타입과 리턴 타입에 대한 확장에 열려있음.
+```groovy
+dependencies {
+    implementation 'io.github.infoqoch:telegram-framework:0.4.3'
+    implementation 'io.github.infoqoch:telegram-bot:0.2.4'
+}
+```
 
-### 의존성 분리
-- 텔래그램과 통신하는 API는 외부 라이브러리로 분리 및 개발하였음. 어플리케이션과의 의존성을 분리함.
-- 텔래그램의 채팅을 수신하는 update와 채팅에 대한 응답인 send, 그 외 스케쥴러 등 기능을 패키지 단위로 분리. Event와 DB를 통해 결합하여 최대한 결합도를 낮춤.
+# 기본적인 사용
+- simple-in-spring 프로젝트 참고 (spring-boot 2.7.5 기준)
 
-### TDD와 OOP를 지향
-- 테스트 주도 개발
-
-## 기술
-- Java, Spring Boot 기반 개발
-- oracle cloud를 어플리케이션로 사용 중이며, ubuntu에 배포
-- spring-data-jpa 및 queryDSL을 ORM으로 사용
-
-## 텔래그램 채팅의 분석에 대한 확장성을 위한 디자인 패턴 활용
-### front controller pattern 과 UpdateDispatcher
-- 웹 어플리케이션의 경우 기본적으로 url을 사용하여 요청에 대한 명령을 분류한다.
-- 텔래그램의 경우 다음과 같은 형태로 명령과 값을 분류하며, 해당 명령에 대한 핸들러를 프론트 컨트롤러 패턴을 통해 확장 가능하도록 구현하였다.
-
-- `w apple` 의 채팅을 어플리케이션가 분석할 경우... (참고로) 단어(word)를 기준으로 apple을 검색함을 의미한다.
+## 1. @SpringBootApplication 
+- @SpringBootApplication 위치에 아래의 어너테이션을 삽입합니다.
+- @EnableTelegramFramework
+- @EnableScheduling
+- @EnableAsync
 
 ```java
-public enum UpdateRequestCommand {
-    // LOOKUP_WORD를 통해 컨트롤러가 이해할 수 있는 명령을 enum으로 구현한다.
-    // 해당 enum의 values를 통해 채팅의 첫 단어를 기준으로 enum이 무엇인지를 분류한다.
-    LOOKUP_WORD({"w", "단어", "word"}); 
-}
+import infoqoch.telegram.framework.update.EnableTelegramFramework;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-public class LookupController {
-    // enum을 값으로 하는 어너테이션 @UpdateRequestMethodMapper 을 사용하여, 해당 명령에 대한 핸들러를 사용한다.
-    @UpdateRequestMethodMapper(UpdateRequestCommand.LOOKUP_WORD)
-    public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage) {
-        // 로직
+@EnableTelegramFramework
+@EnableScheduling
+@EnableAsync
+
+@SpringBootApplication
+public class SimpleInSpringApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SimpleInSpringApplication.class, args);
+    }
+
+}
+```
+
+## 2. telegram-framework.properties
+- telegram-framework.properties 를 다음의 양식으로 작성합니다.
+
+```properties
+telegram.token=
+telegram.file-upload-path=
+telegram.send-message-after-update-resolved = true
+```
+
+## 3. controller
+- controller를 작성합니다.
+
+```java
+import infoqoch.telegram.framework.update.UpdateRequestMapper;
+import infoqoch.telegram.framework.update.request.UpdateRequestCommandAndValue;
+import infoqoch.telegrambot.util.MarkdownStringBuilder;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BaseController {
+    // * 은 반드시 구현해야 한다. 어떤 명령어에도 해당하지 않는 채팅메시지에 대응한다.
+    @UpdateRequestMapper({"*", "help"})
+    public MarkdownStringBuilder help(){
+        return new MarkdownStringBuilder()
+                .plain("안녕하세요! 현재 제공하는 기능은 다음과 같습니다.").lineSeparator()
+                .command("help", null).plain(" -> 도움말").lineSeparator()
+                .command("echo", "echo").plain(" -> 입력한 값을 메아리로 돌려준다").lineSeparator()
+                .plain("명령을 할 때 슬러시('/')는 생략 가능하며 언더바('_')는 띄어쓰기(' ')로 대체합니다.");
+    }
+
+    @UpdateRequestMapper({"echo", "에코", "애코", "메아리", "야호"})
+    public MarkdownStringBuilder echo(UpdateRequestCommandAndValue commandAndValue){
+        return new MarkdownStringBuilder().italic(commandAndValue.getValue()+"~~~");
     }
 }
 ```
 
-- `UpdateRequestCommand`의 enum과 values를 정의하고, 이에 맞춰 핸들러인 `@UpdateRequestMethodMapper(UpdateRequestCommand command)` 로 어너테이션을 사용한다. 스프링의 `@RequestMapping` 과 유사한 사용성을 제공한다.
+# 구체적인 사용
+- 프로젝트 sample-in-spring 을 참고하여 주십시오.
 
-### adapter pattern과 UpdateRequestMethodResolver
-- 각 핸들러마다 필요로 한 데이터는 다르다. `w apple`로 전달했다면, 어플리케이션은 단순하게 해당 텍스트만을 필요로 할 수 있다. 하지만 경우에 따라 클라이언트가 전달한 사진이나 도큐먼트 파일이 필요할 수 있고, 클라이언트에 의존하는 로직을 구현하는 경우 클라이언트의 정보를 필요로 할 수 있다. 
-- 리턴 값 또한 다 다르다. 응답값을 단순한 문자열로 전달할 수 있지만 사진이나 도큐먼트를 전달할 수 있다. 
-- 이러한 파라미터 타입과 리턴 타입에 유연하게 대응하기 위하여 아답터 패턴을 적용하였고, 핸들러를 구현할 때 필요로 한 데이터 타입으로 정의할 수 있다.
+## UpdateDispatcher와 채팅 메시지 분석기
+- telegram-framework의 가장 핵심적인 기능으로 frontend controller pattern 을 기반으로 작성되었습니다.
+- UpdateDispatcher는 명령어가 명시된 @UpdateRequestMapper를 기반으로 동작합니다. 위의 예제 중 @UpdateRequestMapper("echo") 는 "/echo_"로 시작하는 클라이언트의 메시지를 분석하기 위한 핸들러입니다.
+- @UpdateRequestMapper로 선언된 핸들러의 시그니처는 상황에 따라 적절한 파라미터 타입과 리턴 타입을 가질 수 있습니다. UpdateRequestParam와 UpdateRequestReturn를 구현한 타입이 그것이며, 이는 adapater pattern을 통해 구현되었습니다.
 
-- `w apple`의 값이 전달되었다고 가정하자.
+## UpdateDispatcher의 관심사
+- UpdateDispacher는 클라이언트의 채팅 메시지를 분석하는 것을 관심사로 가집니다. 만약 채팅에 대한 단순한 분석기로 사용할 경우 `@EnableTelegramFramework`를 `@Configuration`에 선언하여 사용하여도 무관합니다. 그리고 UpdateDispacher 빈을 주입하여 사용하십시오. 리턴 타입은 더는 특별한 의미를 가지지 않으므로 void로 선언합니다.  
+- 구체적인 사용은 방식은 `infoqoch.telegram.framework.update.dispatcher` 패키지의 테스트 코드를 참고 바랍니다.
+
+## UpdateRunner와 자동 응답을 위한 프레임워크
+- UpdateDispatcher가 클라이언트의 응답 메시지를 분석하기 위하여 사용한다면, UpdateRunner는 UpdateDispatcher 가 도출해낸 결과값을 클라이언트에 응답하기 위하여 존재합니다.
+- 스프링 스케줄러를 활용하여 텔레그렘 api로 부터 채팅 메시지를 실시간으로 polling 합니다. 값이 있으면 UpdateDispatcher 가 값을 분석하고 서버의 응답값을 생산합니다. 생상된 값을 SendUpdateResponseEventListener에 전달하여 클라이언트에 응답합니다. 
+- UpdateRunner 는 스프링의 스케줄러(Scheduled)와 이벤트퍼블리셔(ApplicationEventPublisher)를 기반으로 동작합니다. 이를 사용하기 위해서 @Configuration 에 `@EnableScheduling` 을 선언해야 합니다. 프로퍼티의 `telegram-framework.properties` 를 다음과 같이 설정합니다. `telegram.send-message-after-update-resolved = true`
+
+## UpdateRequestParam와 UpdateRequestReturn
+- @UpdateRequestMapper의 핸들러는 UpdateRequestParam와 UpdateRequestReturn의 구현체를 시그니쳐로 할 수 있습니다.
+- 현재 구현된 파라미터 타입과 리턴 타입은 다음과 같습니다.
+- 파라미터 타입
+  - UpdateMessage : 클라이언트의 단순 메시지
+  - UpdateDocument : 클라이언트의 파일 타입 메시지 (엑셀, 텍스트 등)
+  - UpdateRequestCommandAndValue : UpdateDispacher의 분석결과로 도출된 명령어(command)와 값(value)
+  - UpdateRequest : 텔레그렘 서버에서 받은 데이터 전체 값. 어텝터 패턴의 기준이 되는 데이터 타입 (서블릿의 HttpServletRequest 에 대응)
+- 리턴 타입 (특히 UpdateRunner를 사용할 경우)
+  - void : 생성된 응답 메시지가 없음
+  - String : 단순 문자
+  - MarkdownStringBuilder : 마크다운
+  - UpdateResponse : 텔레그렘 서버에 응답을 위한 기본 타입. 어텝터 패턴의 기준이 되는 데이터 타입 (서블릿의 HttpServletResponse 에 대응)
+
+### UpdateRequestParam와 UpdateRequestReturn의 확장
+- CustomUpdateRequestParamRegister, CustomUpdateRequestReturnRegister 를 구현하여 파라미터와 리턴 타입을 확장 가능합니다. 
+- 구체적인 내용은 sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.config` 패키지를 참고하여 주시기 바랍니다.
+
+## SendUpdateResponseEventListener 의 구체적인 활용과 비동기 처리의 필요성
+- SendUpdateResponseEventListener 는 Send 타입으로 동작합니다. 
+- Send 타입은 텔레그렘과의 통신이 완료되었는지를 확인하기 위한 메서드 isDone이 있으며 이는 CompletableFuture 기반 아래에 작성되었습니다.
+- 만약 Send 타입의 응답값을 별도의 이벤트 리스너를 생성하여 받고 싶다면 **반드시 isDone으로 종료를 확인해야 하며, 비동기@Async로 처리해야 합니다**.
+- 이는 sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.log` 패키지를 확인하여 주시기 바랍니다.
 
 ```java
-public class LookupController {
-    // 단어 검색 핸들러(명령어 w에 대응함)를 실행한다.
-    @UpdateRequestMethodMapper(UpdateRequestCommand.LOOKUP_WORD) 
-    public List<Dictionary> lookupByWord(UpdateRequestMessage updateRequestMessage) {
-        String value = updateRequestMessage.getValue();  // apple
+public class SomeListener{
+  @Async
+  @EventListener(Send.class)
+  public void handle(Send send) {
+    while(!send.isDone());
 
-        // word를 apple로 검색한 사전리스트를 응답한다.
-        List<Dictionary> result = findDictionariesByWord(value);
-        return result;
-    }
+    UpdateLog updateLog = ifUpdateLogExistThenSave(send);
+
+    SendLog sendLog = SendLog.of(send, updateLog);
+    sendLogRepository.save(sendLog);
+  }
 }
 ```
 
-- 파라미터 타입과 리턴 타입은 아래의 인터페이스로 추상화되어있다.
 
-```java
-public interface UpdateRequestParam {
-    boolean support(Parameter target);
+# 아키텍쳐
+## SRP
+- 스프링의 DispacherServlet과 같은 사용성 보장과 비지니스 로직에 집중하기 위한 프레임워크를 목표로 제작되었습니다.
+- 결합도를 최대한 낮추고 각 모듈마다의 단일 책임을 지키기 위하여 개발되었습니다.
+- telegram-bot : 텔레그렘과의 통신(자바 기반 구현)
+- UpdateDispatcher : 클라이언트의 채팅 메시지 분석과 확장 가능성
+- UpdateRunner : 실시간 처리를 위한 스케줄러
+- SendUpdateResponseEventListener : 분석된 값을 사용자에게 전달. 이벤트 기반 동작
 
-    Object resolve(UpdateRequest request);
-}
+## TDD와 OOP 지향
+- 테스트 주도로 개발하였습니다. 
+- 가능한 작은 기능으로 분리하여 테스트 및 재사용 가능하도록 구현하였습니다.
+- 유닛 테스트와 통합 테스트를 분리하였습니다.
 
-public interface UpdateRequestReturn {
-    boolean support(Method target);
+## main 파티션과 application 파티션의 분리
+- main 파티션을 담당하는 프레임워크로 완전하게 분리시켰습니다.
+- @UpdateRequestMapper를 기반으로 비지니스 로직에 집중할 수 있습니다. 
+- 스프링 컨텍스트의 로딩 시점에서 UpdateDispatcher 등 기능의 유효성을 검사합니다. 런타임 시점에서 에러가 발생하지 않도록 구현하였습니다.
 
-    boolean support(Object target);
+# 주요 구현 프로젝트
+- 현재 프로젝트의 simple-in-spring 프로젝트와 sample-in-spring 프로젝트 이외
+ 
+## telegram-bot
+- [텔레그램 봇 telegram-bot](https://github.com/infoqoch/telegram-bot)
+- https://github.com/infoqoch/telegram-bot
+- telegram bot과의 통신을 위한 라이브러리
 
-    UpdateResponse resolve(Object target);
-}
-```
+## dictionary-bot
+- [사전봇 dictionary-bot](https://github.com/infoqoch/dictionary-v3)
+- https://github.com/infoqoch/dictionary-v3
+- telegram-framework를 기반으로 구현한 사전봇
+- 현 프로젝트가 탄생하기 된 계기
+- 현재 텔레그램의 채널로 동작 중 : @custom_dictionary_bot
 
-- 프론트 컨트롤러 패턴에 활용했던 어너테이션 `@UpdateRequestMethodResolver` 으로 선언한 각각의 핸들러는 아래의 객체를 생성한다. 앞서 정의한 파라미터 타입과 리턴 타입에 대한 메타데이터를 리플렉션 기술을 통해 스프링 컨텍스트 로딩 때 수집한다.
+# 프로젝트 로그
+- v1. 2021.07 - 2021.12
+  - dictionary-bot 기반의 프로젝트
+  - 동작하는 채팅 봇 시스템 구현을 목표로 하였음
+  - app 파티션과 main 파티션의 분리되지 않아 수정의 범위가 넓고 모호하였음. 명령어 등 확장이 어려웠음.
+  - 테스트 코드 작성이 어렵거나 제한적으로 가능하였음. 리팩터링이 어려웠음.
 
-```java
-public class UpdateRequestMethodResolver {
-    private final UpdateRequestMethodMapper mapper;
-    private final UpdateRequestParam[] parameters;
-    private final UpdateRequestReturn returnResolver;
-}
-```
+- v2. 2021-12 - 2022.01
+  - main 파티션 중 텔래그램과의 통신 모듈을 telegram-bot으로 분리하였음. 
+  - telegram-bot은 TDD로 개발하였고 최대한 단순한 상태를 유지함.
 
-### 이벤트와 DB 기반의 메시지 처리 : 결합도 낮추기
-- 텔래그램은 `update` 라는 api를 통해 채팅 데이터를 어플리케이션에 전달한다. 어플리케이션은 해당 채팅에 대한 응답값을 `send` api를 통해 전달한다. 이와 같은 플로우에 의존할 경우, 어플리케이션에서는 `update`와 `send`를 처리하는 기능에 강한 결합이 발생한다. 이를 보완하기 위하여 이벤트 방식으로 두 기능을 연결하였으며, 스프링의 `ApplicationEventPublisher` 기능을 활용하였다.
-- 오류에 대응하기 위한 Admin의 경고 메시지 기능, 매 시간마다 랜덤한 사전을 전달하는 기능을 구현하였다. 이는 DB를 활용하여 서비스를 구현하였다.
+- v3. 2021.01 - 2022.07
+  - 어너테이션 기반의 확장 가능한 아키텍쳐를 구현.
+  - 스프링의 DispatcherServlet을 참고하여 front controller pattern과 adapter pattern 기반의 프로젝트 구현. 
+  - 클라이언트의 채팅 메시지에 대한 확장이 쉽고 자유로워 졌음
+  - 다만 main 파티션과 app 파티션이 분리되지 않아 테스트가 어렵고 비니지스 로직이 분명하게 드러나지 않았음.
 
-## 명령어 분석에 대하여
-### 텔래그램 데이터 분석의 어려운 지점
-- 웹 어플리케이션은 url과 헤더, 바디 등 그것의 역할이 분명하게 분리되어 있고, 스프링은 이에 대응하여 이를 잘 처리할 수 있도록 명확하고 깔끔하게 구현되어 있다. 
-- 하지만 채팅의 경우 단순한 문자열로 구성되어 있다. 더 나아가 텔래그램의 경우 채팅을 전달하는 `update` api의 경우, 사용자의 상태나 문자, 사진, 도큐먼트 등 데이터 타입에 따라 객체와 프로퍼티가 마음대로 변경되어 json 문자열이 전달된다.
-- 이처럼 텔래그램의 `update`를 처리하는 과정에서 1) 문자열의 처리 2) 객체와 프로퍼티가  마음대로 변경되는 json 의 처리가 매우 큰 문제였다.
+- v4. 2022.09 - 2022.11
+  - telegram-framework와 dictionary-bot으로 프로젝트를 분리하여 main 파티션과 app 파티션을 완전하게 분리
+  - 프레임워크로 동작. 의존성 주입과 몇 가지 간단한 설정을 통하여 클라이언트 개발자가 쉽게 사용할 수 있음. 새로운 채팅 봇 프로젝트 생성에 자유로움.
+  - main과 app 파티션의 분리로 SRP를 준수. 테스트 코드 작성이 단순해지고 유지보수가 편해짐.
+  - 오픈소스로 배포 (sonatype.org)
 
-### 문자열에 대한 우선적인 처리
-- `update`를 단순하게 처리하기 위해서는 채팅의 문자열을 통해, 클라이언트의 요청사항을 수집하는 것으로 보았다. 클라이언트로 하여금 채팅 문자를 통해 요청사항을 명확하게 하고, 어플리케이션은 요청사항을 분석하는 형태로 구현하였다. 
-- 어플리케이션은 앞서 설명한 `UpdateRequestCommand`을 enum을 통해 정의한다. `UpdateRequestCommand`은 `String[]`을 필드로 가진다. 사용자는 문자열의 첫 단어를 명령어로 하며, 어플리케이션 해당 단어를 기준으로 `UpdateRequestCommand`를 찾는다. 명령어를 제외한 문자열은 값으로 하여 `UpdateRequestMessage.value`로 전달한다.
-- 어플리케이션은 `UpdateRequestCommand`에 대응하는 핸들러에, 클라이언트의 요청사항을 입력한다. 
-- 어플리케이션은 해당 명령에 적합한 데이터를 파라미터를 통해 전달한다.
-
-## 제한된 서비스 
-- 현재까지 어플리케이션은 채팅 문자열에 대한 처리는 `/{커맨드}_{값}`의 포맷으로 제한 없이 제공하고 있다.
-- 다만 어플리케이션이 지원하는 데이터 타입이 한정적이다. `update` api가 전달하는 데이터 타입 중, Chat(단순문자열), Document(사진 외 파일) 이 두 개에 대한 기능을 제공한다. 현재 구현한 사전봇은 두 개의 데이터타입만을 필요로 하기 때문이다. 그 이외의 데이터 타입에 대해서는 무시하거나 Chat으로 처리해버린다. 
-- 텔래그램의 경우 채팅 기능 이외에 게임, 결제 서비스 등 다양한 기능이 있으며, 이를 봇 api 를 통해 제공 한다. 현재 어플리케이션은 차후 버전이 올라가더라도 채팅 수준의 기능에 한정하여 업데이트 될 예정이다.
-
-## 나아가며
-- 스프링은 웹 개발을 매우 편리하게 만들어 준다. 스프링은 http 통신에 대응하여 편리하고 다양한 기능을 제공한다. 인터셉터, 익셉션핸들러, 스프링데이터, 스프링시큐리티, 모델엔뷰 등 다양한 기능이 존재한다. 
-- 스프링의 이러한 기능 중 백미는 단연 dispatcher servlet의 front controller patter이라 생각한다. `@Controller`와 `@RequestMapping`만을 붙이면 어플리케이션의 엔드포인트를 유연하고 확장 가능하게 구현할 수 있다. 
-- 이러한 디스패쳐 서블릿을 손수 구현하고 싶었다. 이번 텔래그램 채팅 봇을 만들며 직접 아키텍쳐를 기획하고 구현할 수 있었다. 
-- 물론 이런 과정은 매우 길었다. 프로젝트가 v3로 되어 있는 것을 볼 수 있었는데, 더 좋은 구조를 짜기 위하여 세 번을 갈아 엎었고 지금의 프로젝트가 만들어졌다. 조만간 한 번 더 엎을 것으로 생각된다.
-
+# 버전 로그 
+- 0.4.2 오픈 소스 배포
+- 0.4.3 java 8 버전 대응
