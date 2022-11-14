@@ -1,10 +1,10 @@
 # telegram-framework
 - 어너테이션 기반의 확장 가능한 텔레그램 채팅 봇 프레임워크
-- main 파티션과 application 파티션의 분리를 통하여 사용성을 높이고 비니지스 로직에 집중할 수 있도록 지원
+- main 파티션과 application 파티션의 분리하여 사용성을 높이고 비니지스 로직에 집중할 수 있도록 각종 기능 지원
 
 # 사용
 - telegram-bot과 telegram-framework을 의존성에 추가
-- spring-context를 기반으로 구현되었음. spring-boot을 부모로 하여 코드 작성을 권장
+- spring-context를 기반으로 작성되었으며, 편의를 위하여 spring-boot을 부모로 하여 프로젝트 생성을 권장
 
 ```groovy
 dependencies {
@@ -45,10 +45,12 @@ public class SimpleInSpringApplication {
 
 ## 2. telegram-framework.properties
 - telegram-framework.properties 를 다음의 양식으로 작성합니다.
+- 구체적인 텔레그렘 봇 api 및 토큰 생성은 다음 링크를 참고하여 주십시오.
+- https://core.telegram.org/bots#how-do-i-create-a-bot
 
 ```properties
-telegram.token=
-telegram.file-upload-path=
+telegram.token= # 반드시 입력
+telegram.file-upload-path= # 생략 가능
 telegram.send-message-after-update-resolved = true
 ```
 
@@ -63,7 +65,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BaseController {
-    // * 은 반드시 구현해야 한다. 어떤 명령어에도 해당하지 않는 채팅메시지에 대응한다.
+    // "*" 은 반드시 구현해야 한다. 어떤 명령어에도 해당하지 않는 채팅메시지에 대응한다.
     @UpdateRequestMapper({"*", "help"})
     public MarkdownStringBuilder help(){
         return new MarkdownStringBuilder()
@@ -85,41 +87,43 @@ public class BaseController {
 
 ## UpdateDispatcher와 채팅 메시지 분석기
 - telegram-framework의 가장 핵심적인 기능으로 frontend controller pattern 을 기반으로 작성되었습니다.
-- UpdateDispatcher는 명령어가 명시된 @UpdateRequestMapper를 기반으로 동작합니다. 위의 예제 중 @UpdateRequestMapper("echo") 는 "/echo_"로 시작하는 클라이언트의 메시지를 분석하기 위한 핸들러입니다.
-- @UpdateRequestMapper로 선언된 핸들러의 시그니처는 상황에 따라 적절한 파라미터 타입과 리턴 타입을 가질 수 있습니다. UpdateRequestParam와 UpdateRequestReturn를 구현한 타입이 그것이며, 이는 adapater pattern을 통해 구현되었습니다.
+- UpdateDispatcher는 명령어가 명시된 @UpdateRequestMapper을 기반으로 동작합니다. 위의 예제 중 @UpdateRequestMapper("echo") 는 "/echo_"로 시작하는 클라이언트의 메시지를 분석하기 위한 핸들러입니다.
+- @UpdateRequestMapper로 선언된 핸들러의 시그니처는 필요에 따라 적절한 파라미터 타입과 리턴 타입을 가질 수 있습니다. UpdateRequestParam와 UpdateRequestReturn를 구현한 타입이 그것이며, 이는 adapater pattern을 통해 구현되었습니다.
 
 ## UpdateDispatcher의 관심사
-- UpdateDispacher는 클라이언트의 채팅 메시지를 분석하는 것을 관심사로 가집니다. 만약 채팅에 대한 단순한 분석기로 사용할 경우 `@EnableTelegramFramework`를 `@Configuration`에 선언하여 사용하여도 무관합니다. 그리고 UpdateDispacher 빈을 주입하여 사용하십시오. 리턴 타입은 더는 특별한 의미를 가지지 않으므로 void로 선언합니다.  
+- UpdateDispacher는 클라이언트의 채팅 메시지를 분석하는 것을 관심사로 가집니다. 만약 채팅에 대한 단순한 분석기로 사용할 경우 `@EnableTelegramFramework`를 `@Configuration`에 선언하여 사용한 후 UpdateDispacher 빈을 주입하여 사용할 수 있습니다. 리턴 타입은 더는 특별한 의미를 가지지 않으므로 void로 선언합니다.
 - 구체적인 사용은 방식은 `infoqoch.telegram.framework.update.dispatcher` 패키지의 테스트 코드를 참고 바랍니다.
 
-## UpdateRunner와 자동 응답을 위한 프레임워크
-- UpdateDispatcher가 클라이언트의 응답 메시지를 분석하기 위하여 사용한다면, UpdateRunner는 UpdateDispatcher 가 도출해낸 결과값을 클라이언트에 응답하기 위하여 존재합니다.
-- 스프링 스케줄러를 활용하여 텔레그렘 api로 부터 채팅 메시지를 실시간으로 polling 합니다. 값이 있으면 UpdateDispatcher 가 값을 분석하고 서버의 응답값을 생산합니다. 생상된 값을 SendUpdateResponseEventListener에 전달하여 클라이언트에 응답합니다. 
-- UpdateRunner 는 스프링의 스케줄러(Scheduled)와 이벤트퍼블리셔(ApplicationEventPublisher)를 기반으로 동작합니다. 이를 사용하기 위해서 @Configuration 에 `@EnableScheduling` 을 선언해야 합니다. 프로퍼티의 `telegram-framework.properties` 를 다음과 같이 설정합니다. `telegram.send-message-after-update-resolved = true`
+## UpdateRunner와 실시간 클라이언트의 채팅 수집 및 응답을 위한 스케줄러
+- UpdateDispatcher가 클라이언트의 응답 메시지를 분석하기 위하여 사용한다면, UpdateRunner는 UpdateDispatcher를 쉽게 다루기 위하여 사용합니다. UpdateRunner는 클라이언트의 채팅 메시지인 Update를 pooling으로 수집하고, 이를 UpdateDispatcher로 해석 및 결과값을 생산한 후, Send 객체로 TelegramBot을 통해 클라이언트에 응답합니다.
+- UpdateRunner는 스프링 스케줄러를 기반으로 작성되었습니다. UpdateRunner는 Send를 이벤트퍼블리셔(ApplicationEventPublisher)로 SendUpdateResponseEventListener에 전달하여 처리합니다.
+- 스케줄러 및 이벤트 퍼블리셔의 정상적인 처리를 위하여 설정빈에 다음의 어너테이션을 선언합니다. `@EnableScheduling`, `@EnableAsync`. 
+- 프로퍼티의 `telegram-framework.properties` 를 다음과 같이 설정하여 SendUpdateResponseEventListener를 빈으로 등록합니다. `telegram.send-message-after-update-resolved = true`
 
-## UpdateRequestParam와 UpdateRequestReturn
-- @UpdateRequestMapper의 핸들러는 UpdateRequestParam와 UpdateRequestReturn의 구현체를 시그니쳐로 할 수 있습니다.
-- 현재 구현된 파라미터 타입과 리턴 타입은 다음과 같습니다.
+## UpdateRequestParam과 UpdateRequestReturn
+- @UpdateRequestMapper의 핸들러는 UpdateRequestParam와 UpdateRequestReturn의 구현체를 파라미터와 리턴 타입으로 사용할 수 있습니다. 
+- 기본적으로 구현된 파라미터 타입과 리턴 타입은 다음과 같습니다.
 - 파라미터 타입
   - UpdateMessage : 클라이언트의 단순 메시지
   - UpdateDocument : 클라이언트의 파일 타입 메시지 (엑셀, 텍스트 등)
   - UpdateRequestCommandAndValue : UpdateDispacher의 분석결과로 도출된 명령어(command)와 값(value)
   - UpdateRequest : 텔레그렘 서버에서 받은 데이터 전체 값. 어텝터 패턴의 기준이 되는 데이터 타입 (서블릿의 HttpServletRequest 에 대응)
 - 리턴 타입 (특히 UpdateRunner를 사용할 경우)
-  - void : 생성된 응답 메시지가 없음
+  - void : 메세지를 응답하지 아니함.
   - String : 단순 문자
   - MarkdownStringBuilder : 마크다운
-  - UpdateResponse : 텔레그렘 서버에 응답을 위한 기본 타입. 어텝터 패턴의 기준이 되는 데이터 타입 (서블릿의 HttpServletResponse 에 대응)
+  - UpdateResponse : 텔레그렘 서버에 응답을 위한 데이터 타입. 어텝터 패턴의 기준이 되는 데이터 타입 (서블릿의 HttpServletResponse 에 대응)
 
 ### UpdateRequestParam와 UpdateRequestReturn의 확장
 - CustomUpdateRequestParamRegister, CustomUpdateRequestReturnRegister 를 구현하여 파라미터와 리턴 타입을 확장 가능합니다. 
 - 구체적인 내용은 sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.config` 패키지를 참고하여 주시기 바랍니다.
 
-## SendUpdateResponseEventListener 의 구체적인 활용과 비동기 처리의 필요성
-- SendUpdateResponseEventListener 는 Send 타입으로 동작합니다. 
-- Send 타입은 텔레그렘과의 통신이 완료되었는지를 확인하기 위한 메서드 isDone이 있으며 이는 CompletableFuture 기반 아래에 작성되었습니다.
-- 만약 Send 타입의 응답값을 별도의 이벤트 리스너를 생성하여 받고 싶다면 **반드시 isDone으로 종료를 확인해야 하며, 비동기@Async로 처리해야 합니다**.
-- 이는 sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.log` 패키지를 확인하여 주시기 바랍니다.
+## SendUpdateResponseEventListener의 구체적인 활용과 비동기 처리의 필요성
+- SendUpdateResponseEventListener는 Send 타입을 처리합니다. 
+- Send는 텔레그렘과의 통신이 완료되었는지를 확인하기 위한 메서드 isDone이 있으며, 이는 CompletableFuture으로 작성되었습니다.
+- 만약 로깅 등 어떤 이유로 Send를 처리하는 리스너를 구현해야 한다면 **반드시 isDone으로 종료를 확인해야 하며, 비동기@Async로 처리해야 합니다**. 
+- sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.log` 패키지를 확인하여 주시기 바랍니다.
+- 아래는 로깅을 위한 리스너의 예시입니다.
 
 ```java
 public class SomeListener{
@@ -136,15 +140,15 @@ public class SomeListener{
 }
 ```
 
-
 # 아키텍쳐
 ## SRP
-- 스프링의 DispacherServlet과 같은 사용성 보장과 비지니스 로직에 집중하기 위한 프레임워크를 목표로 제작되었습니다.
+- 스프링의 DispacherServlet과 같이 사용성 보장과 비지니스 로직에 집중하기 위한 프레임워크를 목표로 제작되었습니다.
 - 결합도를 최대한 낮추고 각 모듈마다의 단일 책임을 지키기 위하여 개발되었습니다.
 - telegram-bot : 텔레그렘과의 통신(자바 기반 구현)
-- UpdateDispatcher : 클라이언트의 채팅 메시지 분석과 확장 가능성
-- UpdateRunner : 실시간 처리를 위한 스케줄러
-- SendUpdateResponseEventListener : 분석된 값을 사용자에게 전달. 이벤트 기반 동작
+- telegram-framework : main 파티션의 분리
+  - UpdateDispatcher : 클라이언트의 채팅 메시지 분석과 확장 가능성
+  - UpdateRunner : 실시간 처리를 위한 스케줄러
+  - SendUpdateResponseEventListener : 분석된 값을 사용자에게 전달. 이벤트 기반 동작
 
 ## TDD와 OOP 지향
 - 테스트 주도로 개발하였습니다. 
