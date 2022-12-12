@@ -2,7 +2,7 @@
 - 어너테이션 기반의 확장 가능한 텔레그램 채팅 봇 프레임워크
 - main 파티션과 application 파티션의 분리하여 사용성을 높이고 비니지스 로직에 집중할 수 있도록 각종 기능 지원
 
-# 사용
+# 의존성
 - telegram-bot과 telegram-framework을 의존성에 추가
 - spring-context를 기반으로 작성되었으며, 편의를 위하여 spring-boot을 부모로 하여 프로젝트 생성을 권장
 
@@ -99,7 +99,7 @@ public class BaseController {
 - UpdateDispatcher가 클라이언트의 응답 메시지를 분석하기 위하여 사용한다면, UpdateRunner는 UpdateDispatcher를 쉽게 다루기 위하여 사용합니다. UpdateRunner는 클라이언트의 채팅 메시지인 Update를 pooling으로 수집하고, 이를 UpdateDispatcher로 해석 및 결과값을 생산한 후, Send 객체로 TelegramBot을 통해 클라이언트에 응답합니다.
 - UpdateRunner는 스프링 스케줄러를 기반으로 작성되었습니다. UpdateRunner는 Send를 이벤트퍼블리셔(ApplicationEventPublisher)로 SendUpdateResponseEventListener에 전달하여 처리합니다.
 - 스케줄러 및 이벤트 퍼블리셔의 정상적인 처리를 위하여 설정빈에 다음의 어너테이션을 선언합니다. `@EnableScheduling`, `@EnableAsync`. 
-- 프로퍼티의 `telegram-framework.properties` 를 다음과 같이 설정하여 SendUpdateResponseEventListener를 빈으로 등록합니다. `telegram.send-message-after-update-resolved = true`
+- 프로퍼티는 다음과 같이 설정합니다. `telegram.send-message-after-update-resolved = true`
 
 ## UpdateRequestParam과 UpdateRequestReturn
 - @UpdateRequestMapper의 핸들러는 UpdateRequestParam와 UpdateRequestReturn의 구현체를 파라미터와 리턴 타입으로 사용할 수 있습니다. 
@@ -132,11 +132,7 @@ public class SomeListener {
   @EventListener(Send.class)
   public void handle(Send send) {
     while(!send.isDone());
-
-    UpdateLog updateLog = ifUpdateLogExistThenSave(send);
-
-    SendLog sendLog = SendLog.of(send, updateLog);
-    sendLogRepository.save(sendLog);
+    sendLogRepository.save(new SendLog(send));
   }
 }
 ```
@@ -146,8 +142,7 @@ public class SomeListener {
   - @UpdateRequestMapper("help")를 선언하였고
   - 클라이언트가 help how to use 라 작성하면
   - 서버는 "help"를 명령어로 이해하고 "how to use"를 값으로 이해합니다.
-- 명령어는 `String[]`으로 작성하여 하나의 메서드가 다수의 명령어를 가질 수 있습니다.
-- 명령어는 띄어쓰기를 허용 합니다. 매칭되는 명령어가 다수일 경우 가장 긴 명령어로 이해합니다.
+- 명령어는 `String[]`으로 작성하여 하나의 메서드가 다수의 명령어를 가질 수 있습니다. 명령어는 띄어쓰기를 허용 합니다. 매칭되는 명령어가 다수일 경우 가장 긴 명령어로 이해합니다.
   - "help" 와 "help signup" 라는 명령어가 있고
   - 클라이언트가 "help signup kim:1234" 라 채팅 메시지를 작성하면
   - "help signup" 을 명령어로 하며 "kim:1234"를 값으로 합니다.
@@ -158,26 +153,25 @@ public class SomeListener {
 - 매칭되지 않는 명령어는 "*" 가 선언된 메서드가 처리합니다. "*"은 반드시 구현해야 합니다.
 
 # 아키텍쳐
-## 채팅봇 구현의 어려움과 해소
-### 부재한 메타데이터와 채팅의 종류 및 클라이언트 메시지 분석의 어려움
-- http는 url, method, header 를 통하여 풍부한 메타데이터를 제공하고 이를 기준으로 핸들러를 세세하게 맵핑할 수 있습니다.
-- 텔레그렘은 http에 대비하여 상당히 불친절하며 이는 두 가지로 나누어 생각할 수 있습니다.
-- 첫 번째로 텔래그램은 클라이언트의 채팅의 종류(단순 메시지, 파일, 사진 등)를 메타데이터나 json의 프로퍼티로 명시하지 않습니다. json 바디에 몇 개의 엔티티가 어떤 설명도 없이 추가되어 전달될 뿐입니다. 
-- 두 번째로 텔레그렘의 문제라기 보다 채팅봇의 한계인데, 클라이언트가 작성한 문자열로부터 적절한 명령어와 값을 추출하고 처리해야 한다는 점입니다. 
-- 스프링이 http 처리를 위한 쉽고 풍부한 기능을 제공하나 텔레그렘 봇을 작성할 때 제한적인 부분이 많습니다. 이를 분석할 자체적인 메시지 포맷을 정의하고 메시지 처리기를 직접 구현해야 했습니다.
+## 메타데이터의 부재와 클라이언트 메시지 분석의 어려움
+- http는 url, method, header 를 통하여 풍부한 메타데이터를 제공하고 스프링은 이를 세세하게 다룰 수 있습니다. 반대로 텔레그램 봇은 http에 대비하여 다음과 같은 이유로 개발에 어려움이 있습니다.
+- 첫 번째로 텔레그램은 어떤 메타데이터도 전달하지 않습니다. 클라이언트의 채팅의 종류(단순 메시지, 파일, 사진 등)를 json 내부의 key를 가지고 예측해야 합니다. 
+- 두 번째로 클라이언트가 작성한 문자열로부터 적절한 명령어와 값을 추출하고 처리해야 합니다.
+ 
+## {명령어}_{값} 으로의 메시지 포맷 단순화와 front controller pattern
+- 두 번째 문제의 경우 채팅의 포맷을 단순화하여 해소하였습니다. 클라이언트의 채팅을 `{명령어}_{값}` 포맷을 규칙으로 하여, 명령어와 값을 분리하기 쉽도록 하였습니다. 
+- 어너테이션 `@UpdateRequestMapper`에 명령어를 값으로 하고 이를 처리할 핸들러에 붙였습니다. 어너테이션을 통해 쉽게 확장 가능합니다. 
+- 다수의 핸들러 중 클라이언트의 명령어에 대한 적절한 핸들러를 선택하기 위하여 front controller pattern을 활용하였습니다. 스프링의 DispatcherServlet에 대응하는 UpdateDispatcher를 구현하였습니다.
 
-### {명령어}_{값} 으로의 메시지 포맷 단순화와 front controller pattern
-- 두 번째 문제를 우선적으로 해소하였습니다. 그 방법은 사용자의 채팅 메시지를 단순화 하는 일이었습니다. 채팅 메시지를 `{명령어}_{값}`의 포맷으로 정의하였습니다. 
-- @UpdateRequestMapper를 사용하여 명령어에 따른 핸들러를 정의하고 처리하도록 작성하였습니다.
-- 명령어에 적합한 핸들러를 찾기 위하여 front controller pattern을 활용하였으며 이는 UpdateDispatcher로 구현되었습니다.
+## 핸들러에 필요로한 데이터만을 전달하기 위한 adpater pattern
+- 클라이언트의 채팅을 Update 타입으로 추상화 및 바인딩하였습니다. Update는 예측 불가능한 채팅 타입에 대응하기 위하여 복잡하게 나열된 필드를 가집니다. 채팅 종류에 따라 어떤 필드는 값이 있고 어떤 필드는 값이 없습니다.
+- 만약 핸들러가 Update를 파라미터로 가질 경우, 어떤 필드에 값이 있는지를 바로 파악할 수 없습니다. 이로 인해 클라이언트 개발자의 혼란 및 NPE가 예상되었습니다. 
+- 필요에 따라 값이 존재하는 필드만 제공하는 DTO를 핸들러의 파라미터로 전달할 필요가 있었습니다. 필요로 한 파라미터만 전달할 수 있도록 adpater pattern을 활용하여 해소할 수 있었습니다. 
 
-### 핸들러에 필요로한 데이터만 전달하기 위한 데이터 타입 정의와 adpater pattern 
-- 클라이언트의 채팅 메시지인 json 바디를 telegram-bot은 Update로 추상화 및 바인딩하였습니다.
-- Update 타입은 텔레그렘의 json이 가질 수 있는 프로퍼티에 대응하기 위하여 복잡한 필드를 가집니다. 채팅 타입에 따라 어떤 필드는 값이 있고 어떤 필드는 값을 가지지 않습니다. 
-- 핸들러가 Update를 파라미터로 가질 경우 어떤 필드에 값이 있는지를 바로 파악할 수 없기 때문에, 클라이언트 개발자의 혼란 및 NPE가 예상되었습니다. 채팅 종류에 따라 NPE를 방지할 수 있는 데이터 타입이 필요 했고, 핸들러마다 필요로 한 데이터 타입을 파라미터로 전달할 수 있어야 했습니다.  
-- 이는 adpater pattern를 통해 해소할 수 있었습니다. Update는 telegram-framework에서 UpdateRequest로 랩핑되었고, 이는 어뎁터 패턴의 기준 타입이 되었습니다.
-- UpdateRequest는 단순 채팅인 UpdateMessage와 첨부된 파일을 가지는 UpdateDocument로 분리됩니다. 단순한 명령어와 값만을 가지는 UpdateRequestCommandAndValue를 타입으로 정의하였습니다.
-- 클라이언트 개발자의 필요에 따라 UpdateRequestParam 인터페이스를 구현하여 파라미터 타입을 추가할 수 있도록 구현하였습니다.
+## 메인 파티션의 분리와 프레임워크 개발
+- 최초 완성된 프로젝트의 경우 메인 파티션과 어플리케이션 파티션 코드가 혼재되어 있었습니다. 각 기능이 서로를 침범하여 단일 책임 원칙을 지키기 어려웠고 테스트코드 작성이 복잡했습니다. 비니지스 로직이 어떤 코드인지 직관적으로 이해하기 어려웠습니다. 
+- 이를 해소하기 위하여 메인 파티션에 해당하는 코드를 분리하였습니다. 텔레그램과의 통신 모듈은 telegram-bot 라이브러리로 분리하였습니다. 나머지 메인 파티션 코드는 프레임워크로 분리하였습니다. 프레임워크는 메이븐 리포지토리에서 의존성으로 가져올 수 있도록 오픈소스로 배포하였습니다. 클라이언트 개발자는 의존성 한 줄에 몇 개의 어너테이션만 붙이면 자신의 프로젝트에는 비지니스 로직만 담을 수 있습니다.
+- 이러한 과정을 통해 아래와 같은 최소한의 코드만으로 텔레그램 봇을 만들 수 있습니다. 
 
 ## SRP
 - 스프링의 DispacherServlet과 같이 사용성 보장과 비지니스 로직에 집중하기 위한 프레임워크를 목표로 제작되었습니다.
@@ -192,11 +186,6 @@ public class SomeListener {
 - 테스트 주도로 개발하였습니다. 
 - 가능한 작은 기능으로 분리하여 테스트 및 재사용 가능하도록 구현하였습니다.
 - 유닛 테스트와 통합 테스트를 분리하였습니다.
-
-## main 파티션과 application 파티션의 분리
-- main 파티션을 담당하는 프레임워크로 완전하게 분리시켰습니다.
-- @UpdateRequestMapper를 기반으로 비지니스 로직에 집중할 수 있습니다. 
-- 스프링 컨텍스트의 로딩 시점에서 UpdateDispatcher 등 기능의 유효성을 검사합니다. 런타임 시점에서 에러가 발생하지 않도록 구현하였습니다.
 
 # 주요 구현 프로젝트
 - 현재 프로젝트의 simple-in-spring 프로젝트와 sample-in-spring 프로젝트 이외
@@ -239,3 +228,4 @@ public class SomeListener {
 # 버전 로그 
 - 0.4.2 오픈 소스 배포
 - 0.4.3 java 8 버전 대응
+- 0.4.4 jar 파일에서의 비정상 동작에 대응
