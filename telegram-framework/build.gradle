@@ -63,7 +63,7 @@ publishing {
 
             groupId = 'io.github.infoqoch'
             artifactId = 'telegram-framework'
-            version = '0.4.3'
+            version = '0.4.4'
             from components.java
 
             pom {
@@ -111,4 +111,12 @@ signing {
 
 javadoc {
     options.encoding = 'UTF-8'
+}
+
+publishToMavenLocal{
+
+}
+
+publish{
+
 }

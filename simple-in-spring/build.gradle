@@ -17,10 +17,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // 텔레그램
-    implementation 'io.github.infoqoch:telegram-framework:0.4.3'
+    implementation 'io.github.infoqoch:telegram-framework:0.4.4'
     implementation 'io.github.infoqoch:telegram-bot:0.2.4'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+build{
+
 }
