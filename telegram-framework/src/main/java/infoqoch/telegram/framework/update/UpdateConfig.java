@@ -8,23 +8,20 @@ import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestRet
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.*;
 import infoqoch.telegram.framework.update.send.SendUpdateResponseEventListener;
+import infoqoch.telegram.framework.update.util.ReflectionUtil;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -42,9 +39,15 @@ public class UpdateConfig {
     public CustomUpdateRequestReturnRegister customUpdateRequestReturnRegister(){
         List<UpdateRequestReturn> result = new ArrayList<>();
 
-        final Set<Class<? extends CustomUpdateRequestReturnRegister>> registers = new Reflections(
-                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
-        ).getSubTypesOf(CustomUpdateRequestReturnRegister.class);
+        String basePackage = frameworkBase().get().getClass().getPackage().getName();
+
+        ConfigurationBuilder configuration = new ConfigurationBuilder()
+                .forPackage(basePackage)
+                .setScanners(Scanners.SubTypes);
+        ReflectionUtil.ifJarThenCalibrating(configuration, basePackage);
+
+        final Set<Class<? extends CustomUpdateRequestReturnRegister>> registers =
+                new Reflections(configuration).getSubTypesOf(CustomUpdateRequestReturnRegister.class);
 
         for (Class<? extends CustomUpdateRequestReturnRegister> register : registers) {
             try{
@@ -64,9 +67,15 @@ public class UpdateConfig {
     public CustomUpdateRequestParamRegister customUpdateRequestParamRegister(){
         List<UpdateRequestParam> result = new ArrayList<>();
 
-        final Set<Class<? extends CustomUpdateRequestParamRegister>> registers = new Reflections(
-                new ConfigurationBuilder().setUrls(generateTargetUrl(extractBasePackageName(frameworkBase().get()))).setScanners(Scanners.SubTypes)
-        ).getSubTypesOf(CustomUpdateRequestParamRegister.class);
+        String basePackage = frameworkBase().get().getClass().getPackage().getName();
+
+        ConfigurationBuilder configuration = new ConfigurationBuilder()
+                .forPackage(basePackage)
+                .setScanners(Scanners.SubTypes);
+        ReflectionUtil.ifJarThenCalibrating(configuration, basePackage);
+
+        final Set<Class<? extends CustomUpdateRequestParamRegister>> registers =
+                new Reflections(configuration).getSubTypesOf(CustomUpdateRequestParamRegister.class);
 
         for (Class<? extends CustomUpdateRequestParamRegister> register : registers) {
             try{
@@ -124,12 +133,9 @@ public class UpdateConfig {
 
     @Bean
     public UpdateDispatcher updateDispatcher(){
-        final Collection<URL> urls = generateTargetUrl(extractBasePackageName(frameworkBase().get()));
-        urls.stream().peek(u -> log.info("url = {}", u));
-
         final Map<UpdateRequestCommand, UpdateRequestResolver> methodResolvers = UpdateRequestMapperFactory.collectUpdateRequestMappedMethods(
                 context
-                , urls
+                , frameworkBase().get()
                 , updateRequestParamRegister()
                 , updateRequestReturnRegister()
         );
@@ -156,23 +162,5 @@ public class UpdateConfig {
 
     private Optional<Object> frameworkBase() {
         return context.getBeansWithAnnotation(EnableTelegramFramework.class).values().stream().findAny();
-    }
-
-    private static String extractBasePackageName(Object frameworkBase) {
-        return frameworkBase.getClass().getPackage().getName();
-    }
-
-    private Set<URL> generateTargetUrl(String basePackageName) {
-        return ClasspathHelper.forPackage(basePackageName).stream()
-                .map(u -> appendPackageName(u, basePackageName))
-                .collect(Collectors.toSet());
-    }
-
-    private static URL appendPackageName(URL url, String packageName) {
-        try {
-            return new URL(url.toString() + packageName.replaceAll("[.]", "/"));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

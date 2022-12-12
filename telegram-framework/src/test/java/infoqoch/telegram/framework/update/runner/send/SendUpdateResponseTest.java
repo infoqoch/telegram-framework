@@ -82,7 +82,7 @@ class SendUpdateResponseTest {
         @Primary
         @Bean
         TelegramProperties telegramProperties(){
-            return TelegramProperties.generate("telegram-framework-send.properties");
+            return TelegramProperties.generate("telegram-framework.properties");
         }
 
         @Bean

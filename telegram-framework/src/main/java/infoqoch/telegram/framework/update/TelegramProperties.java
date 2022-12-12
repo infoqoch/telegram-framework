@@ -3,9 +3,7 @@ package infoqoch.telegram.framework.update;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileReader;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Properties;
 
 @Slf4j
@@ -58,11 +56,9 @@ public class TelegramProperties {
 
     private static String findProperty(String key) {
         try{
-            final URL resource = TelegramProperties.class.getClassLoader().getResource(PROPERTIES_FILE);
-            File path = new File(resource.toURI());
-            try(FileReader file = new FileReader(path)) {
+            try(InputStream stream = TelegramProperties.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
                 Properties p = new Properties();
-                p.load(file);
+                p.load(stream);
                 return p.getProperty(key);
             }
         }catch (Exception e){
