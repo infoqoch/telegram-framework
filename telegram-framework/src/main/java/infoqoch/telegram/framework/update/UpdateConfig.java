@@ -7,7 +7,7 @@ import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestPar
 import infoqoch.telegram.framework.update.resolver.custom.CustomUpdateRequestReturnRegister;
 import infoqoch.telegram.framework.update.resolver.param.*;
 import infoqoch.telegram.framework.update.resolver.returns.*;
-import infoqoch.telegram.framework.update.send.SendUpdateResponseEventListener;
+import infoqoch.telegram.framework.update.send.SendEventListener;
 import infoqoch.telegram.framework.update.util.ReflectionUtil;
 import infoqoch.telegrambot.bot.DefaultTelegramBotFactory;
 import infoqoch.telegrambot.bot.TelegramBot;
@@ -153,9 +153,9 @@ public class UpdateConfig {
     }
 
     @Bean
-    public SendUpdateResponseEventListener sendUpdateResponseEventListener(){
+    public SendEventListener sendUpdateResponseEventListener(){
         if(telegramProperties().sendMessageAfterUpdateResolved()){
-            return new SendUpdateResponseEventListener(telegramBot().send());
+            return new SendEventListener(telegramBot().send());
         }
         return null;
     }

@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import static infoqoch.telegram.framework.update.send.Send.Status.*;
 
@@ -35,19 +34,8 @@ public class Send {
 
     private Optional<Send> resend = Optional.empty();
 
-    private Optional<Long> updateId = Optional.empty();
     private Optional<UpdateRequest> updateRequest = Optional.empty();
     private Optional<UpdateResponse> updateResponse = Optional.empty();
-
-    public CompletableFuture<Boolean> job = new CompletableFuture<>();
-
-    public boolean isDone(){
-        return job.isDone();
-    }
-
-    public void done() {
-        job.complete(true);
-    }
 
     public enum Status {
         REQUEST, SENDING, SUCCESS, RESPONSE_ERROR, ERROR;
@@ -73,7 +61,6 @@ public class Send {
     }
 
     public void setupUpdate(Long updateId, UpdateRequest updateRequest, UpdateResponse updateResponse){
-        this.updateId = Optional.ofNullable(updateId);
         this.updateRequest = Optional.ofNullable(updateRequest);
         this.updateResponse = Optional.ofNullable(updateResponse);
     }
