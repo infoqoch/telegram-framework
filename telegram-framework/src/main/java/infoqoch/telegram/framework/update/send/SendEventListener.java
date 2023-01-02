@@ -8,6 +8,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 import static infoqoch.telegram.framework.update.response.ResponseType.SERVER_ERROR;
 
 @Slf4j
@@ -18,8 +20,7 @@ public class SendEventListener {
     @Async
     @Transactional
     @EventListener(Send.class)
-    public SendResult handle(Send send) {
-        log.info("SendEventListener#handle called");
+    public CompletableFuture<SendResult> handle(Send send) {
         try {
             send.sending(telegramSend);
         } catch (Exception e) {
@@ -30,6 +31,6 @@ public class SendEventListener {
                 log.error("error again - SendEventListener, ", ee);
             }
         }
-        return new SendResult(send);
+        return CompletableFuture.completedFuture(new SendResult(send));
     }
 }

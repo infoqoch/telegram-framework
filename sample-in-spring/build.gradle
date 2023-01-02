@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     // 텔레그램
-    implementation 'io.github.infoqoch:telegram-framework:0.4.4'
+    implementation 'io.github.infoqoch:telegram-framework:0.4.5'
     implementation 'io.github.infoqoch:telegram-bot:0.2.4'
 
     // 스프링

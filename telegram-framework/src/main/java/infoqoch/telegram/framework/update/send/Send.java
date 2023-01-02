@@ -13,7 +13,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static infoqoch.telegram.framework.update.send.Send.Status.*;
 
@@ -21,8 +20,6 @@ import static infoqoch.telegram.framework.update.send.Send.Status.*;
 @Getter
 @ToString
 public class Send {
-    private final String id = UUID.randomUUID().toString();
-
     private final Long chatId;
     private final ResponseType responseType;
     private final MarkdownStringBuilder message;
