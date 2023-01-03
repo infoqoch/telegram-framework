@@ -13,7 +13,7 @@ public class BaseController {
         return new MarkdownStringBuilder()
                 .plain("안녕하세요! 현재 제공하는 기능은 다음과 같습니다.").lineSeparator()
                 .command("help", null).plain(" -> 도움말").lineSeparator()
-                .command("echo", "echo").plain(" -> 입력한 값을 메아리로 돌려준다").lineSeparator()
+                .command("echo", "yaaaahooooo").plain(" -> 입력한 값을 메아리로 돌려준다").lineSeparator()
                 .plain("명령을 할 때 슬러시('/')는 생략 가능하며 언더바('_')는 띄어쓰기(' ')로 대체합니다.");
     }
 

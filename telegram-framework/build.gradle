@@ -56,6 +56,15 @@ java {
     withSourcesJar()
 }
 
+publishToMavenLocal{
+
+}
+
+publish{
+
+}
+
+
 publishing {
     publications{
 
@@ -63,7 +72,7 @@ publishing {
 
             groupId = 'io.github.infoqoch'
             artifactId = 'telegram-framework'
-            version = '0.4.4'
+            version = '0.4.5'
             from components.java
 
             pom {
@@ -111,12 +120,4 @@ signing {
 
 javadoc {
     options.encoding = 'UTF-8'
-}
-
-publishToMavenLocal{
-
-}
-
-publish{
-
 }
