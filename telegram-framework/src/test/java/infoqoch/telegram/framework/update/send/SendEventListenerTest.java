@@ -21,9 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-
-class SendUpdateResponseEventListenerTest {
-    SendUpdateResponseEventListener listener;
+class SendEventListenerTest {
+    SendEventListener listener;
     TelegramSend mockTelegramSend;
     final DefaultJsonBind binder = DefaultJsonBind.getInstance();
 
@@ -31,7 +30,7 @@ class SendUpdateResponseEventListenerTest {
     @BeforeEach
     void setUp(){
         mockTelegramSend = mock(TelegramSend.class);
-        listener = new SendUpdateResponseEventListener(mockTelegramSend);
+        listener = new SendEventListener(mockTelegramSend);
     }
 
     @Test
@@ -48,7 +47,6 @@ class SendUpdateResponseEventListenerTest {
         listener.handle(send);
 
         // then
-        while(!send.isDone());
         assertThat(send.getStatus()).isEqualTo(SUCCESS);
     }
 
@@ -64,7 +62,6 @@ class SendUpdateResponseEventListenerTest {
         listener.handle(send);
 
         // then
-        while(!send.isDone());
         assertThat(send.getResponseType()).isEqualTo(MESSAGE);
         assertThat(send.getStatus()).isEqualTo(ERROR);
 
@@ -88,7 +85,6 @@ class SendUpdateResponseEventListenerTest {
         listener.handle(send);
 
         // then
-        while(!send.isDone());
         assertThat(send.getStatus()).isEqualTo(RESPONSE_ERROR);
         assertThat(send.getErrorMessage()).isEqualTo("Bad Request: chat not found");
     }

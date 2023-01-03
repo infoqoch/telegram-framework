@@ -1,6 +1,7 @@
 package infoqoch.telegramframework.spring.sampleinspring.log;
 
 import infoqoch.telegram.framework.update.send.Send;
+import infoqoch.telegram.framework.update.send.SendResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -16,16 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SubscribeSendUpdateEventListener {
+public class SendResultEventListener {
     private final SendLogRepository sendLogRepository;
     private final UpdateLogRepository updateLogRepository;
 
     @Async
-    @Transactional()
-    @EventListener(Send.class)
-    public void handle(Send send) {
-        while(!send.isDone());
-
+    @Transactional
+    @EventListener(SendResult.class)
+    public void handle(SendResult sendResult) {
+        Send send = sendResult.getSend();
         UpdateLog updateLog = ifUpdateLogExistThenSave(send);
 
         SendLog sendLog = SendLog.of(send, updateLog);
@@ -34,8 +34,8 @@ public class SubscribeSendUpdateEventListener {
 
     private UpdateLog ifUpdateLogExistThenSave(Send send) {
         UpdateLog updateLog = null;
-        if(send.getUpdateId().isPresent()){
-            updateLog = UpdateLog.of(send.getUpdateId().get(), send.getUpdateRequest().get(), send.getUpdateResponse().get());
+        if(send.getUpdateRequest().isPresent()){
+            updateLog = UpdateLog.of(send.getUpdateRequest().get().updateId(), send.getUpdateRequest().get(), send.getUpdateResponse().get());
             updateLogRepository.save(updateLog);
         }
         return updateLog;
