@@ -97,7 +97,7 @@ public class BaseController {
 
 ## UpdateRunner와 실시간 클라이언트의 채팅 수집 및 응답을 위한 스케줄러
 - UpdateDispatcher가 클라이언트의 응답 메시지를 분석하기 위하여 사용한다면, UpdateRunner는 UpdateDispatcher를 쉽게 다루기 위하여 사용합니다. UpdateRunner는 클라이언트의 채팅 메시지인 Update를 pooling으로 수집하고, 이를 UpdateDispatcher로 해석 및 결과값을 생산한 후, Send 객체로 TelegramBot을 통해 클라이언트에 응답합니다.
-- UpdateRunner는 스프링 스케줄러를 기반으로 작성되었습니다. UpdateRunner는 Send를 이벤트퍼블리셔(ApplicationEventPublisher)로 SendUpdateResponseEventListener에 전달하여 처리합니다.
+- UpdateRunner는 스프링 스케줄러를 기반으로 작성되었습니다. UpdateRunner는 Send를 이벤트퍼블리셔(ApplicationEventPublisher)로 SendEventListener에 전달하여 처리합니다.
 - 스케줄러 및 이벤트 퍼블리셔의 정상적인 처리를 위하여 설정빈에 다음의 어너테이션을 선언합니다. `@EnableScheduling`, `@EnableAsync`. 
 - 프로퍼티는 다음과 같이 설정합니다. `telegram.send-message-after-update-resolved = true`
 
@@ -119,20 +119,20 @@ public class BaseController {
 - CustomUpdateRequestParamRegister, CustomUpdateRequestReturnRegister 를 구현하여 파라미터와 리턴 타입을 확장 가능합니다. 
 - 구체적인 내용은 sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.config` 패키지를 참고하여 주시기 바랍니다.
 
-## SendUpdateResponseEventListener의 구체적인 활용과 비동기 처리의 필요성
-- SendUpdateResponseEventListener는 Send 타입을 처리합니다. 
-- Send는 텔레그렘과의 통신이 완료되었는지를 확인하기 위한 메서드 isDone이 있으며, 이는 CompletableFuture으로 작성되었습니다.
-- 만약 로깅 등 어떤 이유로 Send를 처리하는 리스너를 구현해야 한다면 **반드시 isDone으로 종료를 확인해야 하며, 비동기@Async로 처리해야 합니다**. 
+## SendEventListener의 구체적인 활용과 비동기 처리의 필요성
+- SendEventListener는 Send 타입을 처리합니다. 
+- Send의 결과는 CompletableFuture<SendResult>로 리턴합니다. 해당 값은 이벤트 리스너로 읽을 수 있습니다.   
 - sample-in-spring 프로젝트의 `infoqoch.telegramframework.spring.sampleinspring.log` 패키지를 확인하여 주시기 바랍니다.
 - 아래는 로깅을 위한 리스너의 예시입니다.
 
 ```java
 public class SomeListener {
   @Async
-  @EventListener(Send.class)
-  public void handle(Send send) {
-    while(!send.isDone());
-    sendLogRepository.save(new SendLog(send));
+  @EventListener(SendResult.class)
+  public void handle(SendResult sendResult) {
+    Send send = sendResult.getSend();
+    SendLog sendLog = SendLog.of(send);
+    sendLogRepository.save(sendLog);
   }
 }
 ```
@@ -180,7 +180,7 @@ public class SomeListener {
 - telegram-framework : main 파티션의 분리
   - UpdateDispatcher : 클라이언트의 채팅 메시지 분석과 확장 가능성
   - UpdateRunner : 실시간 처리를 위한 스케줄러
-  - SendUpdateResponseEventListener : 분석된 값을 사용자에게 전달. 이벤트 기반 동작
+  - SendEventListener : 분석된 값을 사용자에게 전달. 이벤트 기반 동작
 
 ## TDD와 OOP 지향
 - 테스트 주도로 개발하였습니다. 
@@ -229,3 +229,8 @@ public class SomeListener {
 - 0.4.2 오픈 소스 배포
 - 0.4.3 java 8 버전 대응
 - 0.4.4 jar 파일에서의 비정상 동작에 대응
+- 0.4.5 Send에 대한 전반적인 수정
+  - SendUpdateResponseEventListener ->  SendEventListener 로 명칭 변경
+  - Send를 SendUpdateResponseEventListener에서 다루고, Send의 결과값을 다루는 이벤트 리스너를 구현하도록(Send를 다수의 이벤트리스너가 공유하도록) 클라이언트 개발자에게 유도.  
+  - 이로 인하여 Send 내부에 Future 관련 로직이 들어가고, while(isDone())의 메서드를 사용하는 등 오염 및 오해의 여지가 존재.  
+  - 타입 하나마다 하나의 이벤트 리스너가 처리하는 것이 코드가 더 간단하고 명확함. Send의 처리 결과를 CompletableFuture<SendResult>로 하여 해당 이벤트 리스너를 구현하도록 유도.
