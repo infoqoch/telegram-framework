@@ -231,6 +231,7 @@ public class SomeListener {
 - 0.4.4 jar 파일에서의 비정상 동작에 대응
 - 0.4.5 Send에 대한 전반적인 수정
   - SendUpdateResponseEventListener ->  SendEventListener 로 명칭 변경
-  - Send를 SendUpdateResponseEventListener에서 다루고, Send의 결과값을 다루는 이벤트 리스너를 구현하도록(Send를 다수의 이벤트리스너가 공유하도록) 클라이언트 개발자에게 유도.  
-  - 이로 인하여 Send 내부에 Future 관련 로직이 들어가고, while(isDone())의 메서드를 사용하는 등 오염 및 오해의 여지가 존재.  
-  - 타입 하나마다 하나의 이벤트 리스너가 처리하는 것이 코드가 더 간단하고 명확함. Send의 처리 결과를 CompletableFuture<SendResult>로 하여 해당 이벤트 리스너를 구현하도록 유도.
+  - 기존에는 Send가 텔레그램에 통신 완료 여부를 결정하는 필드, Future<>가 있었음. 이는 두 가지 문제를 일으켰음.
+    - 클라이언트 개발자의 이벤트 리스너가 `while(send.isDone())` 의 형태를 강제하였음.
+    - Send 객체에 불필요한 책임이 과중
+  - Send 객체를 텔레그램에 보낼 때는 SendEventListener 가 처리한다. 그것의 결과값인 SendResult를 클라이언트 개발자가 이벤트 리스너에서 받을 수 있도록 수정
